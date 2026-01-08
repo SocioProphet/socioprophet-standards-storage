@@ -27,3 +27,11 @@ We treat the platform as a set of **contexts** (event stream, incident state, ar
 ## Graph Layer
 
 This repo now includes the Graph Store Abstraction standard (RDF/SPARQL, property graph, and AtomSpace-style hypergraph) plus a dedicated graph benchmark workload suite.
+
+## Dev setup
+
+python3 -m venv .venv
+. .venv/bin/activate
+python3 -m pip install -U pip
+python3 -m pip install -r requirements-dev.txt
+
