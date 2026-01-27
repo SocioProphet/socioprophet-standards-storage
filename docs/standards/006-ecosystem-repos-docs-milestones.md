@@ -3,6 +3,7 @@
 ## Repos and roles
 
 - Standards repos (governance): this repo + triRPC + policy/evidence specs.
+- Knowledge standards: socioprophet-standards-knowledge (Knowledge Context: micro-publications, meriotopographics, masking/tokenization/IR/vector, office/editor integration).
 - Shipping repos: socioprophet-web, prophet-cli, sociosphere (workspace orchestration).
 - Docs repo: socioprophet-docs (canonical narrative + generated references).
 
@@ -28,3 +29,4 @@ M2: web portal reads standards artifacts (static mode)
 M3: SDK + reference service
 M4: agentic DevSecOps PR bots (policy + evidence)
 M5: benchmarks + dashboards
+M6: Knowledge Context standards repo published + wired into docs automation
