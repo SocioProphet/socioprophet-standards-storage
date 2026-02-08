@@ -1,6 +1,7 @@
 # SocioProphet Platform Standards — Storage, Contracts, and Measurement
 
-This repository is a **standards and decision** package for an open, vendor-neutral incident intelligence / ChatOps platform.
+## Repository description
+This repository is a **standards and decision** package for an open, vendor-neutral incident intelligence / ChatOps platform. It defines storage contexts, data contracts, service interfaces, and benchmark methodology for evaluating portability, performance, and governance across the stack.
 
 We treat the platform as a set of **contexts** (event stream, incident state, artifacts, search, vectors, graphs, metrics) and we standardize:
 - **Data contracts:** Avro for event contracts; Arrow + Parquet for analytic payloads; JSON-LD for semantic/provenance overlays.
@@ -17,6 +18,8 @@ We treat the platform as a set of **contexts** (event stream, incident state, ar
 - `adr/` — Architecture Decision Records (templates + initial decisions)
 - `schemas/` — schema placeholders for Avro/Arrow/JSON-LD contexts
 - `ops/` — deployment conventions (placeholders)
+- `SECURITY.md` — security policy and reporting guidance
+- `LICENSE` — Apache-2.0 license
 
 ## Status
 - Initial scaffold created: 2026-01-08
@@ -28,10 +31,18 @@ We treat the platform as a set of **contexts** (event stream, incident state, ar
 
 This repo now includes the Graph Store Abstraction standard (RDF/SPARQL, property graph, and AtomSpace-style hypergraph) plus a dedicated graph benchmark workload suite.
 
+## Topic tags (23)
+incident-intelligence, chatops, standards, data-contracts, avro, arrow, parquet, json-ld, rdf, sparql, property-graph, hypergraph, tritrpc, event-streams, benchmarks, storage, opensearch, postgres, vector-search, graph-database, observability, governance, interoperability
+
+## Security policy
+Please review `SECURITY.md` for supported versions, vulnerability disclosure, and response expectations.
+
+## License
+Licensed under the Apache-2.0 license. See `LICENSE` for full text.
+
 ## Dev setup
 
 python3 -m venv .venv
 . .venv/bin/activate
 python3 -m pip install -U pip
 python3 -m pip install -r requirements-dev.txt
-
