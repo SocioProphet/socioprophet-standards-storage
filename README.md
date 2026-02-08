@@ -1,5 +1,7 @@
 # SocioProphet Platform Standards — Storage, Contracts, and Measurement
 
+**Description:** Standards and measurement guidance for interoperable storage, data contracts, and benchmarking in an incident intelligence / ChatOps platform.
+
 ## Repository description
 This repository is a **standards and decision** package for an open, vendor-neutral incident intelligence / ChatOps platform. It defines storage contexts, data contracts, service interfaces, and benchmark methodology for evaluating portability, performance, and governance across the stack.
 
