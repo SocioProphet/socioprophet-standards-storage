@@ -1,5 +1,11 @@
 # SocioProphet Platform Standards — Storage, Contracts, and Measurement
 
+| Metadata | Details |
+| --- | --- |
+| Description | Standards and measurement guidance for interoperable storage, data contracts, and benchmarking in an incident intelligence / ChatOps platform. |
+| Website | https://github.com/SocioProphet |
+| Topics | incident-intelligence, chatops, standards, data-contracts, avro, arrow, parquet, json-ld, rdf, sparql, property-graph, hypergraph, tritrpc, event-streams, benchmarks, storage, opensearch, postgres, vector-search, graph-database, observability, governance, interoperability |
+
 **Description:** Standards and measurement guidance for interoperable storage, data contracts, and benchmarking in an incident intelligence / ChatOps platform.
 
 ## Repository description
@@ -32,9 +38,6 @@ We treat the platform as a set of **contexts** (event stream, incident state, ar
 ## Graph Layer
 
 This repo now includes the Graph Store Abstraction standard (RDF/SPARQL, property graph, and AtomSpace-style hypergraph) plus a dedicated graph benchmark workload suite.
-
-## Topic tags (23)
-incident-intelligence, chatops, standards, data-contracts, avro, arrow, parquet, json-ld, rdf, sparql, property-graph, hypergraph, tritrpc, event-streams, benchmarks, storage, opensearch, postgres, vector-search, graph-database, observability, governance, interoperability
 
 ## Security policy
 Please review `SECURITY.md` for supported versions, vulnerability disclosure, and response expectations.
