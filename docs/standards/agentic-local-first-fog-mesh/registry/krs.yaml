@@ -1,0 +1,94 @@
+version: 1.0.0-draft
+spec_id: RFC-SPEC-0001
+krs:
+  - id: KR-LOC-01
+    tag: '#local_agent'
+    area: edge_sovereignty
+    metric: penetration_validation_pass_rate
+    threshold:
+      operator: eq
+      value: 100
+      unit: percent
+    severity_on_breach: block_release
+    owner: Security Architecture
+  - id: KR-LOC-02
+    tag: '#local_agent'
+    area: edge_performance
+    metric: p99_secured_4kb_write_latency_over_baseline
+    threshold:
+      operator: lte
+      value: 20
+      unit: percent
+      condition: baseline_lt_10ms
+    severity_on_breach: severity_1_resource_exhaustion
+    owner: Core Platform
+  - id: KR-UPD-01
+    tag: '#secure_updates'
+    area: update_integrity
+    metric: signature_verification_failure_rate
+    threshold:
+      operator: lte
+      value: 0.001
+      unit: percent_per_24h
+    severity_on_breach: severity_0_quarantine_and_investigate
+    owner: Security Architecture
+  - id: KR-FOG-01
+    tag: '#fog_mesh'
+    area: fog_performance
+    metric: intra_region_p95_rtt
+    threshold:
+      operator: lt
+      value: 15
+      unit: ms
+    severity_on_breach: topology_re_evaluation
+    owner: Network Engineering
+  - id: KR-FOG-02
+    tag: '#fog_mesh'
+    area: fog_performance
+    metric: inter_region_p95_rtt
+    threshold:
+      operator: lt
+      value: 90
+      unit: ms
+    severity_on_breach: topology_re_evaluation
+    owner: Network Engineering
+  - id: KR-FOG-03
+    tag: '#fog_mesh'
+    area: fog_stability
+    metric: mesh_formation_success_rate
+    threshold:
+      operator: gt
+      value: 95
+      unit: percent_per_logical_cluster
+    severity_on_breach: force_rediscovery_and_alert
+    owner: Network Engineering
+  - id: KR-SYN-01
+    tag: '#synthetic_data'
+    area: synthetic_utility
+    metric: utility_baseline
+    threshold:
+      operator: gte
+      value: 90
+      unit: percent
+    severity_on_breach: pause_synthesis
+    owner: Data Science
+  - id: KR-SYN-02
+    tag: '#synthetic_data'
+    area: synthetic_drift
+    metric: kl_divergence_equivalent_utility_drift_below_baseline
+    threshold:
+      operator: lte
+      value: 1
+      unit: percent
+    severity_on_breach: rollback_last_approved_privacy_utility_config
+    owner: Data Science
+  - id: KR-GOV-01
+    tag: null
+    area: review_velocity
+    metric: median_security_architecture_signoff_time
+    threshold:
+      operator: lte
+      value: 48
+      unit: hours
+    severity_on_breach: escalate_governance_bottleneck
+    owner: Program Management
