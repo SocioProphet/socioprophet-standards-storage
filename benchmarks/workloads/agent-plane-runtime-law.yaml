@@ -1,0 +1,50 @@
+suite: agent-plane-runtime-law
+version: 0.1.0
+description: >-
+  Workload catalog for session law, defer/resume correctness, worktree review immutability,
+  promotion/reversal completeness, and background-session control inspired by clean-room
+  lessons from Claude Code leak-era reporting and the live runtime surfaces in our stack.
+workloads:
+  - id: defer_resume_roundtrip
+    objective: Ensure a paused execution decision can be deferred and resumed without transcript or tool-call drift.
+    assertions:
+      - pending request persists with stable session identity
+      - resumed decision is reflected in a session receipt
+      - no duplicate tool invocation occurs after resume
+  - id: review_lane_immutability
+    objective: Ensure review-only worktree sessions never push, merge, or mutate protected branches.
+    assertions:
+      - review mode forbids git push
+      - worktree is isolated from main checkout
+      - review artifact is written to local scratch output
+  - id: background_session_tracking
+    objective: Ensure long-running PTY/background sessions remain observable and controllable.
+    assertions:
+      - session handle remains stable across poll/log/write cycles
+      - process termination is explicit and receipt-backed
+      - no orphaned session survives cleanup path
+  - id: promotion_reversal_completeness
+    objective: Ensure promotion and reversal artifacts are emitted with stable refs and gate outcomes.
+    assertions:
+      - promotion artifact points to review/session evidence
+      - reversal artifact links back to promotion receipt
+      - replay path remains available after reversal
+  - id: memory_rule_vs_learned_separation
+    objective: Ensure authored rules and learned memory remain separately queryable and cited.
+    assertions:
+      - rule entries preserve authoritative refs
+      - learned entries carry citation refs and freshness metadata
+      - compaction never overwrites authoritative rules
+  - id: runtime_surface_conformance
+    objective: Ensure execution surface attributes match runtime reality for PTY/workdir/background/review lanes.
+    assertions:
+      - PTY-required workloads fail clearly without PTY
+      - workdir is treated as the execution boundary
+      - reviewOnly workloads remain non-mutating
+metrics:
+  - correctness
+  - latency
+  - recovery
+  - evidence_completeness
+  - reversibility
+  - cost
