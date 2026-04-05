@@ -1,0 +1,51 @@
+{
+  "type": "record",
+  "name": "PolicyDecisionInput",
+  "namespace": "org.socioprophet.policy.v1",
+  "doc": "Input payload for policy.v1.Decision/Evaluate in the first local-hybrid slice.",
+  "fields": [
+    {"name": "taskId", "type": "string"},
+    {"name": "actor", "type": {
+      "type": "record",
+      "name": "PolicyActor",
+      "fields": [
+        {"name": "kind", "type": "string"},
+        {"name": "id", "type": "string"}
+      ]
+    }},
+    {"name": "device", "type": {
+      "type": "record",
+      "name": "PolicyDevice",
+      "fields": [
+        {"name": "deviceId", "type": "string"},
+        {"name": "zone", "type": "string"},
+        {"name": "posture", "type": {
+          "type": "record",
+          "name": "PolicyDevicePosture",
+          "fields": [
+            {"name": "encryptedStore", "type": "boolean"},
+            {"name": "verifiedBoot", "type": "boolean"},
+            {"name": "attested", "type": "boolean"}
+          ]
+        }}
+      ]
+    }},
+    {"name": "requestedOperation", "type": {
+      "type": "record",
+      "name": "PolicyRequestedOperation",
+      "fields": [
+        {"name": "capability", "type": "string"},
+        {"name": "destinationZone", "type": "string"},
+        {"name": "sideEffects", "type": {"type": "array", "items": "string"}}
+      ]
+    }},
+    {"name": "data", "type": {
+      "type": "record",
+      "name": "PolicyDataEnvelope",
+      "fields": [
+        {"name": "labels", "type": {"type": "array", "items": "string"}},
+        {"name": "estimatedBytes", "type": "long"}
+      ]
+    }}
+  ]
+}
