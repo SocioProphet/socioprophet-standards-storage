@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.org/descriptors/order-descriptor.v0.1.json",
+  "title": "OrderDescriptor v0.1",
+  "type": "object",
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "orders.socioprophet.org/v0.1"
+    },
+    "kind": {
+      "const": "OrderDescriptor"
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["id", "name", "createdAt", "createdBy"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._:-]{1,127}$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdBy": { "type": "string" },
+        "labels": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "spec": {
+      "type": "object",
+      "required": [
+        "orderType",
+        "action",
+        "targets",
+        "lifecycle",
+        "validation",
+        "outputs"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "orderType": {
+          "type": "string",
+          "enum": [
+            "IngestOrder",
+            "ClassifyOrder",
+            "RecommendOrder",
+            "AssetPromotionOrder",
+            "AssetRefreshOrder",
+            "AssetPublishOrder",
+            "ReviewOrder",
+            "ExecutionOrder",
+            "ReplayOrder",
+            "ArchiveOrder"
+          ]
+        },
+        "action": { "type": "string" },
+        "targets": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["targetRef", "targetType"],
+            "additionalProperties": false,
+            "properties": {
+              "targetRef": { "type": "string" },
+              "targetType": { "type": "string" }
+            }
+          }
+        },
+        "inputs": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "lifecycle": {
+          "type": "object",
+          "required": ["state", "allowedTransitions"],
+          "additionalProperties": false,
+          "properties": {
+            "state": { "type": "string" },
+            "allowedTransitions": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "validation": {
+          "type": "object",
+          "required": ["requiredChecks", "humanGateRequired"],
+          "additionalProperties": false,
+          "properties": {
+            "requiredChecks": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "humanGateRequired": { "type": "boolean" },
+            "maxRunSeconds": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "policyPackRef": { "type": "string" },
+            "policyPackHash": { "type": "string" },
+            "errorPolicyRef": { "type": "string" }
+          }
+        },
+        "outputs": {
+          "type": "object",
+          "required": ["expectedArtifacts"],
+          "additionalProperties": false,
+          "properties": {
+            "expectedArtifacts": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string" }
+            },
+            "publishTargets": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}
