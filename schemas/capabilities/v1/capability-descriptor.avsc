@@ -1,0 +1,43 @@
+{
+  "type": "record",
+  "name": "CapabilityDescriptor",
+  "namespace": "org.socioprophet.capabilities.v1",
+  "doc": "Logical capability descriptor for the first local-hybrid slice.",
+  "fields": [
+    {"name": "capabilityId", "type": "string"},
+    {"name": "version", "type": "string"},
+    {"name": "kind", "type": "string"},
+    {"name": "description", "type": ["null", "string"], "default": null},
+    {"name": "inputSchemaRef", "type": "string"},
+    {"name": "outputSchemaRef", "type": "string"},
+    {"name": "execution", "type": {
+      "type": "record",
+      "name": "CapabilityExecutionProfile",
+      "fields": [
+        {"name": "supportedLanes", "type": {"type": "array", "items": "string"}},
+        {"name": "defaultLane", "type": "string"},
+        {"name": "requiresGpu", "type": "boolean"},
+        {"name": "maxContextBytes", "type": ["null", "long"], "default": null},
+        {"name": "timeoutSeconds", "type": "int"}
+      ]
+    }},
+    {"name": "trust", "type": {
+      "type": "record",
+      "name": "CapabilityTrustProfile",
+      "fields": [
+        {"name": "egressDefault", "type": "string"},
+        {"name": "sideEffectsDefault", "type": "string"},
+        {"name": "dataLabelsAllowed", "type": {"type": "array", "items": "string"}},
+        {"name": "dataLabelsDenied", "type": {"type": "array", "items": "string"}}
+      ]
+    }},
+    {"name": "policyHooks", "type": {
+      "type": "record",
+      "name": "CapabilityPolicyHooks",
+      "fields": [
+        {"name": "preExec", "type": {"type": "array", "items": "string"}},
+        {"name": "postExec", "type": {"type": "array", "items": "string"}}
+      ]
+    }}
+  ]
+}
