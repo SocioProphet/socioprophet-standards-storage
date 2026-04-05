@@ -1,0 +1,15 @@
+{
+  "type": "record",
+  "name": "OrderRequested",
+  "namespace": "socioprophet.events.orders.v1",
+  "fields": [
+    {"name": "eventId", "type": "string"},
+    {"name": "eventType", "type": "string", "default": "order.requested"},
+    {"name": "occurredAt", "type": "string"},
+    {"name": "actorRef", "type": "string"},
+    {"name": "orderId", "type": "string"},
+    {"name": "orderType", "type": "string"},
+    {"name": "targetRefs", "type": {"type": "array", "items": "string"}},
+    {"name": "policyPackRef", "type": ["null", "string"], "default": null}
+  ]
+}
