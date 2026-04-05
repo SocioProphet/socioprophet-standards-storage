@@ -1,0 +1,19 @@
+{
+  "artifact": "agentic_control_matrix_v3",
+  "as_of_date": "2026-04-05",
+  "workbook": "agentic_control_matrix_v3.xlsx",
+  "row_counts": {
+    "reachable_rows": 187,
+    "denied_rows": 16,
+    "tests": 1177,
+    "monitors": 686,
+    "exceptions": 8,
+    "incidents": 12
+  },
+  "bundles": [
+    "compiled_policy_bundle_v3.json",
+    "compiled_monitor_bundle_v3.json",
+    "compiled_test_bundle_v3.json",
+    "matrix_compiler_v3.py"
+  ]
+}
