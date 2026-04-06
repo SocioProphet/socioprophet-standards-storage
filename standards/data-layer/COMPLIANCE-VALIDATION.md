@@ -555,9 +555,12 @@ if __name__ == "__main__":
 #!/usr/bin/env python3
 """audit_completeness_check.py — verify audit log coverage for each system."""
 
+import os
 from opensearchpy import OpenSearch
 from datetime import datetime, timedelta, timezone
 import sys
+
+OPENSEARCH_AUDIT_CHECKER_PASSWORD = os.environ["OPENSEARCH_AUDIT_CHECKER_PASSWORD"]
 
 client = OpenSearch(
     hosts=["https://opensearch.internal:9200"],

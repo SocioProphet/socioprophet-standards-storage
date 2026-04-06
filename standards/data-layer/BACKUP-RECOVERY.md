@@ -74,6 +74,9 @@ WRAPPED_DEK=$(vault write -field=ciphertext \
 
 mkdir -p "${BACKUP_DIR}"
 
+# Generate IV before encryption (must be stored for later decryption)
+IV_HEX=$(openssl rand -hex 16)
+
 # Stream base backup, compress, and encrypt
 pg_basebackup \
   --host=localhost \
@@ -86,8 +89,11 @@ pg_basebackup \
   --progress 2>/dev/null \
 | openssl enc -aes-256-gcm \
     -K "${DEK_HEX}" \
-    -iv "$(openssl rand -hex 16)" \
+    -iv "${IV_HEX}" \
     -out "${BACKUP_DIR}/base_backup.tar.gz.enc"
+
+# Store IV alongside backup so it can be used for decryption
+echo "${IV_HEX}" > "${BACKUP_DIR}/backup.iv"
 
 # Compute and store HMAC-SHA-256 checksum
 HMAC_KEY=$(vault read -field=hmac_key secret/postgres/backup-hmac)
@@ -124,12 +130,14 @@ DEK_HEX=$(vault write -field=plaintext \
 
 openssl enc -aes-256-gcm \
   -K "${DEK_HEX}" \
-  -iv "$(openssl rand -hex 16)" \
+  -iv "$(openssl rand -hex 16 | tee "/backup/postgres/wal/${WAL_FILE}.iv")" \
   -in "${WAL_SOURCE}" \
-  -out "/tmp/wal_enc/${WAL_FILE}.enc"
+  -out "/backup/postgres/wal/${WAL_FILE}.enc"
 
-mc cp "/tmp/wal_enc/${WAL_FILE}.enc" \
+mc cp "/backup/postgres/wal/${WAL_FILE}.enc" \
   "myminio/socioprophet-backups/postgres/wal/${WAL_FILE}.enc"
+mc cp "/backup/postgres/wal/${WAL_FILE}.iv" \
+  "myminio/socioprophet-backups/postgres/wal/${WAL_FILE}.iv"
 ```
 
 ### Point-in-Time Recovery (PITR) Procedure
@@ -147,7 +155,7 @@ DEK_HEX=$(vault write -field=plaintext \
 
 openssl enc -d -aes-256-gcm \
   -K "${DEK_HEX}" \
-  -iv "<iv from backup metadata>" \
+  -iv "$(cat /restore/base_backup/backup.iv)" \
   -in /restore/base_backup.tar.gz.enc \
   -out /restore/base_backup.tar.gz
 
@@ -198,13 +206,15 @@ WRAPPED_DEK=$(vault write -field=ciphertext \
   transit/mongodb-backup/encrypt \
   plaintext=$(echo -n "${DEK_HEX}" | base64))
 
+IV_HEX=$(openssl rand -hex 16)
 openssl enc -aes-256-gcm \
   -K "${DEK_HEX}" \
-  -iv "$(openssl rand -hex 16)" \
+  -iv "${IV_HEX}" \
   -in "${DUMP_DIR}/socioprophet.archive.gz" \
   -out "${DUMP_DIR}/socioprophet.archive.gz.enc"
 
 echo "${WRAPPED_DEK}" > "${DUMP_DIR}/wrapped_dek.txt"
+echo "${IV_HEX}" > "${DUMP_DIR}/backup.iv"
 
 # Remove plaintext archive immediately
 shred -u "${DUMP_DIR}/socioprophet.archive.gz"
@@ -360,13 +370,15 @@ DEK_HEX=$(vault write -field=plaintext transit/redis-backup/datakey/plaintext bi
 WRAPPED_DEK=$(vault write -field=ciphertext transit/redis-backup/encrypt \
   plaintext=$(echo -n "${DEK_HEX}" | base64))
 
+IV_HEX=$(openssl rand -hex 16)
 openssl enc -aes-256-gcm \
   -K "${DEK_HEX}" \
-  -iv "$(openssl rand -hex 16)" \
+  -iv "${IV_HEX}" \
   -in "${RDB_PATH}" \
   -out "/backup/redis/${SNAPSHOT_NAME}"
 
 echo "${WRAPPED_DEK}" > "/backup/redis/${SNAPSHOT_NAME}.key"
+echo "${IV_HEX}" > "/backup/redis/${SNAPSHOT_NAME}.iv"
 mc cp "/backup/redis/${SNAPSHOT_NAME}" \
   "myminio/socioprophet-backups/redis/${SNAPSHOT_NAME}"
 ```
@@ -382,14 +394,18 @@ AOF_ARCHIVE="redis-aof-$(date +%Y%m%d_%H%M%S).aof.enc"
 redis-cli ... BGREWRITEAOF
 sleep 5  # Wait for rewrite
 
+AOF_IV_HEX=$(openssl rand -hex 16)
 openssl enc -aes-256-gcm \
   -K "${DEK_HEX}" \
-  -iv "$(openssl rand -hex 16)" \
+  -iv "${AOF_IV_HEX}" \
   -in "${AOF_PATH}" \
   -out "/backup/redis/${AOF_ARCHIVE}"
 
+echo "${AOF_IV_HEX}" > "/backup/redis/${AOF_ARCHIVE}.iv"
 mc cp "/backup/redis/${AOF_ARCHIVE}" \
   "myminio/socioprophet-backups/redis/aof/${AOF_ARCHIVE}"
+mc cp "/backup/redis/${AOF_ARCHIVE}.iv" \
+  "myminio/socioprophet-backups/redis/aof/${AOF_ARCHIVE}.iv"
 ```
 
 ### Redis Cluster Backup
@@ -485,24 +501,34 @@ status = backup_engine->VerifyBackup(backup_id);
 
 ```python
 # Post-processing: encrypt RocksDB backup directory
-import subprocess, os
+import subprocess, os, secrets
 
 backup_path = "/backup/rocksdb/latest"
 archive_path = f"/backup/rocksdb/archive/rocksdb-{timestamp}.tar.enc"
+iv_path = f"/backup/rocksdb/archive/rocksdb-{timestamp}.tar.iv"
 
-# Tar and encrypt in one pipe
+# Generate and persist IV before encryption
+iv_hex = secrets.token_hex(16)
+with open(iv_path, "w") as f:
+    f.write(iv_hex)
+
+# Tar and encrypt in one pipe (IV read from file so it is always stored)
 subprocess.run([
     "bash", "-c",
     f"tar -czf - {backup_path} | "
     f"openssl enc -aes-256-gcm "
     f"-K $(vault read -field=key transit/rocksdb-backup/export) "
-    f"-iv $(openssl rand -hex 16) "
+    f"-iv {iv_hex} "
     f"-out {archive_path}"
 ], check=True)
 
-# Upload to MinIO
+# Upload archive and IV to MinIO
 subprocess.run([
     "mc", "cp", archive_path,
+    f"myminio/socioprophet-backups/rocksdb/"
+], check=True)
+subprocess.run([
+    "mc", "cp", iv_path,
     f"myminio/socioprophet-backups/rocksdb/"
 ], check=True)
 ```
