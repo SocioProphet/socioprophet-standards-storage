@@ -20,6 +20,7 @@ We treat the platform as a set of **contexts** (event stream, incident state, ar
 
 ## Repository map
 - `docs/standards/` — normative standards (MUST/SHOULD/MAY language)
+- `docs/standards/governance/` — governance-oriented standards and operating controls, including the governed CSO partnership execution pack
 - `docs/benchmarks/` — benchmark methodology and reporting format
 - `benchmarks/workloads/` — workload definitions (YAML)
 - `benchmarks/harness/` — harness scaffold (drivers to implement)
@@ -29,11 +30,14 @@ We treat the platform as a set of **contexts** (event stream, incident state, ar
 - `SECURITY.md` — security policy and reporting guidance
 - `LICENSE` — Apache-2.0 license
 
+## Governance surfaces
+- `GOVERNANCE.md` — root entry point for governance-oriented standards and operating controls
+- `docs/standards/governance/README.md` — governance standards index
+- `docs/standards/governance/cso-partnerships/README.md` — governed CSO partnership execution pack
+
 ## Status
 - Initial scaffold created: 2026-01-08
 - Next: implement benchmark harness code + populate schema directories with v1 contracts.
-
-
 
 ## Graph Layer
 
