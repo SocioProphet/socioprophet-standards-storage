@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.org/proofs/verification-result.schema.json",
+  "title": "VerificationResult",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "proof_id": {
+      "$ref": "../semantic/common.schema.json#/$defs/Id"
+    },
+    "verified": {
+      "type": "boolean"
+    },
+    "failure_code": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "enum": [
+            "E_PROOF_SCHEMA_INVALID",
+            "E_PROOF_VERSION_UNSUPPORTED",
+            "E_PROOF_TREE_ALG_UNSUPPORTED",
+            "E_PROOF_HASH_ALG_UNSUPPORTED",
+            "E_PROOF_LEAF_HASH_MISMATCH",
+            "E_PROOF_AUDIT_PATH_INVALID",
+            "E_PROOF_ROOT_MISMATCH",
+            "E_PROOF_BOUNDARY_INVALID",
+            "E_PROOF_KEY_ORDER_INVALID",
+            "E_PROOF_CONSISTENCY_INVALID",
+            "E_PROOF_DIFF_REF_UNRESOLVED",
+            "E_PROOF_SNAPSHOT_STATE_INVALID"
+          ]
+        }
+      ]
+    },
+    "details": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "required": [
+    "proof_id",
+    "verified",
+    "failure_code",
+    "details"
+  ]
+}
