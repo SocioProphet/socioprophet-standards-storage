@@ -24,7 +24,8 @@ Record the completion date and operator name next to each item.
 
 ## MongoDB
 
-- [ ] Set `net.tls.mode: requireTLS` in `mongod.conf`; disable TLS 1.0, 1.1, 1.2
+- [ ] Set `net.tls.mode: requireTLS` in `mongod.conf`; disable TLS 1.0 and TLS 1.1
+  (TLS 1.2 deprecated — disable by Q3 2026 per [ENCRYPTION-IN-TRANSIT.md](ENCRYPTION-IN-TRANSIT.md))
 - [ ] Enable authentication (`security.authorization: enabled`)
 - [ ] Set `authenticationMechanisms: SCRAM-SHA-256`
 - [ ] Enable native audit logging for all required event types

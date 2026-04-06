@@ -5,7 +5,8 @@ This document uses RFC 2119 language: **MUST**, **SHOULD**, **MAY**.
 ## 1. Scope
 
 This standard defines comprehensive audit-trail requirements for all data-layer systems, satisfying
-NIST SP 800-88 and NIST SP 800-53 AU-2, AU-12, and SI-7 controls.
+NIST SP 800-53 AU-2, AU-12, and SI-7 controls.  Secure deletion of audit media follows NIST SP 800-88
+(Guidelines for Media Sanitization); see §6 for details.
 
 ## 2. Required Audit Events
 
