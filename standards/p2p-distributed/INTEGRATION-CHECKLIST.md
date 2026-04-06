@@ -11,7 +11,7 @@ boundary. All items marked **MUST** are mandatory; **SHOULD** items are strongly
 - [ ] Local audit logging enabled (MUST)
 - [ ] CycloneDX SBOM generated and signed (MUST)
 - [ ] Automated dependency scanning in CI (MUST)
-- [ ] Release artefacts signed with ECDSA-P256 (MUST)
+- [ ] Release artifacts signed with ECDSA-P256 (MUST)
 - [ ] Backup and recovery procedures tested quarterly (MUST)
 
 ## Hyperdrive

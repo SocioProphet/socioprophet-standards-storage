@@ -69,7 +69,7 @@ See [AUDIT-LOGGING.md](AUDIT-LOGGING.md) for the full specification.
 - Every P2P component **MUST** have a CycloneDX SBOM covering direct and transitive dependencies.
 - SBOMs **MUST** be signed with ECDSA-P256.
 - Automated vulnerability scanning (OWASP / Grype / Snyk) **MUST** run daily.
-- All release artefacts **MUST** be signed and verifiable with a published public key.
+- All release artifacts **MUST** be signed and verifiable with a published public key.
 
 See [SUPPLY-CHAIN.md](SUPPLY-CHAIN.md) for the full specification.
 

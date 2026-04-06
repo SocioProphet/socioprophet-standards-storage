@@ -9,7 +9,7 @@ This document uses RFC 2119 language: **MUST**, **SHOULD**, **MAY**.
 - SBOMs **MUST** be regenerated on every release and on every dependency update.
 - Each SBOM file **MUST** be signed with the project's ECDSA-P256 release key; the signature
   **MUST** be published alongside the SBOM.
-- The signed SBOM **MUST** be attached to the corresponding GitHub Release artefact.
+- The signed SBOM **MUST** be attached to the corresponding GitHub Release artifact.
 
 ## Dependency Scanning
 
@@ -22,13 +22,13 @@ This document uses RFC 2119 language: **MUST**, **SHOULD**, **MAY**.
 
 ## Component Signing
 
-- All release artefacts (npm packages, GitHub Release tarballs, Docker images) **MUST** be signed
+- All release artifacts (npm packages, GitHub Release tarballs, Docker images) **MUST** be signed
   with the project's ECDSA-P256 key.
 - The signing public key **MUST** be published in the repository and pinned (certificate pinning)
   for automated consumers.
 - Signature verification **MUST** be enforced at installation time in automated pipelines.
 - If a signing key is compromised, a revocation notice **MUST** be published immediately, and all
-  artefacts signed with the compromised key **MUST** be re-signed with a new key and re-released.
+  artifacts signed with the compromised key **MUST** be re-signed with a new key and re-released.
 
 ## Source Code Integrity
 
@@ -44,11 +44,11 @@ This document uses RFC 2119 language: **MUST**, **SHOULD**, **MAY**.
 
 - Builds **MUST** be reproducible: given the same source commit and toolchain, the output
   **MUST** be byte-for-byte identical.
-- Build artefacts **MUST** be signed with ECDSA-P256 immediately after production.
+- Build artifacts **MUST** be signed with ECDSA-P256 immediately after production.
 - Build environments **MUST** be isolated (e.g. ephemeral containers or sandboxed VMs) to prevent
   supply chain injection.
-- All build events (start, finish, artefact hashes, signing events) **MUST** be written to an
-  append-only build audit log.
+- All build events (start, finish, artifact hashes, signing events) **MUST** be written to an
+  append-only build-event audit log.
 
 ## Distribution Integrity
 
