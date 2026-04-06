@@ -243,7 +243,7 @@ This document uses RFC 2119 language: **MUST**, **SHOULD**, **MAY**.
 | Field | Value |
 |-------|-------|
 | **Status** | 📋 Planned |
-| **Implementation** | Continuous monitoring of system behaviour. Anomaly detection based on baseline profiles. Real-time alerting on deviations. See [ZERO-TRUST-ARCHITECTURE.md](../nist-800-207/ZERO-TRUST-ARCHITECTURE.md) §Continuous Monitoring. |
+| **Implementation** | Continuous monitoring of system behavior. Anomaly detection based on baseline profiles. Real-time alerting on deviations. See [ZERO-TRUST-ARCHITECTURE.md](../nist-800-207/ZERO-TRUST-ARCHITECTURE.md) §Continuous Monitoring. |
 | **Evidence Location** | `sociosphere/monitoring/anomaly_detector.py` |
 | **Cryptographic Binding** | HMAC-SHA-256 integrity on monitoring data streams |
 | **Audit Events** | `AnomalyDetected`, `BaselineDeviation`, `AlertTriggered`, `MonitoringGapDetected` |

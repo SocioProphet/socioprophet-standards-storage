@@ -238,7 +238,7 @@ Each request is assigned an anomaly score (0–100) based on:
 
 - **Identity risk** (0–30): Is the principal authenticating from a new device/IP? Is the token
   recently issued? Has MFA been completed?
-- **Behavioural risk** (0–40): Does the operation pattern match historical baseline? Is the
+- **Behavioral risk** (0–40): Does the operation pattern match historical baseline? Is the
   request volume unusual?
 - **Contextual risk** (0–30): Is the request time unusual? Is the resource sensitivity high?
 
