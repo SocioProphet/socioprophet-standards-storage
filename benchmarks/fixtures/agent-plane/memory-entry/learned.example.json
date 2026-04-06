@@ -1,0 +1,26 @@
+{
+  "id": "urn:srcos:memory:fixture-learned-001",
+  "type": "MemoryEntry",
+  "specVersion": "2.1.0-agentplane-draft",
+  "kind": "learned",
+  "namespace": "openclaw/coding-agent",
+  "key": "pty-required",
+  "payloadRef": "urn:srcos:artifact:fixture-learned-payload-001",
+  "authoritativeRef": null,
+  "citationRefs": [
+    "urn:srcos:artifact:session-log-001",
+    "urn:srcos:artifact:skill-doc-001"
+  ],
+  "scope": {
+    "workspace": "openclaw",
+    "pathPrefixes": [
+      "skills/coding-agent/"
+    ],
+    "sessionRef": "urn:srcos:session:fixture-001"
+  },
+  "freshness": {
+    "learnedAt": "2026-04-06T00:00:03Z",
+    "reviewedAt": null,
+    "ttl": 2592000
+  }
+}
