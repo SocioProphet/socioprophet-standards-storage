@@ -169,9 +169,9 @@ Linters and static analysis gates in the CI/CD pipeline scan for use of disallow
 
 ## NIST 800-53 Control Implementation Status
 
-The SocioProphet platform maps 28 controls across six control families. Full implementation details are in [../nist-800-53/CONTROL-MAPPINGS.md](../nist-800-53/CONTROL-MAPPINGS.md).
+The SocioProphet platform maps 20 baseline controls across seven control families, with 8 additional enhanced and supplemental controls targeted for Q3–Q4 2026 (bringing the full set to 28). Full implementation details are in [../nist-800-53/CONTROL-MAPPINGS.md](../nist-800-53/CONTROL-MAPPINGS.md).
 
-### Control Family Summary
+### Control Family Summary (20 Baseline Controls)
 
 | Family | Controls Mapped | Implemented | In Progress | Planned |
 |---|---|---|---|---|
@@ -182,9 +182,9 @@ The SocioProphet platform maps 28 controls across six control families. Full imp
 | SI — System & Information Integrity | 3 | 2 | 1 | 0 |
 | CA — Assessment & Authorization | 2 | 1 | 1 | 0 |
 | AT — Awareness & Training | 2 | 1 | 0 | 1 |
-| **Total** | **20** | **13** | **6** | **1** |
+| **Total (baseline)** | **20** | **13** | **6** | **1** |
 
-> Note: The full 28-control matrix includes enhanced and supplemental controls not shown in this summary. See CONTROL-MAPPINGS.md for complete coverage.
+> Expansion target: 8 additional enhanced and supplemental controls (AC-6, AU-9, IA-8, SC-28, SI-3, SI-4, SA-9, CP-9) are planned for Q3–Q4 2026, bringing total coverage to 28 controls. See CONTROL-MAPPINGS.md for the current baseline mapping.
 
 ### High-Priority Controls
 
