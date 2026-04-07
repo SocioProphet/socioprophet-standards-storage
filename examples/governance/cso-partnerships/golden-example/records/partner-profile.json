@@ -1,0 +1,26 @@
+{
+  "legal_name": "Golden Example Governed CSO Pack",
+  "aliases": [],
+  "registration_status": "draft",
+  "jurisdiction": "TBD",
+  "year_founded": "TBD",
+  "contacts": [
+    {
+      "name": "Primary contact",
+      "email": "contact@example.org",
+      "phone": "+00 0000 0000"
+    }
+  ],
+  "mission": "Describe the mission and intended public-interest role of the partner.",
+  "constituency": "Describe the primary constituency or stakeholder group.",
+  "operating_geographies": [
+    "TBD"
+  ],
+  "safeguarding_status": "developing",
+  "data_classes_handled": [
+    "TBD"
+  ],
+  "civic_space_risks": [
+    "TBD"
+  ]
+}
