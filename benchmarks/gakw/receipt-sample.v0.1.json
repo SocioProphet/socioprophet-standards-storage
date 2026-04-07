@@ -1,0 +1,74 @@
+{
+  "receipt_id": "rpt_trace_gakw_hybrid_warm_001",
+  "trace_id": "trace_gakw_hybrid_warm_001",
+  "span_id": "span_workspace",
+  "timestamp": "2026-04-05T07:30:00Z",
+  "task": {
+    "family": "assistive_knowledge_work",
+    "case_id": "gakw_hybrid_warm_answer",
+    "mission_weight": 1.2,
+    "utility_rubric_version": "gakw-utility-v0.1",
+    "latency_slo_ms": 2500,
+    "risk_class": "high"
+  },
+  "context": {
+    "pack_ids": ["topicpack://slash-topics/community-health@1"],
+    "pack_digests": ["sha256:pack01"],
+    "policy_bundle_id": "hdt-policy-2026-04",
+    "locality_class": "warm-local",
+    "total_bytes": 65536,
+    "cache_hits": 1,
+    "cache_misses": 1,
+    "working_set_hit_rate": 0.5,
+    "remote_fetch_count": 1
+  },
+  "placement": {
+    "site": "hybrid-us-east-1",
+    "node_pool": "edge-plus-cloud",
+    "host_id": "node-edge-a-01",
+    "accelerator_type": "cpu+npu",
+    "execution_mode": "hybrid",
+    "planner_version": "agentplane-0.1.0"
+  },
+  "model_runtime": {
+    "model_id": "model://gpt-class/small-retrieval-agent",
+    "model_digest": "sha256:model01",
+    "runtime_id": "runtime://vllm-like@0.1",
+    "quantization": "int8",
+    "context_window_tokens": 8192
+  },
+  "energy_j": {
+    "train_amortized": 0.0,
+    "inference": 22.0,
+    "data_move": 11.0,
+    "network": 9.5,
+    "storage": 4.0,
+    "control": 6.0,
+    "idle": 8.0,
+    "cooling_adjusted": 7.0,
+    "replay": 3.0,
+    "total": 67.5,
+    "accounting_boundary": "device+host+allocated-network+storage+cooling",
+    "estimation_model": "mixed-meter-v0.1"
+  },
+  "outcome": {
+    "policy_pass": true,
+    "human_approved": true,
+    "quality": 0.87,
+    "calibration": 0.82,
+    "robustness": 0.88,
+    "latency_ms": 1860,
+    "replayable": true
+  },
+  "evidence": {
+    "input_digest": "sha256:input01",
+    "output_digest": "sha256:output01",
+    "evidence_refs": ["evidence://run/trace_gakw_hybrid_warm_001/output"],
+    "attestation_refs": ["attest://hdt/approval/001"],
+    "signature": "sig:example"
+  },
+  "replay": {
+    "supported": true,
+    "replay_manifest_id": "replay://trace_gakw_hybrid_warm_001"
+  }
+}
