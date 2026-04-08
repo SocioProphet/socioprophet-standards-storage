@@ -1,0 +1,12 @@
+partner_profile: examples/governance/cso-partnerships/example-partner-profile.json
+instrument_decision: docs/standards/governance/cso-partnerships/templates/instrument-decision-worksheet.md
+capacity_assessment: docs/standards/governance/cso-partnerships/templates/capacity-assessment-sheet.md
+safeguarding_record: local/safeguarding-record.md
+data_schedule: local/data-schedule.md
+approvals:
+  - local/approval-001.md
+  - local/approval-002.md
+reporting_calendar: local/reporting-calendar.md
+corrective_actions:
+  - local/action-001.md
+closeout_note: local/closeout-note.md

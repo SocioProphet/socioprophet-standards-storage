@@ -1,0 +1,39 @@
+name: Validate governed CSO partnership hygiene
+
+on:
+  pull_request:
+    paths:
+      - 'docs/standards/governance/**'
+      - 'schemas/governance/cso-partnerships/**'
+      - 'examples/governance/cso-partnerships/**'
+      - 'scripts/validate_cso_partnership_negative_and_hygiene.py'
+      - '.github/workflows/validate-cso-governance-hygiene.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/standards/governance/**'
+      - 'schemas/governance/cso-partnerships/**'
+      - 'examples/governance/cso-partnerships/**'
+      - 'scripts/validate_cso_partnership_negative_and_hygiene.py'
+      - '.github/workflows/validate-cso-governance-hygiene.yml'
+
+jobs:
+  validate-hygiene:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install validation dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install jsonschema PyYAML
+
+      - name: Run negative validation and markdown hygiene checks
+        run: python scripts/validate_cso_partnership_negative_and_hygiene.py

@@ -1,0 +1,241 @@
+title: Agentic Control Cell Schema v3
+type: object
+required:
+- row_id
+- phase
+- connector
+- authority
+- memory_class
+- objective
+- failure_mode
+- principal
+- environment_tier
+- trust_zone
+- data_class
+- resource_type
+- approval_mode
+- execution_mode
+- dependency_state
+- tenant_scope
+- concurrency_profile
+- monitor_health
+- owner_role
+- enforcement_point
+- control_type
+- review_cadence_days
+- blast_radius_score
+properties:
+  row_id:
+    type: string
+  edge_id:
+    type: string
+  phase:
+    type: string
+    enum:
+    - explore
+    - stabilize
+    - harden
+    - operate
+  connector:
+    type: string
+    enum:
+    - "human↔model"
+    - "model↔planner"
+    - "planner↔specialist"
+    - "model↔tool:browser"
+    - "model↔tool:shell"
+    - "tool↔environment:browser_session"
+    - "tool↔environment:filesystem"
+    - "environment↔memory:working"
+    - "environment↔memory:project"
+    - "environment↔memory:durable"
+    - "workflow↔workflow"
+    - "channel↔channel"
+    - "policy↔action"
+    - "evaluation↔deployment"
+    - "monitor↔telemetry"
+    - "telemetry↔alerting"
+    - "alerting↔incident"
+    - "incident↔change"
+  authority:
+    type: string
+    enum:
+    - advisory
+    - draft
+    - constrained_action
+    - autonomous
+    - emergency_override
+  memory_class:
+    type: string
+    enum:
+    - ephemeral
+    - working
+    - project
+    - durable
+  objective:
+    type: string
+    enum:
+    - observe
+    - research
+    - synthesize
+    - plan
+    - modify
+    - execute
+    - deploy
+    - reconcile
+    - approve
+    - recover
+  failure_mode:
+    type: string
+    enum:
+    - ambiguity
+    - stale_state
+    - hallucination
+    - overreach
+    - hidden_side_effect
+    - partial_completion
+    - conflict
+    - policy_bypass
+    - drift
+    - reward_hacking
+    - telemetry_loss
+    - alert_storm
+    - monitor_blindness
+    - approval_fatigue
+    - dependency_failure
+    - cross_tenant_bleed
+    - race_condition
+    - non_idempotent_retry
+  principal:
+    type: string
+  environment_tier:
+    type: string
+    enum:
+    - dev
+    - staging
+    - prod
+    - isolated_recovery
+  trust_zone:
+    type: string
+    enum:
+    - public
+    - internal
+    - restricted
+    - secret
+  data_class:
+    type: string
+    enum:
+    - public
+    - internal
+    - confidential
+    - restricted
+    - secret
+  resource_type:
+    type: string
+    enum:
+    - task_brief
+    - browser_session
+    - workspace_filesystem
+    - repo_code
+    - project_memory
+    - durable_memory
+    - policy_bundle
+    - deployment_target
+    - telemetry_stream
+    - alert_stream
+    - incident_record
+    - change_record
+    - secret_store
+  approval_mode:
+    type: string
+    enum:
+    - none
+    - single_human
+    - dual_control
+    - break_glass
+  execution_mode:
+    type: string
+    enum:
+    - interactive
+    - async_batch
+    - scheduled
+    - event_driven
+  dependency_state:
+    type: string
+    enum:
+    - healthy
+    - degraded
+    - offline
+    - unknown
+  tenant_scope:
+    type: string
+    enum:
+    - single_tenant
+    - delegated_scope
+    - cross_tenant
+    - global
+  concurrency_profile:
+    type: string
+    enum:
+    - single_flight
+    - serialized_queue
+    - parallel_bounded
+    - parallel_unbounded
+  monitor_health:
+    type: string
+    enum:
+    - healthy
+    - lagging
+    - partial
+    - blind
+  owner_role:
+    type: string
+  enforcement_point:
+    type: string
+    enum:
+    - orchestrator
+    - planner_runtime
+    - tool_wrapper
+    - sandbox
+    - memory_service
+    - policy_engine
+    - deployment_controller
+    - telemetry_bus
+    - alert_manager
+    - incident_manager
+    - reviewer_gate
+  control_type:
+    type: string
+    enum:
+    - preventive
+    - detective
+    - corrective
+    - compensating
+  model_version:
+    type: string
+  tool_version:
+    type: string
+  policy_version:
+    type: string
+  review_cadence_days:
+    type: integer
+  blast_radius_score:
+    type: number
+  inherent_likelihood:
+    type: number
+  inherent_impact:
+    type: number
+  authority_weight:
+    type: number
+  environment_weight:
+    type: number
+  data_weight:
+    type: number
+  approval_weight:
+    type: number
+  tenant_weight:
+    type: number
+  dependency_weight:
+    type: number
+  monitor_health_weight:
+    type: number
