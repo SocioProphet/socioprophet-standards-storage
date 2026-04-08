@@ -1,0 +1,208 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.org/descriptors/general-descriptor.v0.1.json",
+  "title": "GeneralDescriptor v0.1",
+  "type": "object",
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "knowledge.socioprophet.org/v0.1"
+    },
+    "kind": {
+      "const": "GeneralDescriptor"
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["id", "name", "createdAt", "version"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._:-]{1,127}$"
+        },
+        "displayName": { "type": "string" },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "version": { "type": "string" },
+        "labels": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "spec": {
+      "type": "object",
+      "required": ["object", "relationships", "policies", "provenance"],
+      "additionalProperties": false,
+      "properties": {
+        "object": {
+          "type": "object",
+          "required": ["objectType", "schemaRef", "sourceSystem", "sourceRef"],
+          "additionalProperties": false,
+          "properties": {
+            "objectType": {
+              "type": "string",
+              "enum": [
+                "DocumentAsset",
+                "CodeAsset",
+                "RunbookAsset",
+                "PromptAsset",
+                "BundleAsset",
+                "PolicyAsset",
+                "ConversationAsset",
+                "EvidenceArtifact",
+                "GraphTraversalAsset",
+                "PublishedKnowledgeUnit"
+              ]
+            },
+            "schemaRef": { "type": "string" },
+            "sourceSystem": {
+              "type": "string",
+              "enum": [
+                "github",
+                "gitlab",
+                "bitbucket",
+                "cms",
+                "drive",
+                "matrix",
+                "ticketing",
+                "agentplane",
+                "ck",
+                "manual"
+              ]
+            },
+            "sourceRef": {
+              "type": "object",
+              "additionalProperties": true,
+              "minProperties": 1
+            },
+            "contentHash": { "type": "string" }
+          }
+        },
+        "relationships": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "domains": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "categories": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "tasks": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "owners": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "contentSpaces": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "repos": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "relatedObjects": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "policies": {
+          "type": "object",
+          "required": ["visibility"],
+          "additionalProperties": false,
+          "properties": {
+            "visibility": {
+              "type": "string",
+              "enum": ["public", "community", "internal", "restricted"]
+            },
+            "accessPolicyRef": { "type": "string" },
+            "promotionPolicyRef": { "type": "string" },
+            "stewardReviewRequired": { "type": "boolean" },
+            "agentActionsAllowed": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "required": ["evidenceRefs"],
+          "additionalProperties": false,
+          "properties": {
+            "hash": { "type": "string" },
+            "lineage": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "derivedFrom": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "supersedes": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            },
+            "evidenceRefs": {
+              "type": "array",
+              "items": { "type": "string" },
+              "minItems": 1
+            },
+            "stewards": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "presentations": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "para": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "projects": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "areas": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "resources": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "archives": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            },
+            "labels": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

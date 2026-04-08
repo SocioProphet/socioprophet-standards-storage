@@ -1,0 +1,16 @@
+{
+  "type": "record",
+  "name": "OrderValidated",
+  "namespace": "socioprophet.events.orders.v1",
+  "fields": [
+    {"name": "eventId", "type": "string"},
+    {"name": "eventType", "type": "string", "default": "order.validated"},
+    {"name": "occurredAt", "type": "string"},
+    {"name": "actorRef", "type": "string"},
+    {"name": "orderId", "type": "string"},
+    {"name": "validationPassed", "type": "boolean"},
+    {"name": "completedChecks", "type": {"type": "array", "items": "string"}},
+    {"name": "failedChecks", "type": {"type": "array", "items": "string"}},
+    {"name": "evidenceRefs", "type": {"type": "array", "items": "string"}}
+  ]
+}
