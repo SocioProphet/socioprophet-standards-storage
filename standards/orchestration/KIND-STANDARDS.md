@@ -1,389 +1,149 @@
-# KinD (Kubernetes in Docker) Standards — SocioProphet Platform
+# KinD Standards (Kubernetes in Docker)
 
-- Last updated: 2026-01-27
-- Status: Active governance document
-- Owner: DevSecOps / Platform Engineering
-- Applies to: CI/CD pipelines (GitHub Actions) and local developer KinD clusters
+## Rationale
 
----
-
-## Table of Contents
-
-1. [KinD Cluster Configuration for Local Development](#kind-cluster-configuration-for-local-development)
-2. [Audit Logging in KinD Clusters](#audit-logging-in-kind-clusters)
-3. [RBAC Configuration for Dev Environments](#rbac-configuration-for-dev-environments)
-4. [Secret Management in KinD](#secret-management-in-kind)
-5. [Network Policy Enforcement in KinD](#network-policy-enforcement-in-kind)
-6. [CI/CD Integration: GitHub Actions KinD Provisioning](#cicd-integration-github-actions-kind-provisioning)
-7. [Security Controls for CI Environments](#security-controls-for-ci-environments)
-8. [Ephemeral Cluster Cleanup Procedures](#ephemeral-cluster-cleanup-procedures)
+KinD (Kubernetes in Docker) clusters are used for local development and ephemeral CI testing. Although KinD clusters run workloads that are not production, they MUST maintain a security baseline that mirrors production policies to ensure that security regressions are caught before they reach higher environments. This standard defines those requirements.
 
 ---
 
-## KinD Cluster Configuration for Local Development
+## Docker Image Security
 
-KinD clusters used for local development and CI must be provisioned from a standard configuration that enforces FIPS-compatible settings. Developers must not create ad-hoc KinD clusters outside this specification.
+### Base Images
 
-### FIPS-Compliant KinD Node Image
+- KinD node images MUST be sourced from the official KinD release registry (`kindest/node`) and pinned to a specific SHA digest.
+- Custom images built on top of `kindest/node` MUST be scanned for vulnerabilities before use.
+- Images with Critical CVEs MUST NOT be used in CI pipelines without a documented exception.
 
-The SocioProphet KinD node image is built from the upstream `kindest/node` image with the following modifications:
+### Image Scanning
 
-- Compiled with `GOFLAGS=-tags=fips` and `CGO_ENABLED=1` against the BoringCrypto `crypto/tls` implementation.
-- All OpenSSL dynamic libraries replaced with the FIPS-validated OpenSSL 3.0 FIPS module.
-- The image is published to `registry.socioprophet.internal/infra/kindest-node-fips:<version>` and signed with Cosign.
+- All images pulled during KinD-based tests MUST be scanned with Trivy, Grype, or an equivalent tool as part of the CI pipeline step that precedes cluster creation.
+- Scan results MUST be stored as CI artefacts and retained for 90 days.
 
-### Standard KinD Cluster Configuration
+### Docker Socket Access
+
+- The Docker socket (`/var/run/docker.sock`) MUST NOT be mounted into workload containers during KinD testing, except for the KinD cluster-creation step itself.
+- Any test that requires Docker socket access MUST document the justification and scope.
+
+### Seccomp Profiles
+
+- KinD node containers MUST run with the `RuntimeDefault` seccomp profile or a stricter custom profile.
+- The seccomp profile MUST be specified in the KinD configuration file under `nodes[*].kubeadmConfigPatches`.
+
+---
+
+## KinD Cluster Configuration
+
+### Audit Logging
+
+- KinD clusters used in CI MUST enable Kubernetes API audit logging.
+- Audit policy MUST be passed via `kubeadmConfigPatches` in the KinD configuration.
+- Audit logs MUST be written to a host-mounted path so that they persist after cluster deletion and are captured as CI artefacts.
+
+Example KinD configuration snippet:
 
 ```yaml
-# kind-config.yaml — SocioProphet standard KinD configuration
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
-name: socioprophet-dev
-networking:
-  apiServerAddress: 127.0.0.1
-  apiServerPort: 6443
-  podSubnet: 10.244.0.0/16
-  serviceSubnet: 10.96.0.0/16
-  disableDefaultCNI: false
-  kubeProxyMode: iptables
 nodes:
   - role: control-plane
-    image: registry.socioprophet.internal/infra/kindest-node-fips:v1.29.2
     kubeadmConfigPatches:
       - |
         kind: ClusterConfiguration
         apiServer:
           extraArgs:
-            anonymous-auth: "false"
-            authorization-mode: "Node,RBAC"
             audit-log-path: /var/log/kubernetes/audit.log
             audit-policy-file: /etc/kubernetes/audit-policy.yaml
-            audit-log-maxage: "7"
-            audit-log-maxsize: "50"
-            tls-min-version: VersionTLS12
-            tls-cipher-suites: "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"
-            encryption-provider-config: /etc/kubernetes/encryption-config.yaml
-            profiling: "false"
           extraVolumes:
-            - name: audit-policy
-              hostPath: /etc/kubernetes/audit-policy.yaml
-              mountPath: /etc/kubernetes/audit-policy.yaml
-              readOnly: true
-              pathType: File
-            - name: audit-log
+            - name: audit-logs
               hostPath: /var/log/kubernetes
               mountPath: /var/log/kubernetes
+              readOnly: false
               pathType: DirectoryOrCreate
-            - name: encryption-config
-              hostPath: /etc/kubernetes/encryption-config.yaml
-              mountPath: /etc/kubernetes/encryption-config.yaml
-              readOnly: true
-              pathType: File
-        etcd:
-          local:
-            extraArgs:
-              cipher-suites: "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384"
-  - role: worker
-    image: registry.socioprophet.internal/infra/kindest-node-fips:v1.29.2
-  - role: worker
-    image: registry.socioprophet.internal/infra/kindest-node-fips:v1.29.2
 ```
 
-### Pod Security Standards for KinD
+### RBAC
 
-Development namespaces in KinD use the `Baseline` Pod Security Standard (not `Restricted`) to ease developer iteration, with the exception of namespaces that mirror production configuration. Production-mirror namespaces use `Restricted`.
+- RBAC MUST be enabled (it is enabled by default in KinD; disabling it is prohibited).
+- All test workloads MUST use dedicated `ServiceAccount` resources.
+- The `default` service account MUST have `automountServiceAccountToken: false` set in all test namespaces.
 
-```yaml
-# For dev namespaces
-pod-security.kubernetes.io/enforce: baseline
-pod-security.kubernetes.io/warn: restricted
+### Pod Security Standards
 
-# For production-mirror namespaces
-pod-security.kubernetes.io/enforce: restricted
-pod-security.kubernetes.io/enforce-version: latest
-```
+- Test namespaces MUST be labelled with `pod-security.kubernetes.io/enforce: restricted` unless the test explicitly validates behaviour that requires a less restrictive profile, in which case the deviation MUST be documented.
+
+### Network Policies
+
+- Network policies MUST be enabled in KinD clusters by deploying a CNI plugin that supports `NetworkPolicy` (e.g., Calico or Kindnet with NetworkPolicy support).
+- Default-deny `NetworkPolicy` resources MUST be applied to test namespaces to validate that production network policies work correctly.
 
 ---
 
-## Audit Logging in KinD Clusters
+## Secrets in Local Clusters
 
-KinD clusters emit audit logs to a file on the control-plane node. In CI environments, these logs are captured and uploaded as GitHub Actions artifacts. In local dev environments, they are available at the path configured in the kubeadm patch above.
+### No Real Secrets
 
-### Audit Policy for KinD
+- Real production credentials MUST NOT be used in KinD clusters.
+- Test credentials MUST be synthetic (randomly generated, non-functional outside the test environment).
+- CI pipelines MUST NOT pass real Vault tokens, cloud credentials, or signing keys into KinD clusters.
 
-A simplified audit policy is used for KinD (compared to production) to reduce log volume:
+### Integration with External Secrets Provider
 
-```yaml
-# /etc/kubernetes/audit-policy.yaml (KinD)
-apiVersion: audit.k8s.io/v1
-kind: Policy
-omitStages:
-  - RequestReceived
-rules:
-  - level: RequestResponse
-    resources:
-      - group: ""
-        resources: [secrets]
-  - level: Request
-    resources:
-      - group: rbac.authorization.k8s.io
-        resources: [clusterroles, clusterrolebindings, roles, rolebindings]
-  - level: Request
-    resources:
-      - group: ""
-        resources: [pods]
-    verbs: [create, delete, patch, update]
-  - level: None
-    users: [system:kube-proxy, system:kube-scheduler]
-    verbs: [get, watch, list]
-  - level: Metadata
-    omitManagedFields: true
-```
+- If testing the External Secrets Operator or Vault Agent Injector, a test Vault instance (vault-dev-server or mock) MUST be used.
+- Test Vault instances MUST NOT share namespaces, auth backends, or paths with production Vault.
 
-### Accessing Audit Logs
+### Credential Separation
 
-```bash
-# Get the container ID of the control-plane node
-CONTAINER=$(docker ps --filter "name=socioprophet-dev-control-plane" --format "{{.ID}}")
-
-# Tail the audit log
-docker exec "${CONTAINER}" cat /var/log/kubernetes/audit.log | jq .
-
-# In CI: copy logs out before cluster teardown
-docker cp "${CONTAINER}:/var/log/kubernetes/audit.log" ./audit-ci-run-${GITHUB_RUN_ID}.log
-```
+- Test credentials MUST be clearly labelled with a `purpose: test` metadata annotation.
+- CI pipeline environment variables that hold test credentials MUST be scoped to the job and MUST NOT be exported to child processes beyond the KinD cluster lifecycle.
 
 ---
 
-## RBAC Configuration for Dev Environments
+## CI/CD Integration
 
-### Developer Cluster Admin
+### Ephemeral Clusters
 
-For KinD clusters, developers have cluster-admin access. This is acceptable because:
-
-- KinD clusters are ephemeral (CI) or local (dev); they contain no production data.
-- No production secrets or credentials are present in KinD clusters.
-- The risk surface is the developer's own machine or CI runner.
-
-However, all RBAC policy testing should be done in a dedicated namespace with the minimum required permissions, mirroring production.
-
-### Testing RBAC Policies Locally
-
-```bash
-# Impersonate a production service account to test RBAC
-kubectl auth can-i create pods \
-  --as=system:serviceaccount:socioprophet-prod:socioprophet-workload \
-  --namespace=socioprophet-prod
-
-# Test a federated ClusterRole
-kubectl auth can-i list secrets \
-  --as=system:serviceaccount:external-secrets:external-secrets-sa \
-  --all-namespaces
-```
-
----
-
-## Secret Management in KinD
-
-No production secrets may be stored in or used by KinD clusters. This policy is enforced at two levels:
-
-1. **Organizational**: Documented policy prohibiting production secret use in dev clusters.
-2. **Technical**: The CI service account used to provision GitHub Actions KinD clusters has no access to production Vault paths.
-
-### Dev Secret Patterns
-
-| Secret Type | KinD Approach | Notes |
-|---|---|---|
-| Database credentials | Seeded from a test-data fixture; no real DB | Use `scripts/seed-test-secrets.sh` |
-| OIDC client credentials | Stub OIDC provider (`dex` in-cluster) | See ci/dex-config.yaml |
-| TLS certificates | Self-signed, generated at cluster bootstrap | Not trusted outside the cluster |
-| Image pull secrets | CI-scoped registry token (read-only, 24h TTL) | Injected by GitHub Actions OIDC |
-| API keys | Test keys with no real-world access | Defined in `test/fixtures/` |
-
-### Injecting Test Secrets into KinD
-
-```bash
-# Create dev secrets from test fixtures (no real values)
-kubectl create secret generic db-credentials \
-  --from-literal=password="$(cat test/fixtures/db-password.txt)" \
-  --namespace=socioprophet-prod
-
-# Or use the dev setup script
-make kind-setup-secrets
-```
-
----
-
-## Network Policy Enforcement in KinD
-
-KinD uses Kindnet as its default CNI, which supports NetworkPolicy resources. The same default-deny baseline from [KUBERNETES-SECURITY.md](./KUBERNETES-SECURITY.md) must be applied to production-mirror namespaces in KinD.
-
-### Enabling Calico in KinD for Full NetworkPolicy Testing
-
-For tests that require full NetworkPolicy semantics (e.g., egress rules, CIDR-based policies), Kindnet can be replaced with Calico:
-
-```yaml
-# In kind-config.yaml
-networking:
-  disableDefaultCNI: true
-```
-
-```bash
-# After cluster creation, install Calico
-kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/calico.yaml
-```
-
-### Policy Smoke Tests
-
-The CI pipeline runs a suite of NetworkPolicy smoke tests after cluster provisioning:
-
-```bash
-# Run network policy tests
-kubectl run test-pod --image=busybox --rm -it --restart=Never \
-  --namespace=socioprophet-prod -- wget -qO- http://vault.vault.svc.cluster.local:8200/v1/sys/health
-
-# Expected: connection refused (default-deny egress blocks this)
-```
-
----
-
-## CI/CD Integration: GitHub Actions KinD Provisioning
-
-### Workflow Template
-
-```yaml
-# .github/workflows/kind-integration.yaml
-name: Integration Tests (KinD)
-
-on:
-  pull_request:
-    branches: [main, release/*]
-
-jobs:
-  integration-test:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write  # For OIDC image pull
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Authenticate to registry (OIDC)
-        uses: docker/login-action@v3
-        with:
-          registry: registry.socioprophet.internal
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_TOKEN }}
-
-      - name: Create KinD cluster
-        uses: helm/kind-action@v1.10.0
-        with:
-          version: v0.22.0
-          config: ci/kind-config.yaml
-          cluster_name: socioprophet-ci-${{ github.run_id }}
-          wait: 120s
-
-      - name: Load FIPS node image
-        run: |
-          docker pull registry.socioprophet.internal/infra/kindest-node-fips:v1.29.2
-          kind load docker-image \
-            registry.socioprophet.internal/infra/kindest-node-fips:v1.29.2 \
-            --name socioprophet-ci-${{ github.run_id }}
-
-      - name: Apply baseline security policies
-        run: |
-          kubectl apply -f ci/network-policies/
-          kubectl apply -f ci/pod-security-labels/
-          kubectl apply -f ci/rbac/
-
-      - name: Seed test secrets
-        run: make kind-setup-secrets
-
-      - name: Run integration tests
-        run: make test-integration
-
-      - name: Collect audit logs
-        if: always()
-        run: |
-          CONTAINER=$(docker ps --filter "name=socioprophet-ci-${{ github.run_id }}-control-plane" --format "{{.ID}}")
-          docker cp "${CONTAINER}:/var/log/kubernetes/audit.log" ./audit.log
-
-      - name: Upload audit logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: audit-log-${{ github.run_id }}
-          path: audit.log
-          retention-days: 30
-```
-
----
-
-## Security Controls for CI Environments
-
-### GitHub Actions Runner Hardening
-
-- All CI runners are ephemeral GitHub-hosted runners (or equivalent self-hosted runners that are provisioned fresh per job and destroyed after).
-- Runners are never reused between pull requests from different contributors.
-- The runner's Docker daemon is configured to use the rootless mode where possible.
-
-### Least-Privilege CI Tokens
-
-| Token | Scope | TTL | Storage |
-|---|---|---|---|
-| Registry pull token | Read-only, `registry.socioprophet.internal` | 24 hours | GitHub Actions secret (rotated weekly) |
-| Cosign signing key | N/A in CI (keyless via OIDC) | Per-job | GitHub OIDC token |
-| KinD cluster kubeconfig | Local only, expires with cluster | Job duration | In-memory only |
-
-### Supply Chain Security in CI
-
-- All GitHub Actions are pinned to specific SHA digests, not tags or branches.
-- The `actions/checkout`, `helm/kind-action`, and `docker/login-action` actions are vetted on a quarterly basis.
-- SBOM generation runs as part of the CI pipeline (see [CONTAINER-RUNTIME-SECURITY.md](./CONTAINER-RUNTIME-SECURITY.md)).
-
----
-
-## Ephemeral Cluster Cleanup Procedures
+- KinD clusters MUST be created at the start of each CI job and deleted at the end, regardless of test pass/fail status.
+- Cluster names MUST include the CI run identifier to prevent collisions in parallel jobs.
 
 ### Automatic Cleanup
 
-KinD clusters created in CI are automatically deleted at the end of the GitHub Actions job, regardless of job outcome. The `kind-action` handles this via a post-job step.
+- The CI pipeline MUST include a `post` or `finally` step that runs `kind delete cluster --name <cluster-name>` unconditionally.
+- If cleanup fails, the CI pipeline MUST report an error and alert the platform team.
 
-### Manual Cleanup
+### Audit Logs as CI Artefacts
 
-If a CI job is cancelled mid-run or a cluster is left behind, run:
+- Audit log files from the host-mounted path MUST be collected and uploaded as CI artefacts before cluster deletion.
+- Artefact retention MUST be at least 90 days.
 
-```bash
-# List all kind clusters
-kind get clusters
+### Test Isolation
 
-# Delete a specific stale cluster
-kind delete cluster --name socioprophet-ci-<run-id>
+- Each test suite MUST run in its own namespace with a unique name derived from the test run ID.
+- Cross-namespace access between test suites MUST be prohibited by `NetworkPolicy` and RBAC.
+- Shared cluster state (e.g., `ClusterRole` resources) MUST be cleaned up after each test suite.
 
-# Delete all socioprophet-ci-* clusters
-kind get clusters | grep "^socioprophet-ci-" | xargs -I{} kind delete cluster --name {}
-```
+---
 
-### Cleanup Verification
+## Local Development Guidelines
 
-A weekly scheduled workflow checks for stale KinD clusters on the CI runner pool:
+### Preferred Tool
 
-```bash
-# Run by .github/workflows/cleanup-stale-kind.yaml
-kind get clusters | grep "^socioprophet-ci-" | while read cluster; do
-  echo "Stale cluster found: ${cluster}" | tee -a stale-clusters.log
-  kind delete cluster --name "${cluster}"
-done
-```
+- KinD is the preferred tool for local Kubernetes development; see [MINIKUBE-STANDARDS.md](MINIKUBE-STANDARDS.md) for developer-laptop-specific guidance.
 
-If stale clusters are found, an alert is sent to the `#platform-alerts` Slack channel, since this may indicate a job that failed to clean up properly.
+### Mirror Production Policies
 
-### Data Retention for CI Artifacts
+- Local KinD configurations SHOULD mirror production RBAC, `NetworkPolicy`, and pod security settings.
+- Developers MUST test that their workloads pass the `restricted` pod security profile locally before submitting a pull request.
 
-| Artifact | Retention Period | Storage |
-|---|---|---|
-| Audit logs from CI runs | 30 days | GitHub Actions artifacts |
-| Test results | 30 days | GitHub Actions artifacts |
-| Container images built in CI (untagged) | 7 days | Registry garbage collection |
-| Integration test reports | 90 days | GitHub Actions artifacts |
+### Deviation Documentation
+
+- Any deviation from production security settings in a local KinD cluster MUST be documented in the repository's `docs/local-dev-deviations.md` file with a justification.
+
+---
+
+## References
+
+- KinD Documentation: https://kind.sigs.k8s.io/
+- NIST SP 800-53 Rev. 5: https://csrc.nist.gov/publications/detail/sp/800-53/rev-5
+- Kubernetes Pod Security Standards: https://kubernetes.io/docs/concepts/security/pod-security-standards/
+- Trivy: https://trivy.dev/
+- Calico Network Policies: https://docs.tigera.io/calico/latest/network-policy/

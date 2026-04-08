@@ -1,405 +1,168 @@
-# KubeFed Multi-Cluster Federation Standards — SocioProphet Platform
+# Kubernetes Federation Standards (kubefed)
 
-- Last updated: 2026-01-27
-- Status: Active governance document
-- Owner: Platform Engineering / Platform Security
-- Applies to: SocioProphet KubeFed control plane and all member clusters
+## Rationale
 
----
-
-## Table of Contents
-
-1. [KubeFed Architecture for SocioProphet](#kubefed-architecture-for-socioprophet)
-2. [mTLS Between Federation Control Plane and Member Clusters](#mtls-between-federation-control-plane-and-member-clusters)
-3. [Secret Synchronization Across Clusters](#secret-synchronization-across-clusters)
-4. [Federated RBAC Policies](#federated-rbac-policies)
-5. [Cross-Cluster Audit Log Aggregation](#cross-cluster-audit-log-aggregation)
-6. [Disaster Recovery and Multi-Cluster Failover](#disaster-recovery-and-multi-cluster-failover)
-7. [Federated Network Policies](#federated-network-policies)
-8. [Health Monitoring for Federation Endpoints](#health-monitoring-for-federation-endpoints)
+kubefed enables multi-cluster Kubernetes federation, allowing workloads, policies, and configurations to be propagated across multiple clusters. Federation extends the attack surface beyond a single cluster boundary. This standard defines security requirements for all federated control planes and workloads managed within the SocioProphet governance framework.
 
 ---
 
-## KubeFed Architecture for SocioProphet
+## Federation Control Plane Setup
 
-The SocioProphet platform deploys workloads across multiple geographic regions to meet availability, data residency, and compliance requirements. KubeFed provides the control plane for coordinating workload distribution, configuration propagation, and federated resource management across member clusters.
+### OIDC Authentication Across Clusters
 
-### Cluster Topology
+- Each federated cluster MUST be individually configured with OIDC authentication as specified in [KUBERNETES-SECURITY.md](KUBERNETES-SECURITY.md).
+- The federation control plane MUST authenticate to member clusters using service account tokens bound to OIDC-issued identities, not static kubeconfig credentials.
+- A common OIDC issuer SHOULD be used across all federated clusters to enable consistent identity resolution.
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│              KubeFed Host Cluster (us-east-1)                   │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │  KubeFed Controller Manager                              │   │
-│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │   │
-│  │  │ FederatedType│  │ PropagationP │  │ ReplicaSched │   │   │
-│  │  │ Controller   │  │ olicy Ctrl   │  │ uler         │   │   │
-│  │  └──────────────┘  └──────────────┘  └──────────────┘   │   │
-│  └──────────────────────────────────────────────────────────┘   │
-└──────────────────┬──────────────────────┬───────────────────────┘
-                   │ mTLS                 │ mTLS
-       ┌───────────▼───────┐   ┌──────────▼──────────┐
-       │  Member Cluster   │   │   Member Cluster    │
-       │  (us-west-2)      │   │   (eu-central-1)    │
-       │  FIPS kube build  │   │   FIPS kube build   │
-       └───────────────────┘   └─────────────────────┘
-```
+### mTLS Communication Between Clusters
 
-### Cluster Registration
+- All federation control-plane-to-member-cluster communication MUST use mTLS.
+- Certificates MUST use ECDSA-P256 or RSA-4096 minimum.
+- Certificates MUST be issued by a shared CA trusted by all member clusters.
+- Certificate rotation MUST be automated (cert-manager or equivalent) with a maximum 30-day lifetime.
 
-Member clusters are registered using `kubefedctl join`, which creates a `KubeFedCluster` resource in the host cluster. The registration process must:
+### Secret Synchronisation
 
-1. Use a dedicated service account in the member cluster (`kubefed-member-sa`), not the `cluster-admin` account.
-2. Bind the service account to the `kubefed:member-role` ClusterRole (read Namespaces, write federated resources).
-3. Store the kubeconfig credential in Vault (`kv/v2/kubefed/member-<cluster-name>`) and inject it via External Secrets Operator.
+- Raw Kubernetes `Secret` objects MUST NOT be synchronised between clusters by kubefed.
+- Secrets MUST be synchronised via Vault: each cluster retrieves its secrets independently from the central Vault cluster.
+- Sealed Secrets MAY be used as an interim measure with explicit documentation of the deviation and a remediation timeline.
 
-```yaml
-apiVersion: core.kubefed.io/v1beta1
-kind: KubeFedCluster
-metadata:
-  name: member-us-west-2
-  namespace: kube-federation-system
-spec:
-  apiEndpoint: https://kube.us-west-2.socioprophet.internal:6443
-  caBundle: <base64-encoded-CA>
-  secretRef:
-    name: member-us-west-2-credentials
-```
+### Audit Trail Federation
 
-### Supported Federated Resource Types
-
-| Resource | Federation Mode | Overrides Allowed |
-|---|---|---|
-| Deployment | Propagated | Replica count per cluster |
-| Service | Propagated | None |
-| ConfigMap | Propagated | Cluster-specific values |
-| NetworkPolicy | Propagated | None — policy must be identical |
-| Namespace | Propagated | Labels only |
-| ServiceAccount | Propagated | None |
-| ExternalSecret | Propagated | Vault path per cluster |
+- Audit logs from all member clusters MUST be forwarded to a central, immutable log store.
+- The central log store MUST retain logs for 90 days hot and 7 years archived.
+- Each audit event MUST include the originating cluster identifier.
 
 ---
 
-## mTLS Between Federation Control Plane and Member Clusters
+## Workload Federation
 
-All communication between the KubeFed host cluster controller manager and member cluster kube-apiservers is protected by mTLS. This is enforced at two layers:
+### Federated Resource Types
 
-1. **Kubeconfig-level TLS**: The kubeconfig stored in Vault for each member cluster uses a client certificate signed by the SocioProphet Internal CA (see [SECRETS-MANAGEMENT.md](./SECRETS-MANAGEMENT.md) for Vault PKI configuration).
-2. **Network-level mTLS**: Istio PeerAuthentication STRICT mode is applied to the `kube-federation-system` namespace, ensuring all inter-cluster control traffic is encrypted and mutually authenticated.
+- Federated `Deployment`, `StatefulSet`, and `DaemonSet` resources MUST use the `FederatedDeployment`, `FederatedStatefulSet`, and `FederatedDaemonSet` APIs respectively.
+- Federated resources MUST specify `placement` policies that explicitly list allowed member clusters; wildcard placement MUST NOT be used.
 
-### Certificate Requirements
+### Cross-Cluster Health Checks
 
-| Certificate | Algorithm | Key Size | Validity | Rotation |
-|---|---|---|---|---|
-| KubeFed controller client cert | ECDSA | P-256 | 90 days | Automated via cert-manager |
-| Member cluster CA | ECDSA | P-384 | 5 years | Manual with dual approval |
-| Inter-cluster API client cert | ECDSA | P-256 | 30 days | Automated via Vault PKI |
+- Each federated workload MUST define liveness and readiness probes.
+- The federation control plane MUST monitor health status of each placement independently.
+- Unhealthy placements MUST trigger an alert within 5 minutes.
 
-### cert-manager Certificate for KubeFed Controller
+### Failover Policies
 
-```yaml
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: kubefed-controller-client
-  namespace: kube-federation-system
-spec:
-  secretName: kubefed-controller-tls
-  duration: 2160h  # 90 days
-  renewBefore: 720h  # 30 days before expiry
-  subject:
-    organizations: [SocioProphet Platform]
-  commonName: kubefed-controller.kube-federation-system
-  keyAlgorithm: ecdsa
-  keySize: 256
-  usages:
-    - client auth
-  issuerRef:
-    name: vault-pki-issuer
-    kind: ClusterIssuer
-```
+- Federated workloads that are business-critical MUST define a `ReplicaSchedulingPreference` with failover targets.
+- Failover MUST be automatic for production workloads and MUST not require manual intervention for the first failover event.
+- Failover events MUST be logged as immutable audit entries.
+
+### Traffic Policy
+
+- Service discovery across clusters MUST use Istio or Linkerd service mesh with federated service entries; see [SERVICE-MESH-STANDARDS.md](SERVICE-MESH-STANDARDS.md).
+- DNS federation MUST be implemented via ExternalDNS or equivalent, with DNSSEC enabled where the DNS provider supports it.
 
 ---
 
-## Secret Synchronization Across Clusters
+## Multi-Cluster Networking
 
-Secrets are never stored in etcd unencrypted and are never propagated via KubeFed's built-in secret propagation. Instead, the SocioProphet platform uses a federated External Secrets Operator approach:
+### Service Mesh for Inter-Cluster Communication
 
-### Architecture
+- Istio multi-cluster mesh or Linkerd multi-cluster MUST be deployed for all inter-cluster communication.
+- mTLS MUST be enforced for all cross-cluster traffic; plain-text inter-cluster communication is prohibited.
+- Certificate issuers across clusters MUST share a common root CA or an intermediate CA hierarchy so that mTLS handshakes succeed without trust exceptions.
 
-Each member cluster runs its own ESO instance, and each ESO instance reads from the cluster-local Vault instance (or from the regional Vault cluster). Vault DR replication ensures that each regional Vault contains the same secrets as the primary.
+### CNI Consistency
 
-```
-Host Cluster            Member Cluster (us-west-2)
-┌───────────┐           ┌─────────────────────────┐
-│ FederatedE│           │ ExternalSecret          │
-│ xternalSe │ propagate │ (generated by federation│
-│ cret      │──────────►│  controller)            │
-└───────────┘           └────────────┬────────────┘
-                                     │ reads from
-                              ┌──────▼──────┐
-                              │ Vault       │
-                              │ us-west-2   │
-                              │ (DR replica)│
-                              └─────────────┘
-```
+- The same CNI plugin MUST be deployed on all member clusters or CNI plugins that support the same `NetworkPolicy` API semantics MUST be used.
+- CNI plugin versions SHOULD be kept within one minor version across clusters to prevent policy interpretation drift.
 
-### FederatedExternalSecret Custom Resource
+### IP Address Management
 
-The platform uses a custom controller (`fed-secrets-controller`) that watches `FederatedExternalSecret` resources on the host cluster and creates corresponding `ExternalSecret` resources on each member cluster.
+- IP address ranges MUST NOT overlap between clusters.
+- IP address management (IPAM) MUST be documented for each cluster and reviewed when a new cluster is added.
 
-```yaml
-apiVersion: socioprophet.io/v1alpha1
-kind: FederatedExternalSecret
-metadata:
-  name: db-credentials
-  namespace: socioprophet-prod
-spec:
-  template:
-    spec:
-      refreshInterval: 1h
-      secretStoreRef:
-        name: vault-backend
-        kind: ClusterSecretStore
-      target:
-        name: db-credentials
-        creationPolicy: Owner
-      data:
-        - secretKey: password
-          remoteRef:
-            key: socioprophet/database
-            property: password
-  placement:
-    clusters:
-      - name: member-us-west-2
-      - name: member-eu-central-1
-  overrides:
-    - clusterName: member-us-west-2
-      clusterOverrides:
-        - path: /spec/data/0/remoteRef/key
-          value: socioprophet-us-west/database
-    - clusterName: member-eu-central-1
-      clusterOverrides:
-        - path: /spec/data/0/remoteRef/key
-          value: socioprophet-eu/database
-```
+### DNS Federation
 
-### Encrypted Transit Requirements
-
-All Vault API communication for secret retrieval uses TLS 1.3 with ECDHE-ECDSA cipher suites. The Vault agent sidecar injects credentials directly into pod memory; secrets do not touch disk.
+- Each cluster MUST have a distinct DNS zone.
+- Cross-cluster service resolution MUST use fully qualified domain names (FQDNs).
+- DNS over TLS or DNS over HTTPS MUST be used for any external DNS queries.
 
 ---
 
-## Federated RBAC Policies
+## Secrets Federation
 
-RBAC policies are federated from the host cluster to all member clusters. Local RBAC overrides on member clusters are forbidden; all access is governed by federated policies.
+### Centralised Secrets Provider
 
-### FederatedClusterRole
+- HashiCorp Vault MUST be deployed in high-availability mode (3+ nodes) as the authoritative secrets provider; see [SECRETS-MANAGEMENT.md](SECRETS-MANAGEMENT.md).
+- Each member cluster MUST authenticate to Vault using the Kubernetes JWT auth method scoped to that cluster.
 
-```yaml
-apiVersion: types.kubefed.io/v1beta1
-kind: FederatedClusterRole
-metadata:
-  name: socioprophet-workload
-  namespace: kube-federation-system
-spec:
-  template:
-    rules:
-      - apiGroups: [""]
-        resources: [configmaps]
-        verbs: [get, list, watch]
-      - apiGroups: [""]
-        resources: [serviceaccounts/token]
-        verbs: [create]
-  placement:
-    clusterSelector:
-      matchLabels:
-        socioprophet.io/member: "true"
-```
+### Per-Cluster Secret Projection
 
-### Federated ClusterRoleBinding
+- Vault policies MUST be scoped per cluster; a compromised cluster MUST NOT allow access to another cluster's secrets.
+- Secrets MUST be projected into pods via the Vault Agent Injector or External Secrets Operator on each member cluster independently.
+- Raw secrets MUST NOT reside in etcd on any member cluster without envelope encryption.
 
-```yaml
-apiVersion: types.kubefed.io/v1beta1
-kind: FederatedClusterRoleBinding
-metadata:
-  name: socioprophet-workload-binding
-  namespace: kube-federation-system
-spec:
-  template:
-    roleRef:
-      apiGroup: rbac.authorization.k8s.io
-      kind: ClusterRole
-      name: socioprophet-workload
-    subjects:
-      - kind: Group
-        name: "oidc:socioprophet-workloads"
-        apiGroup: rbac.authorization.k8s.io
-  placement:
-    clusterSelector:
-      matchLabels:
-        socioprophet.io/member: "true"
-```
+### Audit Logging of Secret Access
 
-### RBAC Drift Detection
+- All Vault secret-read events MUST be forwarded to the central audit log store.
+- Vault audit log events MUST include: cluster identifier, service account name, namespace, secret path, timestamp, and result.
 
-A weekly CronJob runs `kubectl auth can-i --list` against each member cluster API server and diffs the results against the expected federated policy. Any deviation triggers an alert in Alertmanager (see [AUDIT-OBSERVABILITY.md](./AUDIT-OBSERVABILITY.md)).
+### Rotation Policies
+
+- Secret rotation policies MUST be synchronised across clusters; all clusters MUST rotate secrets within the same 30-day window.
+- Rotation MUST be zero-downtime across all affected clusters simultaneously.
 
 ---
 
-## Cross-Cluster Audit Log Aggregation
+## RBAC Across Clusters
 
-Each member cluster ships its kube-apiserver audit logs to the central OpenSearch cluster via a Vector agent. The aggregation pipeline is described in detail in [AUDIT-OBSERVABILITY.md](./AUDIT-OBSERVABILITY.md); the KubeFed-specific configuration is:
+### Federated RBAC Policies
 
-### Log Enrichment
+- `FederatedClusterRole` and `FederatedClusterRoleBinding` resources MUST be used to propagate RBAC policies uniformly to all member clusters.
+- Per-cluster RBAC overrides MUST be documented and approved by the security team.
 
-Each audit log event is enriched with the following fields before forwarding:
+### Consistent Role Definitions
 
-```json
-{
-  "cluster": "member-us-west-2",
-  "region": "us-west-2",
-  "federation_host": "host-us-east-1",
-  "compliance_scope": "fips-140-2",
-  "environment": "production"
-}
-```
+- Role names and permission sets MUST be consistent across all member clusters.
+- Any divergence between a cluster's actual role and the federated role definition MUST trigger an automated alert.
 
-### Cross-Cluster Correlation
+### Cross-Cluster Service Accounts
 
-Federated operations (e.g., propagation of a FederatedDeployment) generate audit events on both the host cluster and the member clusters. The `requestID` field is preserved across clusters by the federation controller to enable correlation.
+- Cross-cluster service accounts MUST NOT share tokens; each cluster MUST issue its own bound token for the service account identity.
+- Impersonation across clusters MUST be logged as an audit event in both the source and target cluster.
 
-A Jaeger trace is emitted for each federated operation, linking the host-cluster API call to the member-cluster API calls. This trace is stored in the SocioProphet Jaeger instance and retained for 90 days.
+### Audit of Federated Access Decisions
+
+- All federated RBAC decision events MUST be captured in the central audit log.
+- Rejected cross-cluster access MUST generate a high-priority alert within 5 minutes.
 
 ---
 
-## Disaster Recovery and Multi-Cluster Failover
+## Disaster Recovery
 
-### Failover Tiers
+### Failover Procedures
 
-| Scenario | Recovery Action | RTO | RPO |
-|---|---|---|---|
-| Member cluster unreachable (transient) | KubeFed retries for 5 minutes; alerts after 2 minutes | < 5 min | 0 (no data loss) |
-| Member cluster permanently failed | Promote standby cluster; re-register with KubeFed | < 30 min | < 5 min |
-| Host cluster failure | Promote DR host cluster; re-federate all members | < 2 hours | < 15 min |
-| Multi-region split-brain | Activate break-glass; manual quorum decision | < 4 hours | Varies |
+- Failover procedures MUST be documented in the operations runbook and reviewed quarterly.
+- The runbook MUST include: detection trigger, cluster isolation steps, workload promotion steps, DNS cutover steps, and validation tests.
 
-### Member Cluster Failover Procedure
+### Recovery Time Objective
 
-1. **Declare incident**: Page Platform Engineering on-call. Open an incident ticket.
-2. **Isolate failed cluster**: Remove the `KubeFedCluster` resource for the failed member (`kubectl delete kubefedcluster member-<name> -n kube-federation-system`).
-3. **Provision standby**: If a warm standby is available, update DNS to point to the standby cluster.
-4. **Re-register standby**: `kubefedctl join member-<standby-name> --host-cluster-context=<host> --cluster-context=<standby>`.
-5. **Trigger reconciliation**: The KubeFed controller will propagate all FederatedResources to the new member within the next reconciliation cycle (default: 10 seconds).
-6. **Validate**: Run the post-deployment checklist from [INTEGRATION-CHECKLIST.md](./INTEGRATION-CHECKLIST.md) against the new member cluster.
-7. **Update audit records**: Document all manual actions in the incident ticket with timestamps.
+- Recovery Time Objective (RTO) for federated workloads MUST be less than 1 hour from incident declaration.
 
-### Host Cluster DR
+### Recovery Point Objective
 
-The KubeFed host cluster's etcd is backed up every 4 hours to S3 (encrypted with AES-256-GCM using a Vault-managed key). A DR host cluster is maintained in a separate region in warm-standby mode.
+- Recovery Point Objective (RPO) for federated persistent state MUST be less than 5 minutes, enforced by continuous backup or synchronous replication.
+
+### Quarterly DR Testing
+
+- Disaster recovery scenarios MUST be tested quarterly in a non-production federation.
+- Test results MUST be documented and retained for 3 years.
+- Failures in quarterly DR tests MUST generate a remediation ticket with a 30-day resolution deadline.
 
 ---
 
-## Federated Network Policies
+## References
 
-Network policies are federated using the same `FederatedNetworkPolicy` pattern as other resource types. The same default-deny baseline defined in [KUBERNETES-SECURITY.md](./KUBERNETES-SECURITY.md) is propagated to all member clusters.
-
-```yaml
-apiVersion: types.kubefed.io/v1beta1
-kind: FederatedNetworkPolicy
-metadata:
-  name: default-deny-all
-  namespace: kube-federation-system
-spec:
-  template:
-    spec:
-      podSelector: {}
-      policyTypes:
-        - Ingress
-        - Egress
-  placement:
-    clusters:
-      - name: member-us-west-2
-      - name: member-eu-central-1
-```
-
-### Regional Egress Overrides
-
-Clusters in the EU region have additional egress restrictions to comply with GDPR data residency requirements. These are applied as overrides on the FederatedNetworkPolicy:
-
-```yaml
-  overrides:
-    - clusterName: member-eu-central-1
-      clusterOverrides:
-        - path: /spec/egress
-          value:
-            - to:
-                - ipBlock:
-                    cidr: 10.200.0.0/16  # EU VPC CIDR only
-              ports:
-                - protocol: TCP
-                  port: 443
-```
-
----
-
-## Health Monitoring for Federation Endpoints
-
-### KubeFed Controller Health Metrics
-
-The KubeFed controller exposes Prometheus metrics at `:8080/metrics`. The following metrics are scraped by the cluster-local Prometheus instance:
-
-| Metric | Alert Condition |
-|---|---|
-| `kubefed_controller_reconcile_errors_total` | > 5 in 5 minutes → PagerDuty critical |
-| `kubefed_cluster_healthy` (gauge) | = 0 → PagerDuty critical |
-| `kubefed_resource_propagation_duration_seconds` | p99 > 30s → Slack warning |
-| `kubefed_controller_queue_depth` | > 100 → Slack warning |
-
-### Member Cluster Health Checks
-
-A synthetic health check job runs every 60 seconds against each member cluster's `/healthz`, `/readyz`, and `/livez` endpoints. The job is run from the host cluster and from an external monitoring node (cross-cluster validation).
-
-```yaml
-apiVersion: monitoring.coreos.com/v1
-kind: ProbeList
-metadata:
-  name: member-cluster-health
-  namespace: monitoring
-spec:
-  prober:
-    url: blackbox-exporter.monitoring.svc.cluster.local:9115
-  targets:
-    staticConfig:
-      static:
-        - https://kube.us-west-2.socioprophet.internal:6443/healthz
-        - https://kube.eu-central-1.socioprophet.internal:6443/healthz
-      labels:
-        environment: production
-        component: kubernetes-apiserver
-```
-
-### Alertmanager Rules
-
-```yaml
-groups:
-  - name: kubefed
-    rules:
-      - alert: KubeFedMemberClusterUnhealthy
-        expr: kubefed_cluster_healthy == 0
-        for: 2m
-        labels:
-          severity: critical
-          team: platform
-        annotations:
-          summary: "KubeFed member cluster {{ $labels.cluster_name }} is unhealthy"
-          runbook: "https://docs.socioprophet.internal/runbooks/kubefed-unhealthy"
-      - alert: KubeFedReconcileErrors
-        expr: rate(kubefed_controller_reconcile_errors_total[5m]) > 1
-        for: 5m
-        labels:
-          severity: warning
-          team: platform
-        annotations:
-          summary: "KubeFed controller reconcile errors elevated"
-```
+- kubefed Documentation: https://github.com/kubernetes-sigs/kubefed
+- NIST SP 800-53 Rev. 5: https://csrc.nist.gov/publications/detail/sp/800-53/rev-5
+- Istio Multi-Cluster: https://istio.io/latest/docs/setup/install/multicluster/
+- Linkerd Multi-Cluster: https://linkerd.io/2.13/features/multicluster/
+- ExternalDNS: https://github.com/kubernetes-sigs/external-dns

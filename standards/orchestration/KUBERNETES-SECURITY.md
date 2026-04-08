@@ -1,217 +1,87 @@
-# Kubernetes Security Standards — SocioProphet Platform
+# Kubernetes Security Standards
 
-- Last updated: 2026-01-27
-- Status: Active governance document
-- Owner: Platform Engineering / Platform Security
-- Applies to: All SocioProphet Kubernetes clusters (production, staging, CI)
+## Rationale
 
----
-
-## Table of Contents
-
-1. [OIDC Authentication Configuration](#oidc-authentication-configuration)
-2. [RBAC Policies](#rbac-policies)
-3. [Network Policies](#network-policies)
-4. [Secrets Management](#secrets-management)
-5. [Pod Security Standards](#pod-security-standards)
-6. [Audit Logging](#audit-logging)
-7. [Image Security and Admission Control](#image-security-and-admission-control)
-8. [etcd Encryption at Rest](#etcd-encryption-at-rest)
-9. [CIS Kubernetes Benchmark Compliance](#cis-kubernetes-benchmark-compliance)
-10. [Kubernetes Hardening Checklist](#kubernetes-hardening-checklist)
+Kubernetes clusters are the primary runtime for SocioProphet workloads. Misconfigured clusters represent the largest attack surface in the orchestration layer. This standard defines the minimum security posture that every Kubernetes cluster MUST maintain to be considered compliant with the SocioProphet governance framework and NIST 800-53 controls.
 
 ---
 
-## OIDC Authentication Configuration
+## Cluster API Authentication
 
-The SocioProphet platform uses OIDC as the primary human operator authentication mechanism for the Kubernetes API server. Service-to-service authentication uses SPIFFE/SPIRE SVIDs distributed through Istio or Linkerd.
+### OIDC Integration
 
-### kube-apiserver OIDC Flags
+- Clusters MUST configure `--oidc-issuer-url`, `--oidc-client-id`, `--oidc-username-claim`, and `--oidc-groups-claim` on the API server.
+- Accepted identity providers: GitHub (via GitHub Actions OIDC for CI), corporate identity providers (e.g., Okta, Azure AD, Keycloak).
+- OIDC token validation MUST require audience restriction; tokens without an `aud` claim MUST be rejected.
+- OIDC tokens MUST have a maximum lifetime of 1 hour for human users and 15 minutes for CI workloads.
 
-All kube-apiserver deployments must be started with the following OIDC flags. These values are environment-specific; the placeholders below must be replaced with cluster-specific values stored in Vault.
+### Webhook Token Authentication
 
-```
---oidc-issuer-url=https://auth.socioprophet.internal/oidc
---oidc-client-id=kube-apiserver
---oidc-username-claim=email
---oidc-username-prefix=oidc:
---oidc-groups-claim=groups
---oidc-groups-prefix=oidc:
---oidc-ca-file=/etc/kubernetes/pki/oidc-ca.crt
---oidc-required-claim=aud=kube-apiserver
-```
+- Webhook token authentication MAY be used as an alternative to OIDC where OIDC is unavailable.
+- Webhook endpoints MUST use TLS 1.3 and authenticate with mutual TLS.
+- Tokens passed to webhooks MUST be short-lived (maximum 1 hour).
 
-### Additional kube-apiserver Security Flags
+### Service Account Management
 
-```
---anonymous-auth=false
---authorization-mode=Node,RBAC
---enable-admission-plugins=NodeRestriction,PodSecurity,EventRateLimit,\
-  AlwaysPullImages,ImagePolicyWebhook,LimitRanger,\
-  ResourceQuota,ServiceAccount
---audit-log-path=/var/log/kubernetes/audit.log
---audit-policy-file=/etc/kubernetes/audit-policy.yaml
---audit-log-maxage=30
---audit-log-maxbackup=10
---audit-log-maxsize=100
---tls-min-version=VersionTLS12
---tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,\
-  TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,\
-  TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,\
-  TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
---encryption-provider-config=/etc/kubernetes/encryption-config.yaml
---service-account-issuer=https://kubernetes.socioprophet.internal
---service-account-signing-key-file=/etc/kubernetes/pki/sa.key
---service-account-key-file=/etc/kubernetes/pki/sa.pub
---kubelet-certificate-authority=/etc/kubernetes/pki/ca.crt
---kubelet-client-certificate=/etc/kubernetes/pki/apiserver-kubelet-client.crt
---kubelet-client-key=/etc/kubernetes/pki/apiserver-kubelet-client.key
---profiling=false
---request-timeout=120s
---feature-gates=RotateKubeletServerCertificate=true
-```
+- Every workload MUST use a dedicated `ServiceAccount`; the `default` service account in any namespace MUST have all tokens disabled (`automountServiceAccountToken: false`).
+- Service account tokens MUST use the `BoundServiceAccountTokenVolume` feature (bound tokens with audience and expiry).
+- Projected service account tokens MUST expire within 1 hour.
+- Service accounts MUST NOT be granted `ClusterAdmin` or equivalent permissions.
 
-### kubelet Configuration
+### Client Certificate Authentication (mTLS)
 
-```yaml
-authentication:
-  anonymous:
-    enabled: false
-  webhook:
-    enabled: true
-  x509:
-    clientCAFile: /etc/kubernetes/pki/ca.crt
-authorization:
-  mode: Webhook
-tlsCipherSuites:
-  - TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
-  - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-  - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
-  - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-tlsMinVersion: VersionTLS12
-rotateCertificates: true
-serverTLSBootstrap: true
-protectKernelDefaults: true
-readOnlyPort: 0
-eventRecordQPS: 5
-```
+- Client certificate authentication MUST only be used for break-glass emergency access.
+- Certificates MUST use ECDSA-P256 or RSA-4096 minimum key size.
+- Emergency certificates MUST be revoked within 24 hours of use via CRL or OCSP.
+- Emergency certificate use MUST generate a high-priority audit alert.
 
 ---
 
-## RBAC Policies
+## RBAC (Role-Based Access Control)
 
-### ClusterRoles for SocioProphet Services
+### Cluster Roles vs. Namespace Roles
 
-SocioProphet defines the following ClusterRoles. All are named with the `socioprophet:` prefix to avoid collisions with built-in roles.
+- `ClusterRole` resources MUST only be used when cross-namespace or cluster-wide access is genuinely required.
+- Namespace-scoped `Role` resources MUST be preferred for all application workloads.
+- All `ClusterRoleBinding` resources MUST be reviewed and approved by the security team before deployment.
 
-```yaml
-# Read-only access for observability services (Prometheus, Grafana, Jaeger)
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: socioprophet:observability-reader
-rules:
-  - apiGroups: [""]
-    resources: [nodes, pods, services, endpoints, namespaces]
-    verbs: [get, list, watch]
-  - apiGroups: [apps]
-    resources: [deployments, replicasets, statefulsets, daemonsets]
-    verbs: [get, list, watch]
-  - apiGroups: [batch]
-    resources: [jobs, cronjobs]
-    verbs: [get, list, watch]
-  - nonResourceURLs: [/metrics, /healthz, /readyz]
-    verbs: [get]
----
-# Vault Agent Injector needs to patch pods
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: socioprophet:vault-agent-injector
-rules:
-  - apiGroups: [""]
-    resources: [pods]
-    verbs: [get, list, watch, patch]
-  - apiGroups: [admissionregistration.k8s.io]
-    resources: [mutatingwebhookconfigurations]
-    verbs: [get, list, watch, create, update, patch]
----
-# External Secrets Operator
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: socioprophet:external-secrets-operator
-rules:
-  - apiGroups: [external-secrets.io]
-    resources: [externalsecrets, secretstores, clustersecretstores]
-    verbs: [get, list, watch, create, update, patch, delete]
-  - apiGroups: [""]
-    resources: [secrets, serviceaccounts]
-    verbs: [get, list, watch, create, update, patch, delete]
-  - apiGroups: [""]
-    resources: [events]
-    verbs: [create, patch]
-```
+### Least Privilege Role Definitions
 
-### Namespace-Scoped Roles
+- Roles MUST enumerate only the specific `verbs`, `resources`, and `resourceNames` required.
+- Wildcard (`*`) verbs or resources MUST NOT be used in production roles.
+- Read-only access (`get`, `list`, `watch`) MUST be granted in preference to write access (`create`, `update`, `patch`, `delete`) unless the workload requires write.
 
-```yaml
-# SocioProphet application workload — minimal permissions per namespace
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: socioprophet:workload
-  namespace: socioprophet-prod
-rules:
-  - apiGroups: [""]
-    resources: [configmaps]
-    verbs: [get, list, watch]
-  - apiGroups: [""]
-    resources: [pods]
-    verbs: [get]
-  - apiGroups: [""]
-    resources: [serviceaccounts/token]
-    verbs: [create]
----
-# CI/CD deploy role — scoped to apply manifests, not to read secrets
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: socioprophet:cicd-deploy
-  namespace: socioprophet-prod
-rules:
-  - apiGroups: [apps]
-    resources: [deployments, statefulsets]
-    verbs: [get, list, watch, create, update, patch]
-  - apiGroups: [""]
-    resources: [services, configmaps]
-    verbs: [get, list, watch, create, update, patch]
-  - apiGroups: [networking.k8s.io]
-    resources: [ingresses]
-    verbs: [get, list, watch, create, update, patch]
-```
+### Service Account per Workload
 
-### RoleBinding and ClusterRoleBinding Conventions
+- Each `Deployment`, `StatefulSet`, or `DaemonSet` MUST reference a unique `ServiceAccount`.
+- Service accounts MUST be named to identify the owning workload (e.g., `<workload-name>-sa`).
+- Service accounts MUST be annotated with the owning team and last-reviewed date.
 
-- All bindings use OIDC group subjects (`oidc:<group>`) rather than individual user subjects.
-- Service accounts are bound to the minimum Role required. No service account is bound to `cluster-admin`.
-- `cluster-admin` is reserved for break-glass emergency access only, governed by the break-glass procedure in [SECRETS-MANAGEMENT.md](./SECRETS-MANAGEMENT.md).
-- All bindings are audited on a 30-day cycle; unused bindings are removed.
+### Separation of Duties
+
+- Application workloads MUST NOT hold `cluster-admin` or any `ClusterRole` that grants write access to all resources.
+- Platform operators (human) MUST use impersonation (`kubectl --as`) rather than holding persistent elevated permissions.
+- `cluster-admin` binding MUST be restricted to a break-glass group with auditable access.
+
+### Quarterly RBAC Review
+
+- All `ClusterRoleBinding` and `RoleBinding` resources MUST be reviewed quarterly.
+- Unused service accounts and roles MUST be removed within 30 days of identification.
+- Review results MUST be recorded as an immutable audit event.
 
 ---
 
 ## Network Policies
 
-### Default-Deny Baseline
+### Default Deny
 
-Every SocioProphet namespace must have a default-deny policy applied before any workloads are scheduled. Namespace provisioning automation enforces this.
+- Every namespace MUST contain a default-deny `NetworkPolicy` for both ingress and egress:
 
 ```yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: default-deny-all
-  namespace: socioprophet-prod
 spec:
   podSelector: {}
   policyTypes:
@@ -219,83 +89,48 @@ spec:
     - Egress
 ```
 
-### Ingress Rules — Application Tier
+### Explicit Allow Rules
 
-```yaml
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-ingress-from-mesh
-  namespace: socioprophet-prod
-spec:
-  podSelector:
-    matchLabels:
-      app.kubernetes.io/part-of: socioprophet
-  policyTypes:
-    - Ingress
-  ingress:
-    - from:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: istio-system
-      ports:
-        - protocol: TCP
-          port: 8080
-    - from:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: socioprophet-prod
-      ports:
-        - protocol: TCP
-          port: 8080
-        - protocol: TCP
-          port: 9090
-```
+- Ingress and egress rules MUST be added as separate `NetworkPolicy` resources that explicitly enumerate allowed peer namespaces, pod selectors, ports, and protocols.
+- DNS egress (UDP/TCP port 53 to `kube-dns`) MUST be explicitly permitted for all namespaces.
+- Monitoring scrape paths (Prometheus) MUST be explicitly permitted.
 
-### Egress Rules — Controlled Outbound
+### Pod-to-Pod Network Isolation
 
-```yaml
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-egress-controlled
-  namespace: socioprophet-prod
-spec:
-  podSelector:
-    matchLabels:
-      app.kubernetes.io/part-of: socioprophet
-  policyTypes:
-    - Egress
-  egress:
-    # DNS resolution
-    - to:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: kube-system
-      ports:
-        - protocol: UDP
-          port: 53
-        - protocol: TCP
-          port: 53
-    # Vault for secrets
-    - to:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: vault
-      ports:
-        - protocol: TCP
-          port: 8200
-    # Intra-namespace traffic
-    - to:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: socioprophet-prod
-```
+- Pods MUST NOT be reachable from outside their own namespace unless an explicit `NetworkPolicy` permits it.
+- Cross-namespace communication MUST use `namespaceSelector` in the `NetworkPolicy` rule, not open CIDR ranges.
+
+### Service Mesh Integration
+
+- When Istio or Linkerd is deployed, `NetworkPolicy` MUST remain in place alongside service-mesh authorization policies; one MUST NOT substitute for the other.
+- Service mesh mTLS MUST enforce per-service authorization; see [SERVICE-MESH-STANDARDS.md](SERVICE-MESH-STANDARDS.md).
 
 ---
 
 ## Secrets Management
 
+### Encryption at Rest
+
+- Kubernetes `Secret` objects MUST be encrypted at rest in etcd using `aescbc` with AES-256 or `aesgcm` with AES-256-GCM.
+- The encryption configuration MUST be applied at API server startup via `--encryption-provider-config`.
+- Encryption keys MUST be rotated annually or upon suspected compromise.
+
+### External Secrets Provider (HashiCorp Vault)
+
+- Application secrets MUST be sourced from HashiCorp Vault and injected into pods via the Vault Agent Injector or the External Secrets Operator.
+- Kubernetes `Secret` objects created by the External Secrets Operator serve as a projection cache only; they MUST NOT be the authoritative secret store.
+- See [SECRETS-MANAGEMENT.md](SECRETS-MANAGEMENT.md) for full Vault integration requirements.
+
+### Secret Rotation
+
+- Long-lived secrets MUST be rotated on a maximum 30-day cycle.
+- Rotation MUST be zero-downtime (rolling update or dual-active).
+- All rotation events MUST be logged as immutable audit entries.
+
+### RBAC for Secret Access
+
+- Only the `ServiceAccount` belonging to the consuming workload MAY have `get` access to its projected `Secret` object.
+- No `list` or `watch` permission on `Secret` resources SHOULD be granted to application workloads.
 ### External Secrets Operator
 
 The SocioProphet platform uses the [External Secrets Operator (ESO)](https://external-secrets.io/) to synchronize secrets from Vault into Kubernetes Secrets. No secret value is stored in Git or etcd unencrypted.
@@ -351,6 +186,92 @@ For CI/CD environments where Vault is not directly accessible, [Sealed Secrets](
 
 ## Pod Security Standards
 
+### Enforced Restrictions
+
+- All production namespaces MUST be labelled with `pod-security.kubernetes.io/enforce: restricted`.
+- The `restricted` profile prohibits: privileged containers, host namespaces (PID, IPC, network), host path volumes (write), running as root, and privilege escalation.
+
+### Security Contexts
+
+Every pod MUST include:
+
+```yaml
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 65534
+  seccompProfile:
+    type: RuntimeDefault
+containers:
+  - securityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop: ["ALL"]
+```
+
+### Image Pull Secrets
+
+- Pods that pull from private registries MUST reference an `imagePullSecret` in their pod spec.
+- Image pull credentials MUST be rotated on a 30-day cycle and sourced from Vault.
+
+---
+
+## Audit Logging
+
+### API Audit Policy
+
+- The Kubernetes API server MUST be started with `--audit-log-path`, `--audit-policy-file`, `--audit-log-maxage`, and `--audit-log-maxbackup` flags.
+- The audit policy MUST log `RequestResponse` level for secrets, configmaps, and authentication-related resources.
+- The audit policy MUST log at least `Metadata` level for all other resources.
+
+### Immutable Audit Log Storage
+
+- Audit logs MUST be forwarded to external, immutable storage (e.g., S3 with Object Lock, GCS with Bucket Lock) within 60 seconds.
+- Logs MUST NOT be stored exclusively in cluster-local volumes.
+
+### Retention
+
+- Hot storage: 90 days.
+- Archived storage: 7 years.
+
+### Audit Events
+
+Each audit event MUST include: `user.username`, `user.groups`, `sourceIPs`, `verb`, `objectRef.resource`, `objectRef.namespace`, `objectRef.name`, `responseStatus.code`, `requestReceivedTimestamp`, `stageTimestamp`.
+
+---
+
+## Image Security
+
+### Vulnerability Scanning
+
+- All container images MUST be scanned before admission using a tool such as Trivy, Grype, or equivalent.
+- Images with Critical or High severity CVEs without a mitigating control MUST be blocked by admission policy.
+- SBOM (Software Bill of Materials) MUST be generated and stored alongside each published image.
+
+### Image Signing
+
+- All images MUST be signed using `cosign` with ECDSA-P256 keys or `notary` with ECDSA-P256.
+- Signing keys MUST be stored in Vault or a hardware-backed key store.
+
+### Admission Control
+
+- An `ImagePolicyWebhook` or equivalent admission controller MUST validate that all images are signed before a pod is admitted to any production namespace.
+- Unsigned images MUST be blocked; admission MUST generate an audit event.
+
+### Registry Authentication
+
+- Image pulls MUST use TLS 1.3 to the registry.
+- Unauthenticated pulls from public registries MUST be blocked in production namespaces.
+
+---
+
+## References
+
+- NIST SP 800-53 Rev. 5: https://csrc.nist.gov/publications/detail/sp/800-53/rev-5
+- Kubernetes Security Concepts: https://kubernetes.io/docs/concepts/security/
+- Kubernetes Pod Security Standards: https://kubernetes.io/docs/concepts/security/pod-security-standards/
+- cosign Image Signing: https://docs.sigstore.dev/cosign/overview/
+- External Secrets Operator: https://external-secrets.io/
 All SocioProphet production namespaces enforce the **Restricted** Pod Security Standard. This is enforced via the Kubernetes built-in Pod Security Admission controller.
 
 ### Namespace Labels
