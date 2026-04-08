@@ -1,0 +1,31 @@
+{
+  "legal_name": "Example Community Accountability Network",
+  "aliases": [
+    "ECAN"
+  ],
+  "registration_status": "registered",
+  "jurisdiction": "Example State",
+  "year_founded": 2018,
+  "contacts": [
+    {
+      "name": "Example Lead",
+      "email": "lead@example.org",
+      "phone": "+00 0000 0000"
+    }
+  ],
+  "mission": "Strengthen community accountability and local civic participation.",
+  "constituency": "Local community-based organizations and citizen groups",
+  "operating_geographies": [
+    "District A",
+    "District B"
+  ],
+  "safeguarding_status": "developing",
+  "data_classes_handled": [
+    "contact details",
+    "programme participation records"
+  ],
+  "civic_space_risks": [
+    "registration burden",
+    "periodic online harassment"
+  ]
+}
