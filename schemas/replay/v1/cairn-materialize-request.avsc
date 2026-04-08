@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "CairnMaterializeRequest",
+  "namespace": "org.socioprophet.replay.v1",
+  "doc": "Request payload for replay.v1.Cairn/Materialize in the first local-hybrid slice.",
+  "fields": [
+    {"name": "taskId", "type": "string"},
+    {"name": "journalOffset", "type": "long"},
+    {"name": "materializeArtifacts", "type": "boolean"}
+  ]
+}

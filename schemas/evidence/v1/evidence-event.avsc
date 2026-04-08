@@ -1,0 +1,34 @@
+{
+  "type": "record",
+  "name": "EvidenceEvent",
+  "namespace": "org.socioprophet.evidence.v1",
+  "doc": "Evidence append payload for the first local-hybrid slice.",
+  "fields": [
+    {"name": "eventId", "type": "string"},
+    {"name": "parentEventId", "type": ["null", "string"], "default": null},
+    {"name": "sessionId", "type": "string"},
+    {"name": "taskId", "type": "string"},
+    {"name": "actor", "type": {
+      "type": "record",
+      "name": "EvidenceActor",
+      "fields": [
+        {"name": "kind", "type": "string"},
+        {"name": "id", "type": "string"}
+      ]
+    }},
+    {"name": "capability", "type": "string"},
+    {"name": "policyHash", "type": ["null", "string"], "default": null},
+    {"name": "executionLane", "type": "string"},
+    {"name": "workerId", "type": ["null", "string"], "default": null},
+    {"name": "modelId", "type": ["null", "string"], "default": null},
+    {"name": "toolchain", "type": {"type": "array", "items": "string"}},
+    {"name": "zoneCrossings", "type": {"type": "array", "items": "string"}},
+    {"name": "inputDigest", "type": "string"},
+    {"name": "outputDigest", "type": "string"},
+    {"name": "artifactRefs", "type": {"type": "array", "items": "string"}},
+    {"name": "startedAt", "type": "string"},
+    {"name": "finishedAt", "type": "string"},
+    {"name": "journalOffset", "type": ["null", "long"], "default": null},
+    {"name": "cairnId", "type": ["null", "string"], "default": null}
+  ]
+}
