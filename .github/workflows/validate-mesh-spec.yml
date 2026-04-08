@@ -12,6 +12,9 @@ on:
       - 'docs/standards/agentic-local-first-fog-mesh/**'
       - '.github/workflows/validate-mesh-spec.yml'
 
+permissions:
+  contents: read
+
 jobs:
   validate:
     runs-on: ubuntu-latest
