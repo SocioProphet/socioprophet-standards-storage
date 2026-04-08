@@ -11,6 +11,16 @@
 ## Repository description
 This repository is a **standards and decision** package for an open, vendor-neutral incident intelligence / ChatOps platform. It defines storage contexts, data contracts, service interfaces, and benchmark methodology for evaluating portability, performance, and governance across the stack.
 
+## Metadata summary
+| Key | Summary |
+| --- | --- |
+| Repository role | Canonical standards source for storage, contracts, and benchmark methodology in SocioProphet platform workstreams. |
+| Primary outputs | Normative standards (`docs/standards`), benchmark guidance (`docs/benchmarks`), workload definitions (`benchmarks/workloads`), and ADRs (`adr`). |
+| Contract formats | Avro (events), Arrow/Parquet (analytics), JSON-LD (semantic/provenance overlays). |
+| Interface standards | TritRPC service interfaces and event bus topic conventions. |
+| Decision posture | Vendor-neutral defaults with workload-driven adoption gates for vector and graph systems. |
+| Governance intent | Reproducible measurement, portability, and security-first interoperability across contexts. |
+
 We treat the platform as a set of **contexts** (event stream, incident state, artifacts, search, vectors, graphs, metrics) and we standardize:
 - **Data contracts:** Avro for event contracts; Arrow + Parquet for analytic payloads; JSON-LD for semantic/provenance overlays.
 - **Interfaces:** TritRPC (typed RPC) for service calls; event bus topics for asynchronous flows.
