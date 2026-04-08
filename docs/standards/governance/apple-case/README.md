@@ -1,43 +1,41 @@
-# Apple Case Evidence Pack (staging note)
+# Apple Case — Lessons Learned
 
-This directory anchors the Apple-case evidence-pack work inside the standards repository.
+This document records the system-hardening lessons drawn from the Apple-case investigation. The evidence pack, schemas, fixtures, and rollup helpers developed during that work belong in the **shining-apple** repository. What belongs here are the generalised standards and control-surface improvements that should propagate across the broader system.
 
-## Why this belongs here
+## Lessons learned
 
-This repository already carries standards, contracts, measurement guidance, governance packs, and validation-oriented scaffolding. The Apple-case work fits that surface because it is not a product feature; it is a standards-and-evidence package for measuring distribution friction, interoperability parity, privacy-control behavior, packet-level corroboration, and summary-grade publication constraints.
+### 1. Distribution-friction measurement belongs in governance standards
 
-## Current model surface prepared outside the repo
+The Apple-case work revealed that distribution-run capture and friction scoring lack a shared schema anchor. Any future investigation of a similar kind should begin with a governed schema and a deterministic rollup spec, not an ad hoc accumulation of artefacts.
 
-The current pack includes these machine-readable objects and supporting specs:
+**Hardening action:** Add a `distribution-measurement` schema stub to `schemas/governance/` once a second case confirms the pattern is stable.
 
-- distribution-run
-- distribution-summary
-- interoperability-run
-- interoperability-summary
-- privacy-run
-- privacy-summary
-- packet-run
-- destination-attribution
-- privacy rollup generator spec
+### 2. Privacy-control evidence needs a reproducibility gate
 
-The current local bundle also includes a fixture pack with valid and invalid examples plus a minimal privacy-summary rollup implementation.
+During the Apple-case work, a publication-grade finding could not be issued without a reproducibility rating. That gate was improvised rather than codified. The `claim_grade` and `reproducibility` fields need to be part of a documented claim-graduation policy.
 
-## Intended repository layout
+**Hardening action:** Extend `docs/standards/governance/` with a claim-graduation policy document that codifies how evidence moves from raw capture to a publishable finding.
 
-- `schemas/governance/apple-case/` — JSON Schemas for raw runs, helper attribution, and summary objects
-- `examples/governance/apple-case/` — valid / invalid example objects and sample rollup inputs
-- `scripts/` — validation and deterministic summary generation helpers
-- `docs/standards/governance/apple-case/` — operator and standards notes for the evidence model
+### 3. Deterministic rollup logic must be repo-native before a finding is published
 
-## Immediate next integration steps
+The privacy-summary rollup was implemented in the active working session and validated there. That is a gap: if the rollup logic is not repo-native and CI-verified, findings cannot be independently reproduced.
 
-1. Promote the schema bundle into `schemas/governance/apple-case/`.
-2. Promote the fixture pack and validator helpers into `examples/governance/apple-case/` and `scripts/`.
-3. Add CI validation for schema fixtures and rollup determinism.
-4. Add distribution and interoperability rollup implementations so all three evidence lanes share one execution model.
+**Hardening action:** Any summary-grade rollup used to support a finding must live under `scripts/` and be covered by a CI fixture test before the finding is published.
+
+### 4. Schema, fixture, and validator surfaces must be co-located
+
+The Apple-case work produced schemas, valid/invalid fixtures, and a validator as separate artefacts in separate locations. Co-location and cross-referencing in a single repository layout reduces interpretation drift.
+
+**Hardening action:** Follow the layout established for `cso-partnerships/` (schema in `schemas/governance/`, fixtures in `examples/governance/`, docs in `docs/standards/governance/`) for all future investigation packs.
+
+### 5. Rollup executor and summary schema must be versioned together
+
+A privacy-summary schema change that is not paired with a matching rollup-executor change produces silent inconsistency. The two must be versioned as a unit.
+
+**Hardening action:** Add a `CHANGELOG` convention for co-versioned schema+executor pairs in `docs/standards/`.
 
 ## Status
 
-- Branch anchor created.
-- Repo path selected.
-- Full schema bundle and fixture pack currently exist in the active working session and are ready to be promoted in follow-on commits.
+- Lessons recorded.
+- Evidence pack and full artifact set live in the **shining-apple** repository.
+- Hardening actions above are candidates for follow-on standards work in this repository.
