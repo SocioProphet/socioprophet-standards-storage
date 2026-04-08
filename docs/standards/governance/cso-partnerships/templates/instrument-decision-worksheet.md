@@ -1,7 +1,6 @@
-<!-- Repo-native markdown form. Duplicate this file before use if a clean template copy should remain immutable. -->
-
-
 # Instrument Decision Worksheet
+
+<!-- Repo-native markdown form. Duplicate this file before use if a clean template copy should remain immutable. -->
 
 ## Project summary
 - Programme / portfolio:
