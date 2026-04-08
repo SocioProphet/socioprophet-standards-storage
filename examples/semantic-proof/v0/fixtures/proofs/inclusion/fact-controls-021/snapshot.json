@@ -1,0 +1,10 @@
+{
+  "worldview_id": "wv:2026-04-05:001",
+  "root_hash": "sha256:c44bbe038a6cf60bb3aeee87c904095594758c320ed9f9bbdcfb95067f5ef29c",
+  "tree_size": 3,
+  "ordered_leaf_keys": [
+    "fact\nfact:appoints:trust_a:person_b:003",
+    "fact\nfact:controls:trust_a:firm_x:021",
+    "fact\nfact:flags:person_b:sanctions:002"
+  ]
+}
