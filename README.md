@@ -45,13 +45,29 @@ We treat the platform as a set of **contexts** (event stream, incident state, ar
 
 This repo now includes the Graph Store Abstraction standard (RDF/SPARQL, property graph, and AtomSpace-style hypergraph) plus a dedicated graph benchmark workload suite.
 
-## FIPS 140-2/140-3 Governance
+## FIPS 140-2/140-3 Compliance
 
-This repository hosts the FIPS governance framework for SocioProphet. See [`docs/fips/`](docs/fips/) for:
+This repository is the **standards authority** for FIPS 140-2/140-3 and NIST compliance across the SocioProphet platform. The FIPS/NIST standards are in `docs/standards/` (files 090–095).
 
-- [Standards authority](docs/fips/000-fips-standards-authority.md) — NIST/FIPS controls, approved algorithms, and 28 NIST 800-53 control mappings.
-- [Week 1 activation plan](docs/fips/001-week1-activation-plan.md) — Day-by-day execution checklist for the governance committee.
-- [10-step strategic roadmap](docs/fips/002-10-step-strategic-roadmap.md) — Q2–Q4 2026 path to FIPS 140-2 Level 2 certification.
+### Cross-Repository Governance
+
+Standards in this repository cross-reference implementations in the following repositories:
+
+| Standard | Implementation Location |
+|----------|------------------------|
+| `090-fips-nist-compliance.md` | `SocioProphet/sociosphere/auth/oidc.py`, `SocioProphet/sociosphere/vault/vault-config.hcl` |
+| `091-nist-800-53-control-mappings.md` | All 28 control implementations listed per-control with repo paths |
+| `092-zero-trust-nist-800-207.md` | `SocioProphet/sociosphere/mesh/`, `SocioProphet/sociosphere/k8s/network-policies/` |
+| `093-forensic-audit-nist-800-88.md` | `SocioProphet/sociosphere/observability/audit-pipeline.yaml` |
+| `094-data-layer-fips-compliance.md` | `SocioProphet/postgres`, `SocioProphet/mongo`, `SocioProphet/elasticsearch`, `SocioProphet/redis`, `SocioProphet/minio`, `SocioProphet/rocksdb` |
+| `095-orchestration-fips-compliance.md` | `SocioProphet/sociosphere/k8s/`, `SocioProphet/sociosphere/vault/`, `SocioProphet/sociosphere/mesh/` |
+
+Implementation repositories that consume these standards MUST add a "Complies with Standards" section to their README, linking back to specific standard documents (bidirectional cross-reference requirement).
+
+### Related Governance Repositories
+
+- `SocioProphet/sociosphere` — workspace controller with FIPS validator tool and OIDC/mTLS enforcement
+- `SocioProphet/socioprophet-standards-knowledge` — knowledge context ontologies and semantic governance
 
 ## Security policy
 Please review `SECURITY.md` for supported versions, vulnerability disclosure, and response expectations.
