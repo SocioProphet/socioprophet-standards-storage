@@ -1,0 +1,311 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.local/schemas/maipj-run-receipt.schema.json",
+  "title": "MAIPJ Run Receipt",
+  "type": "object",
+  "required": [
+    "receipt_id",
+    "trace_id",
+    "timestamp",
+    "task",
+    "placement",
+    "model_runtime",
+    "context",
+    "energy_j",
+    "outcome",
+    "evidence",
+    "replay"
+  ],
+  "properties": {
+    "receipt_id": {
+      "type": "string"
+    },
+    "trace_id": {
+      "type": "string"
+    },
+    "span_id": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "task": {
+      "type": "object",
+      "required": [
+        "family",
+        "mission_weight",
+        "utility_rubric_version"
+      ],
+      "properties": {
+        "family": {
+          "type": "string"
+        },
+        "case_id": {
+          "type": "string"
+        },
+        "mission_weight": {
+          "type": "number"
+        },
+        "utility_rubric_version": {
+          "type": "string"
+        },
+        "latency_slo_ms": {
+          "type": "number"
+        },
+        "risk_class": {
+          "type": "string"
+        }
+      }
+    },
+    "placement": {
+      "type": "object",
+      "required": [
+        "site",
+        "node_pool",
+        "execution_mode"
+      ],
+      "properties": {
+        "site": {
+          "type": "string"
+        },
+        "node_pool": {
+          "type": "string"
+        },
+        "host_id": {
+          "type": "string"
+        },
+        "accelerator_type": {
+          "type": "string"
+        },
+        "execution_mode": {
+          "type": "string",
+          "enum": [
+            "cloud",
+            "edge",
+            "local",
+            "hybrid"
+          ]
+        },
+        "planner_version": {
+          "type": "string"
+        }
+      }
+    },
+    "model_runtime": {
+      "type": "object",
+      "required": [
+        "model_id",
+        "runtime_id"
+      ],
+      "properties": {
+        "model_id": {
+          "type": "string"
+        },
+        "model_digest": {
+          "type": "string"
+        },
+        "adapter_digest": {
+          "type": "string"
+        },
+        "runtime_id": {
+          "type": "string"
+        },
+        "compiler_id": {
+          "type": "string"
+        },
+        "quantization": {
+          "type": "string"
+        },
+        "context_window_tokens": {
+          "type": "integer"
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "required": [
+        "pack_ids",
+        "total_bytes",
+        "working_set_hit_rate"
+      ],
+      "properties": {
+        "pack_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pack_digests": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "locality_class": {
+          "type": "string"
+        },
+        "total_bytes": {
+          "type": "integer"
+        },
+        "cache_hits": {
+          "type": "integer"
+        },
+        "cache_misses": {
+          "type": "integer"
+        },
+        "working_set_hit_rate": {
+          "type": "number"
+        },
+        "remote_fetch_count": {
+          "type": "integer"
+        },
+        "policy_bundle_id": {
+          "type": "string"
+        }
+      }
+    },
+    "energy_j": {
+      "type": "object",
+      "required": [
+        "inference",
+        "data_move",
+        "network",
+        "storage",
+        "control",
+        "idle",
+        "total"
+      ],
+      "properties": {
+        "train_amortized": {
+          "type": "number"
+        },
+        "inference": {
+          "type": "number"
+        },
+        "data_move": {
+          "type": "number"
+        },
+        "network": {
+          "type": "number"
+        },
+        "storage": {
+          "type": "number"
+        },
+        "control": {
+          "type": "number"
+        },
+        "idle": {
+          "type": "number"
+        },
+        "cooling_adjusted": {
+          "type": "number"
+        },
+        "replay": {
+          "type": "number"
+        },
+        "total": {
+          "type": "number"
+        },
+        "accounting_boundary": {
+          "type": "string"
+        },
+        "estimation_model": {
+          "type": "string"
+        }
+      }
+    },
+    "outcome": {
+      "type": "object",
+      "required": [
+        "quality",
+        "latency_ms",
+        "policy_pass",
+        "replayable"
+      ],
+      "properties": {
+        "quality": {
+          "type": "number"
+        },
+        "calibration": {
+          "type": "number"
+        },
+        "robustness": {
+          "type": "number"
+        },
+        "latency_ms": {
+          "type": "number"
+        },
+        "policy_pass": {
+          "type": "boolean"
+        },
+        "human_approved": {
+          "type": "boolean"
+        },
+        "utility": {
+          "type": "number"
+        },
+        "maipj": {
+          "type": "number"
+        },
+        "replayable": {
+          "type": "boolean"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "required": [
+        "input_digest",
+        "output_digest",
+        "evidence_refs"
+      ],
+      "properties": {
+        "input_digest": {
+          "type": "string"
+        },
+        "output_digest": {
+          "type": "string"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "attestation_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "signature": {
+          "type": "string"
+        }
+      }
+    },
+    "replay": {
+      "type": "object",
+      "required": [
+        "supported"
+      ],
+      "properties": {
+        "supported": {
+          "type": "boolean"
+        },
+        "replay_manifest_id": {
+          "type": "string"
+        },
+        "non_replay_reason": {
+          "type": "string"
+        }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}
