@@ -1,0 +1,17 @@
+{
+  "id": "urn:srcos:receipt:session:fixture-deferred-001",
+  "type": "SessionReceipt",
+  "specVersion": "2.1.0-agentplane-draft",
+  "sessionRef": "urn:srcos:session:fixture-001",
+  "status": "deferred",
+  "artifactRefs": [
+    "urn:srcos:artifact:pending-request-001"
+  ],
+  "decisionRefs": [
+    "urn:srcos:exec-decision:fixture-defer-001"
+  ],
+  "gateResults": [
+    "awaiting-human-gate"
+  ],
+  "capturedAt": "2026-04-06T00:00:01Z"
+}

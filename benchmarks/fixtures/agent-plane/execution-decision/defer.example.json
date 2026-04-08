@@ -1,0 +1,18 @@
+{
+  "id": "urn:srcos:exec-decision:fixture-defer-001",
+  "type": "ExecutionDecision",
+  "specVersion": "2.1.0-agentplane-draft",
+  "sessionRef": "urn:srcos:session:fixture-001",
+  "toolRequestRef": "urn:srcos:tool:fixture-001",
+  "decision": "defer",
+  "reason": "human approval required before networked side effect",
+  "updatedInput": null,
+  "policyRef": "urn:srcos:policy:fixture-001",
+  "obligations": [
+    "capture pending request",
+    "resume only with explicit decision"
+  ],
+  "issuedAt": "2026-04-06T00:00:00Z",
+  "expiresAt": null,
+  "decisionHash": "sha256:fixture-defer-001"
+}
