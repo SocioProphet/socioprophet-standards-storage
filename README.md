@@ -22,6 +22,7 @@ We treat the platform as a set of **contexts** (event stream, incident state, ar
 - `docs/standards/` — normative standards (MUST/SHOULD/MAY language)
 - `docs/standards/governance/` — governance-oriented standards and operating controls, including the governed CSO partnership execution pack
 - `docs/benchmarks/` — benchmark methodology and reporting format
+- `docs/fips/` — FIPS 140-2/140-3 governance framework (standards authority, activation plan, roadmap)
 - `benchmarks/workloads/` — workload definitions (YAML)
 - `benchmarks/harness/` — harness scaffold (drivers to implement)
 - `adr/` — Architecture Decision Records (templates + initial decisions)
@@ -37,11 +38,20 @@ We treat the platform as a set of **contexts** (event stream, incident state, ar
 
 ## Status
 - Initial scaffold created: 2026-01-08
+- FIPS 140-2/140-3 governance framework added: 2026-Q2 (see `docs/fips/`)
 - Next: implement benchmark harness code + populate schema directories with v1 contracts.
 
 ## Graph Layer
 
 This repo now includes the Graph Store Abstraction standard (RDF/SPARQL, property graph, and AtomSpace-style hypergraph) plus a dedicated graph benchmark workload suite.
+
+## FIPS 140-2/140-3 Governance
+
+This repository hosts the FIPS governance framework for SocioProphet. See [`docs/fips/`](docs/fips/) for:
+
+- [Standards authority](docs/fips/000-fips-standards-authority.md) — NIST/FIPS controls, approved algorithms, and 28 NIST 800-53 control mappings.
+- [Week 1 activation plan](docs/fips/001-week1-activation-plan.md) — Day-by-day execution checklist for the governance committee.
+- [10-step strategic roadmap](docs/fips/002-10-step-strategic-roadmap.md) — Q2–Q4 2026 path to FIPS 140-2 Level 2 certification.
 
 ## Security policy
 Please review `SECURITY.md` for supported versions, vulnerability disclosure, and response expectations.
