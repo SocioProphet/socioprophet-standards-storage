@@ -1,0 +1,103 @@
+version: 1.0.0-draft
+spec_id: RFC-SPEC-0001
+gates:
+  - id: GATE-GDP-001
+    component: gdp_release_pipeline
+    stage: pre_publish
+    enforces:
+      - KR-UPD-01
+      - NFR-SEC-02
+    check: artifact_must_be_signed_and_certificate_chain_valid
+    deny_on_fail: true
+    evidence:
+      - signed_manifest
+      - certificate_chain_validation_log
+      - artifact_digest
+    rollback:
+      - quarantine_artifact
+      - stop_rollout
+      - page_security_architecture
+  - id: GATE-GDP-002
+    component: edge_agent_installer
+    stage: pre_install
+    enforces:
+      - KR-UPD-01
+      - NFR-SEC-02
+    check: reject_unsigned_or_untrusted_artifacts_and_reject_rollback_violations
+    deny_on_fail: true
+    evidence:
+      - local_verification_log
+      - installed_version_record
+      - rollback_decision_record
+    rollback:
+      - abort_install
+      - retain_last_known_good
+  - id: GATE-CNS-001
+    component: consent_policy_engine
+    stage: pre_release_of_derived_artifact
+    enforces:
+      - NFR-SEC-01
+      - NFR-GOV-01
+      - KR-LOC-01
+    check: derived_artifact_release_requires_explicit_granular_policy_match
+    deny_on_fail: true
+    evidence:
+      - policy_decision_record
+      - data_classification_record
+      - purpose_binding_record
+      - audit_log
+    rollback:
+      - deny_release
+      - emit_policy_conflict_event
+  - id: GATE-FOG-001
+    component: fog_topology_admission_controller
+    stage: peer_admission
+    enforces:
+      - KR-FOG-01
+      - KR-FOG-02
+      - KR-FOG-03
+      - NFR-PER-01
+    check: peer_must_satisfy_rtt_class_and_logical_group_authorization
+    deny_on_fail: true
+    evidence:
+      - rtt_measurement
+      - mtls_auth_record
+      - logical_group_membership_record
+    rollback:
+      - reject_peer
+      - trigger_rediscovery
+      - topology_re_evaluation
+  - id: GATE-SYN-001
+    component: cloud_synthesis_pipeline
+    stage: pre_publish_synthetic_output
+    enforces:
+      - KR-SYN-01
+      - KR-SYN-02
+      - NFR-PRI-01
+      - NFR-PRI-02
+    check: synthetic_output_must_meet_privacy_baseline_and_utility_floor
+    deny_on_fail: true
+    evidence:
+      - privacy_run_metadata
+      - utility_validation_report
+      - drift_monitor_output
+    rollback:
+      - pause_synthesis_model
+      - revert_last_approved_privacy_utility_config
+  - id: GATE-FCR-001
+    component: governance_workflow
+    stage: baseline_change_request
+    enforces:
+      - KR-GOV-01
+      - NFR-MAI-01
+      - NFR-GOV-01
+    check: baseline_affecting_changes_require_owner_routing_security_review_and_archival
+    deny_on_fail: true
+    evidence:
+      - fcr_record
+      - approval_chain
+      - adr_reference
+      - archival_receipt
+    rollback:
+      - reject_change
+      - restore_previous_baseline

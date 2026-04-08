@@ -1,0 +1,87 @@
+version: 1.0.0-draft
+spec_id: RFC-SPEC-0001
+decisions:
+  - id: DEC-001
+    area: edge_encryption
+    status: accepted
+    baseline: hardware-accelerated AES-256-GCM
+    deferred_alternatives:
+      - lighter local storage schemes for non-critical data only as contingency
+    rationale: local-first security baseline with acceptable edge performance target
+    owner: Security Architecture
+  - id: DEC-002
+    area: key_rotation
+    status: accepted
+    baseline: 7-day default rotation
+    deferred_alternatives:
+      - shorter or adaptive rotation intervals
+    rationale: deployable default while retaining tighter-policy path
+    owner: Security Architecture
+  - id: DEC-003
+    area: consent_model
+    status: accepted
+    baseline: granular YAML-backed PDP
+    deferred_alternatives:
+      - DID and VC dynamic consent negotiation
+    rationale: current baseline is implementable; DID/VC remains roadmap
+    owner: Legal and Compliance
+  - id: DEC-004
+    area: fog_discovery
+    status: accepted
+    baseline:
+      local: DNS-SD
+      peer_addressing: Kademlia DHT
+    deferred_alternatives:
+      - centralized discovery service as contingency only
+    rationale: most complete current discovery model in source draft
+    owner: Network Engineering
+  - id: DEC-005
+    area: fog_authorization
+    status: accepted
+    baseline: mTLS with short-lived agent certificates
+    deferred_alternatives: []
+    rationale: aligns with logically grouped trust model
+    owner: Network Engineering
+  - id: DEC-006
+    area: privacy_baseline
+    status: accepted
+    baseline:
+      k_anonymity: 5
+      gaussian_dp_epsilon: 0.5
+    deferred_alternatives:
+      - federated analytics
+      - alternate privacy frameworks
+    rationale: most explicit privacy baseline present in later draft
+    owner: Data Science
+  - id: DEC-007
+    area: utility_monitoring
+    status: accepted
+    baseline:
+      metric: KL-divergence-equivalent drift
+      utility_floor_percent: 90
+      tolerance_percent: 1
+    deferred_alternatives:
+      - KS-distance
+      - 3 percent drift tolerance
+    rationale: later stricter utility monitoring supersedes earlier looser variants
+    owner: Data Science
+  - id: DEC-008
+    area: update_trust_chain
+    status: accepted
+    baseline:
+      trust_model: internal PKI
+      certificate_format: X.509
+      transport: TLS 1.3
+    deferred_alternatives:
+      - distributed-ledger-backed transparency
+    rationale: PKI is present baseline; DLT remains strategic path
+    owner: Security Architecture
+  - id: DEC-009
+    area: governance_model
+    status: accepted
+    baseline: centralized Formal Change Request process
+    deferred_alternatives:
+      - DAO governance
+      - smart-contract voting
+    rationale: current governance baseline is centralized; decentralized governance is future-state only
+    owner: Program Management

@@ -1,0 +1,78 @@
+{
+  "spec_id": "agentic-local-first-fog-mesh",
+  "version": "v1",
+  "bundle": "mesh_spec_enforcement_bundle.zip",
+  "generated_from": "uploaded draft normalized in chat",
+  "files": [
+    {
+      "path": "canonical-v1-rfc.md",
+      "sha256": "60f148f72d7071f9097ff9a17d3d458eb9227ec98a274e5510ea27e19b012388",
+      "bytes": 9813
+    },
+    {
+      "path": "decisions.yaml",
+      "sha256": "e9a27ce0ff60e724a844240c9a55d8a52b38e76d2ca89b905d48b6931886f37c",
+      "bytes": 2863
+    },
+    {
+      "path": "krs.yaml",
+      "sha256": "65b927ebbd3a5c5924ff93014f5bc7e22b0e2e8fcaa74fb4ae4d885182a5d7fb",
+      "bytes": 2474
+    },
+    {
+      "path": "nfrs.yaml",
+      "sha256": "12628934940555893176b6746baa9c54db274682473b3bc24c20ad556acf0ddf",
+      "bytes": 1777
+    },
+    {
+      "path": "owners.yaml",
+      "sha256": "55702c9770ce35938ac7dc7a7421fd154267ffb6120536c171b7fb886de8c7e2",
+      "bytes": 1499
+    },
+    {
+      "path": "schemas/decisions.schema.json",
+      "sha256": "e9ca31ea6ebe0dbd9fb51873b60a45f1af23470c7f4df8d2162efa0d79598f16",
+      "bytes": 1733
+    },
+    {
+      "path": "schemas/krs.schema.json",
+      "sha256": "6f51d686b5d8d3745fbe95762bd4a6d94bb5079373e1c00dd1f440c31a42b861",
+      "bytes": 2495
+    },
+    {
+      "path": "schemas/nfrs.schema.json",
+      "sha256": "2d3c56e81e1f492c8f266c26c433f9daaa875eceb7e2a4e274f06d36cf6006d5",
+      "bytes": 1679
+    },
+    {
+      "path": "schemas/owners.schema.json",
+      "sha256": "2981094a712c2ffef641429bfa1f083324fad12d57eee30b1b3fe426eff2d3e1",
+      "bytes": 1410
+    },
+    {
+      "path": "validate_mesh_spec.py",
+      "sha256": "2d5342523417b9e4e5f08dfd5e859b16478b02ba15081e4c72792aee87060b2d",
+      "bytes": 4270
+    },
+    {
+      "path": "control_plane_gates.yaml",
+      "sha256": "43588ef65f1d0d11800bd86833892739104a2ea25ce46e1b802db6d8a851f356",
+      "bytes": 2757
+    },
+    {
+      "path": "control-plane-mapping.md",
+      "sha256": "5d76780760310ee3a72ee32c0d5a352a098fb990db99230afec6ff0952c9080b",
+      "bytes": 3043
+    },
+    {
+      "path": "validation-report.txt",
+      "sha256": "1c2c9f2f7410d6fe0a25de803f850c9e2cdb8810586c4d04d8f0c68a83f1b151",
+      "bytes": 122
+    },
+    {
+      "path": "README-next-steps.md",
+      "sha256": "634ad05acd5288b226ad999c6e64888bf23fad67c04d758f878bf9acd5eb6b40",
+      "bytes": 835
+    }
+  ]
+}

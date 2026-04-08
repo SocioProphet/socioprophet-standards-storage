@@ -1,0 +1,56 @@
+version: 1.0.0-draft
+spec_id: RFC-SPEC-0001
+owners:
+  - domain: edge_cryptography_and_local_storage
+    primary_owner: Security Architecture
+    secondary_owners:
+      - Core Platform
+    approves:
+      - crypto implementation
+      - key hierarchy
+      - local store protection
+  - domain: consent_engine_and_policy_semantics
+    primary_owner: Legal and Compliance
+    secondary_owners:
+      - Core Platform
+      - Security Architecture
+    approves:
+      - data-class policy model
+      - release semantics
+      - auditability
+  - domain: fog_discovery_and_grouping
+    primary_owner: Network Engineering
+    secondary_owners:
+      - Core Platform
+      - Security Architecture
+    approves:
+      - discovery behavior
+      - RTT classes
+      - trust grouping
+  - domain: privacy_model_and_synthetic_data_validity
+    primary_owner: Data Science
+    secondary_owners:
+      - Security Architecture
+      - Legal and Compliance
+    approves:
+      - k and epsilon values
+      - utility validation
+      - synthetic data pipeline
+  - domain: update_integrity_and_rollout
+    primary_owner: Security Architecture
+    secondary_owners:
+      - DevOps
+      - Platform Engineering
+    approves:
+      - signing chain
+      - artifact verification
+      - quarantine
+      - rollback
+  - domain: fcr_governance_and_archival
+    primary_owner: Program Management
+    secondary_owners:
+      - all_domain_owners
+    approves:
+      - review routing
+      - archival status
+      - phase gates

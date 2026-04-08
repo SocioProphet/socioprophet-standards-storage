@@ -1,0 +1,56 @@
+version: 1.0.0-draft
+spec_id: RFC-SPEC-0001
+nfrs:
+  - id: NFR-SEC-01
+    category: security
+    priority: critical
+    statement: raw user data must never leave the local device without explicit granular consent
+    linked_krs:
+      - KR-LOC-01
+      - KR-LOC-02
+  - id: NFR-SEC-02
+    category: security
+    priority: critical
+    statement: all software and model updates must be cryptographically verified before installation
+    linked_krs:
+      - KR-UPD-01
+  - id: NFR-PRI-01
+    category: privacy
+    priority: critical
+    statement: cloud synthesis must preserve re-identification resistance under the approved privacy model
+    linked_krs:
+      - KR-SYN-01
+      - KR-SYN-02
+  - id: NFR-PRI-02
+    category: privacy
+    priority: high
+    statement: privacy controls must preserve analytical utility at or above the approved baseline
+    linked_krs:
+      - KR-SYN-01
+      - KR-SYN-02
+  - id: NFR-PER-01
+    category: performance
+    priority: high
+    statement: fog collaboration must support low-latency collaborative inference within approved topology and trust constraints
+    linked_krs:
+      - KR-FOG-01
+      - KR-FOG-02
+      - KR-FOG-03
+  - id: NFR-PER-02
+    category: performance
+    priority: high
+    statement: edge protection must not make Minimum Spec Device class hardware operationally unusable
+    linked_krs:
+      - KR-LOC-02
+  - id: NFR-MAI-01
+    category: maintainability
+    priority: high
+    statement: baseline architectural changes must be routed through the Formal Change Request path
+    linked_krs:
+      - KR-GOV-01
+  - id: NFR-GOV-01
+    category: governance
+    priority: critical
+    statement: local sovereignty precedence and conflict resolution must be explicit, auditable, and reviewable
+    linked_krs:
+      - KR-GOV-01

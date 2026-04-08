@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.local/schemas/decisions.schema.json",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[A-Za-z0-9.-]+)?$"
+    },
+    "spec_id": {
+      "type": "string",
+      "pattern": "^RFC-SPEC-[0-9]{4}$"
+    },
+    "decisions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^DEC-[0-9]{3}$"
+          },
+          "area": {
+            "type": "string",
+            "pattern": "^[a-z0-9_]+$"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "accepted",
+              "deferred",
+              "rejected"
+            ]
+          },
+          "baseline": {},
+          "deferred_alternatives": {
+            "type": "array",
+            "items": {
+              "type": [
+                "string",
+                "object",
+                "number",
+                "boolean"
+              ]
+            }
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          },
+          "owner": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9 _/&.-]*$"
+          }
+        },
+        "required": [
+          "id",
+          "area",
+          "status",
+          "baseline",
+          "deferred_alternatives",
+          "rationale",
+          "owner"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "version",
+    "spec_id",
+    "decisions"
+  ],
+  "additionalProperties": false
+}
