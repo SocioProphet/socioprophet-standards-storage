@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PartnerProfile",
+  "type": "object",
+  "required": [
+    "legal_name",
+    "mission",
+    "operating_geographies"
+  ],
+  "properties": {
+    "legal_name": {
+      "type": "string"
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "registration_status": {
+      "type": "string"
+    },
+    "jurisdiction": {
+      "type": "string"
+    },
+    "year_founded": {
+      "type": [
+        "integer",
+        "string"
+      ]
+    },
+    "contacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "mission": {
+      "type": "string"
+    },
+    "constituency": {
+      "type": "string"
+    },
+    "operating_geographies": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "safeguarding_status": {
+      "type": "string"
+    },
+    "data_classes_handled": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "civic_space_risks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

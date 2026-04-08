@@ -1,0 +1,14 @@
+{
+  "incident_id": "INC-2026-001",
+  "date_reported": "2026-04-05",
+  "incident_type": "data_exposure",
+  "programme": "Governed CSO Pilot",
+  "partner": "Example Community Accountability Network",
+  "immediate_risk_to_people": "Low immediate physical risk; moderate privacy risk.",
+  "data_involved": true,
+  "safeguarding_involved": false,
+  "civic_space_risk": false,
+  "fraud_risk": false,
+  "escalation_owner": "Governance Lead",
+  "status": "under_review"
+}

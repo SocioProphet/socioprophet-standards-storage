@@ -1,0 +1,32 @@
+title: PartnershipEvidencePack
+type: object
+required:
+  - partner_profile
+  - instrument_decision
+  - capacity_assessment
+properties:
+  partner_profile:
+    type: string
+    description: Path or reference to the partner profile record.
+  instrument_decision:
+    type: string
+    description: Path or reference to the instrument decision worksheet.
+  capacity_assessment:
+    type: string
+    description: Path or reference to the capacity assessment sheet.
+  safeguarding_record:
+    type: string
+  data_schedule:
+    type: string
+  approvals:
+    type: array
+    items:
+      type: string
+  reporting_calendar:
+    type: string
+  corrective_actions:
+    type: array
+    items:
+      type: string
+  closeout_note:
+    type: string
