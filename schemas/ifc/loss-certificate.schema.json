@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.org/schemas/ifc/loss-certificate.schema.json",
+  "title": "IFC Loss Certificate",
+  "type": "object",
+  "required": [
+    "certificate_id",
+    "source_projection_kind",
+    "target_projection_kind",
+    "recoverability_class",
+    "loss_modes",
+    "downstream_intended_uses",
+    "forbidden_uses",
+    "review_required"
+  ],
+  "properties": {
+    "certificate_id": {"type": "string"},
+    "source_projection_kind": {
+      "type": "string",
+      "enum": ["incidence_preserving", "star_expansion", "dyadic_projection", "embedding_compression"]
+    },
+    "target_projection_kind": {
+      "type": "string",
+      "enum": ["incidence_preserving", "star_expansion", "dyadic_projection", "embedding_compression"]
+    },
+    "recoverability_class": {
+      "type": "string",
+      "enum": ["lossless_structural", "lossless_with_incidence_payload", "lossy_but_task_acceptable", "non_recoverable"]
+    },
+    "loss_modes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "non_recoverability",
+          "tie_weakening",
+          "multi_cloning",
+          "role_loss",
+          "order_loss",
+          "multiplicity_loss",
+          "incidence_property_loss",
+          "temporal_scope_loss",
+          "policy_scope_loss",
+          "provenance_scope_loss"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "downstream_intended_uses": {"type": "array", "items": {"type": "string"}},
+    "forbidden_uses": {"type": "array", "items": {"type": "string"}},
+    "certified_task_classes": {"type": "array", "items": {"type": "string"}},
+    "evidence_of_acceptability": {"type": "string"},
+    "review_required": {"type": "boolean"},
+    "review_approver_kind": {"type": "string"},
+    "expires_at": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": false
+}

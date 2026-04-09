@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.org/schemas/ifc/contradiction-competing-claim.schema.json",
+  "title": "IFC Contradiction and Competing-Claim Record",
+  "type": "object",
+  "required": ["record_id", "relation_kind", "left_claim", "right_claim", "visibility_mode"],
+  "properties": {
+    "record_id": {"type": "string"},
+    "relation_kind": {
+      "type": "string",
+      "enum": ["supports", "contradicts", "duplicates", "refines", "supersedes", "depends_on"]
+    },
+    "left_claim": {"type": "string"},
+    "right_claim": {"type": "string"},
+    "visibility_mode": {
+      "type": "string",
+      "enum": ["visible", "review_required", "resolution_only", "hidden_until_resolved"]
+    },
+    "scenario_scope": {
+      "oneOf": [
+        {"type": "string", "enum": ["default_world", "all_worlds", "branch_local"]},
+        {
+          "type": "object",
+          "required": ["world_id"],
+          "properties": {
+            "world_id": {"type": "string"},
+            "branch": {"type": "string"}
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "resolution_state": {
+      "type": "string",
+      "enum": ["open", "reviewing", "resolved", "superseded"]
+    },
+    "resolution_notes": {"type": "string"}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.org/schemas/ifc/delegation-obligation.schema.json",
+  "title": "IFC Delegation and Obligation Record",
+  "type": "object",
+  "required": ["record_id", "record_kind", "subject", "scope"],
+  "properties": {
+    "record_id": {"type": "string"},
+    "record_kind": {"type": "string", "enum": ["delegation", "obligation"]},
+    "subject": {"type": "string"},
+    "delegate_to": {"type": "string"},
+    "scope": {
+      "type": "object",
+      "properties": {
+        "namespaces": {"type": "array", "items": {"type": "string"}},
+        "relation_families": {"type": "array", "items": {"type": "string"}},
+        "projection_kinds": {"type": "array", "items": {"type": "string"}},
+        "branches": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "max_delegation_depth": {"type": "integer", "minimum": 0},
+    "obligation_kind": {
+      "type": "string",
+      "enum": ["retention", "redaction", "attribution", "license", "review", "export_control"]
+    },
+    "propagation_mode": {
+      "type": "string",
+      "enum": ["union", "highest_restriction", "review_required", "reject"]
+    },
+    "expires_at": {"type": "string", "format": "date-time"},
+    "notes": {"type": "string"}
+  },
+  "additionalProperties": false
+}

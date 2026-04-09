@@ -1,0 +1,39 @@
+{
+  "backend_name": "Neo4j",
+  "backend_family": "property_graph",
+  "substrate_class": "operational_lpg",
+  "closest_semantic_fit_to_ifc": "medium",
+  "best_role_in_stack": "operational_serving_layer",
+  "query_models": ["Cypher"],
+  "native_higher_order_support": false,
+  "native_reasoning_support": false,
+  "best_projection_kind": "star_expansion",
+  "projection_risk": "medium",
+  "recoverability_notes": "Safe for reified-LPG serving when relation and incidence payload are preserved as explicit nodes/edges; not a native incidence-first substrate.",
+  "supports": [
+    "reified_lpg_serving",
+    "operational_traversal",
+    "entity_graph_apps",
+    "graph_rag_serving"
+  ],
+  "forbids": [
+    "claim_native_lossless_higher_order_storage",
+    "treat_embedding_views_as_truth_layer"
+  ],
+  "review_required_for": [
+    "dyadic_projection_from_incidence",
+    "losslessness_claims",
+    "policy_reasoning_over_projected_views"
+  ],
+  "safe_task_classes": [
+    "serving",
+    "exploration",
+    "retrieval",
+    "graph_app_queries"
+  ],
+  "unsafe_task_classes": [
+    "canonical_truth_storage_without_reification",
+    "native_higher_order_reasoning",
+    "unreviewed_policy_or_provenance_audit"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "backend_name": "GraphDB",
+  "backend_family": "semantic_graph",
+  "substrate_class": "semantic_graph",
+  "closest_semantic_fit_to_ifc": "medium",
+  "best_role_in_stack": "semantic_publication_and_governance_layer",
+  "query_models": ["SPARQL", "SPARQL-star"],
+  "native_higher_order_support": false,
+  "native_reasoning_support": true,
+  "best_projection_kind": "semantic_statement",
+  "projection_risk": "medium",
+  "recoverability_notes": "Strong fit for statement metadata, validation, and governance publication; not a native incidence-first transactional substrate and requires explicit mapping for higher-order participation semantics.",
+  "supports": [
+    "semantic_publication",
+    "statement_metadata",
+    "governance_validation",
+    "controlled_access"
+  ],
+  "forbids": [
+    "claim_native_lossless_incidence_storage",
+    "treat_semantic_publication_view_as_full_operational_truth_layer"
+  ],
+  "review_required_for": [
+    "projection_of_role_rich_incidence_data_to_statement_view",
+    "weakening_of_obligation_propagation",
+    "contradiction_visibility_changes"
+  ],
+  "safe_task_classes": [
+    "publication",
+    "interoperability",
+    "governance_review",
+    "statement_level_audit"
+  ],
+  "unsafe_task_classes": [
+    "unreviewed_higher_order_export",
+    "opaque_embedding_only_serving",
+    "canonical_truth_storage_without_companion_ledger"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.org/schemas/ifc/merge-conflict.schema.json",
+  "title": "IFC Merge Conflict Record",
+  "type": "object",
+  "required": ["conflict_id", "conflict_class", "severity", "source_branch", "target_branch", "resolution_mode"],
+  "properties": {
+    "conflict_id": {"type": "string"},
+    "conflict_class": {
+      "type": "string",
+      "enum": [
+        "projection_downgrade",
+        "identity_collision",
+        "claim_state_divergence",
+        "policy_overlap",
+        "retraction_supersession_collision",
+        "adapter_semantics_change"
+      ]
+    },
+    "severity": {"type": "string", "enum": ["low", "medium", "high", "critical"]},
+    "source_branch": {"type": "string"},
+    "target_branch": {"type": "string"},
+    "affected_objects": {"type": "array", "items": {"type": "string"}},
+    "resolution_mode": {"type": "string", "enum": ["manual_review", "prefer_target", "prefer_source", "blocked"]},
+    "required_review_kind": {"type": "string"},
+    "notes": {"type": "string"}
+  },
+  "additionalProperties": false
+}
