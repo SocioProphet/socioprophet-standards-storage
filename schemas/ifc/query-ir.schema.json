@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.org/schemas/ifc/query-ir.schema.json",
+  "title": "IFC Query IR",
+  "type": "object",
+  "required": ["query_id", "view_family", "belief_mode", "contradiction_mode", "scenario_scope"],
+  "properties": {
+    "query_id": {"type": "string"},
+    "view_family": {
+      "type": "string",
+      "enum": ["incidence", "reified_lpg", "semantic_statement", "dyadic_projection", "embedding_space"]
+    },
+    "belief_mode": {
+      "type": "string",
+      "enum": ["raw_observations", "candidate_claims", "validated_claims", "superseded_excluded", "all_versions", "policy_effective_now"]
+    },
+    "contradiction_mode": {
+      "type": "string",
+      "enum": ["include_conflicts", "exclude_conflicts", "group_by_claimset", "show_resolution_only"]
+    },
+    "scenario_scope": {
+      "oneOf": [
+        {"type": "string", "enum": ["default_world", "all_worlds", "branch_local"]},
+        {
+          "type": "object",
+          "required": ["world_id"],
+          "properties": {
+            "world_id": {"type": "string"},
+            "branch": {"type": "string"}
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "match": {"type": "array", "items": {"type": "object"}},
+    "where": {"type": "array", "items": {"type": "object"}},
+    "return": {"type": "array", "items": {"type": "object"}}
+  },
+  "additionalProperties": false
+}
