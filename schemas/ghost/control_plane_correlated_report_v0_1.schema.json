@@ -1,0 +1,26 @@
+{
+  "$id": "sp.control_plane_correlated_report.v0.1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Control Plane Correlated Report",
+  "type": "object",
+  "required": [
+    "report_id",
+    "trace_id",
+    "trust_root_refs",
+    "governance_refs",
+    "registry_refs",
+    "runtime_refs",
+    "final_outcome"
+  ],
+  "properties": {
+    "report_id": {"type": "string"},
+    "trace_id": {"type": "string"},
+    "trust_root_refs": {"type": "array", "items": {"type": "string"}},
+    "governance_refs": {"type": "array", "items": {"type": "string"}},
+    "registry_refs": {"type": "array", "items": {"type": "string"}},
+    "runtime_refs": {"type": "array", "items": {"type": "string"}},
+    "final_outcome": {"type": "string", "enum": ["ADMITTED", "ADMITTED_WITH_WARNING", "BLOCKED"]},
+    "summary": {"type": "string"}
+  },
+  "additionalProperties": false
+}
