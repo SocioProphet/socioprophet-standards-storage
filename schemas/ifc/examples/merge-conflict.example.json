@@ -1,0 +1,11 @@
+{
+  "conflict_id": "mc-identity-projection-001",
+  "conflict_class": "projection_downgrade",
+  "severity": "high",
+  "source_branch": "feature/dyadic-export",
+  "target_branch": "main",
+  "affected_objects": ["adapter:neo4j-export", "profile:neo4j", "loss-certificate:lc-reified-lpg-dyadic-001"],
+  "resolution_mode": "manual_review",
+  "required_review_kind": "graph_governance_review",
+  "notes": "Source branch introduces dyadic export for validated claims; requires review because policy/provenance audit tasks are forbidden on target projection."
+}
