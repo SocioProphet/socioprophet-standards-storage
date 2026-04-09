@@ -1,0 +1,36 @@
+{
+  "proof_id": "proof:wv:diff:001",
+  "proof_type": "snapshot_diff",
+  "proof_version": "1",
+  "tree_alg": "sp-merkle-rfc6962-v1",
+  "hash_alg": "sha-256",
+  "left_snapshot": {
+    "worldview_id": "wv:2026-04-05:001",
+    "root_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "right_snapshot": {
+    "worldview_id": "wv:2026-04-06:002",
+    "root_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  },
+  "changes": [
+    {
+      "leaf_key": "fact\nfact:controls:trust_a:firm_x:021",
+      "left_state": "present",
+      "right_state": "present",
+      "left_inclusion_proof_ref": "proof:left:001",
+      "left_exclusion_proof_ref": null,
+      "right_inclusion_proof_ref": "proof:right:001",
+      "right_exclusion_proof_ref": null
+    },
+    {
+      "leaf_key": "fact\nfact:controls:person_c:firm_x:014",
+      "left_state": "present",
+      "right_state": "absent",
+      "left_inclusion_proof_ref": "proof:left:002",
+      "left_exclusion_proof_ref": null,
+      "right_inclusion_proof_ref": null,
+      "right_exclusion_proof_ref": "proof:right:002"
+    }
+  ],
+  "diff_hash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+}
