@@ -1,0 +1,23 @@
+{
+  "schema_version": "0.1.0",
+  "finding_id": "finding_nist_ac_2_001",
+  "evaluation_ref": "eval_nist_ac_2_001",
+  "row_id": "ac-2-account-management",
+  "title": "Account-review evidence is incomplete for AC-2",
+  "severity": "high",
+  "disposition": "open",
+  "evidence_refs": [
+    "evref_vendor_policy_001"
+  ],
+  "remediation": {
+    "summary": "Provide the most recent administrative access review record and a current identity-system export to substantiate the quarterly review claim.",
+    "owner_ref": "owner://vendor-risk/acme-cloud",
+    "due_at": "2026-04-23T00:00:00Z",
+    "closure_criteria": [
+      "Access review record attached and cited",
+      "Identity-system export attached and cited",
+      "Reassessment receipt shows AC-2 status upgraded from partial"
+    ]
+  },
+  "created_at": "2026-04-09T10:00:00Z"
+}
