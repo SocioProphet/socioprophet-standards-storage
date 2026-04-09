@@ -1,0 +1,39 @@
+{
+  "backend_name": "TypeDB",
+  "backend_family": "typed_reasoning_graph",
+  "substrate_class": "higher_order_reasoning",
+  "closest_semantic_fit_to_ifc": "high",
+  "best_role_in_stack": "typed_reasoning_and_semantic_validation_layer",
+  "query_models": ["TypeQL"],
+  "native_higher_order_support": true,
+  "native_reasoning_support": true,
+  "best_projection_kind": "incidence_preserving",
+  "projection_risk": "low",
+  "recoverability_notes": "Strong semantic fit for typed role-rich relations and reasoning workloads; still requires explicit IFC governance controls for projection/export and contradiction handling.",
+  "supports": [
+    "typed_relation_modeling",
+    "role_rich_querying",
+    "reasoning_assisted_validation",
+    "semantic_governance"
+  ],
+  "forbids": [
+    "treat_as_unbounded_embedding_truth_layer",
+    "assume_operational_serving_equivalence_to_lpg_engines"
+  ],
+  "review_required_for": [
+    "export_to_dyadic_projection",
+    "policy_or_provenance_scope_weakening",
+    "identity_merge_actions"
+  ],
+  "safe_task_classes": [
+    "semantic_validation",
+    "typed_reasoning",
+    "governance_review",
+    "higher_order_modeling"
+  ],
+  "unsafe_task_classes": [
+    "unreviewed_projection_downgrade",
+    "opaque_embedding_only_serving",
+    "claim_lossless_lpg_equivalence"
+  ]
+}
