@@ -1,0 +1,14 @@
+{
+  "certificate_id": "lc-reified-lpg-dyadic-001",
+  "source_projection_kind": "incidence_preserving",
+  "target_projection_kind": "dyadic_projection",
+  "recoverability_class": "lossy_but_task_acceptable",
+  "loss_modes": ["role_loss", "incidence_property_loss", "non_recoverability"],
+  "downstream_intended_uses": ["retrieval_ranking", "cooccurrence_exploration"],
+  "forbidden_uses": ["policy_reasoning", "provenance_audit", "identity_resolution"],
+  "certified_task_classes": ["retrieval", "exploration"],
+  "evidence_of_acceptability": "Benchmark slice HO-03 showed acceptable retrieval precision under dyadic projection for this workload.",
+  "review_required": true,
+  "review_approver_kind": "graph_governance_reviewer",
+  "expires_at": "2026-12-31T23:59:59Z"
+}
