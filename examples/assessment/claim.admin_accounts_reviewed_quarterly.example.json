@@ -1,0 +1,18 @@
+{
+  "schema_version": "0.1.0",
+  "claim_id": "claim_admin_accounts_reviewed_quarterly_001",
+  "subject": "vendor:acme-cloud",
+  "predicate": "admin_accounts_reviewed_quarterly",
+  "object": true,
+  "modality": "asserted",
+  "confidence": 0.93,
+  "normalized_text": "Administrative accounts are reviewed on a quarterly basis.",
+  "claim_type": "control_assertion",
+  "evidence_refs": [
+    "evref_vendor_policy_001"
+  ],
+  "extractor": {
+    "name": "claim-extractor",
+    "version": "0.1.0"
+  }
+}
