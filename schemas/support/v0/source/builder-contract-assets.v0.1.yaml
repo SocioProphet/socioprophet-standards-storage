@@ -1,0 +1,72 @@
+version: 0.1.0
+enums:
+  PromptRole:
+  - system
+  - developer
+  - user_template
+  RiskTier:
+  - low
+  - medium
+  - high
+  - critical
+entities:
+  AgentContract:
+    required:
+    - contract_id
+    - name
+    - domain
+    - grounding_policy
+    - risk_tier
+    - schema_version
+    fields:
+      contract_id: Id
+      name: string
+      domain: string
+      grounding_policy: string
+      risk_tier: RiskTier
+      allowed_tool_names:
+      - string
+      required_output_schema_refs:
+      - string
+      eval_suite_ids:
+      - Id
+      schema_version: string
+  PromptAsset:
+    required:
+    - prompt_asset_id
+    - contract_id
+    - role
+    - content
+    - version
+    - schema_version
+    fields:
+      prompt_asset_id: Id
+      contract_id: Id
+      role: PromptRole
+      content: FreeText
+      version: string
+      schema_version: string
+  FewShotPack:
+    required:
+    - few_shot_pack_id
+    - contract_id
+    - examples
+    - schema_version
+    fields:
+      few_shot_pack_id: Id
+      contract_id: Id
+      examples:
+      - object
+      schema_version: string
+  ToolEntitlementSet:
+    required:
+    - entitlement_set_id
+    - contract_id
+    - allowed_tool_names
+    - schema_version
+    fields:
+      entitlement_set_id: Id
+      contract_id: Id
+      allowed_tool_names:
+      - string
+      schema_version: string
