@@ -1,0 +1,122 @@
+version: 0.1.0
+enums:
+  GraphFamily:
+  - case_graph
+  - asset_graph
+  - product_entity_graph
+  GraphNodeType:
+  - Case
+  - CaseSession
+  - Turn
+  - Cairn
+  - Recommendation
+  - RouteDecision
+  - AssignmentDecision
+  - Asset
+  - AssetChunk
+  - EvidencePacket
+  - PolicyDecision
+  - BenchmarkRun
+  - EvalSuite
+  - EvalCase
+  - Product
+  - Version
+  - Service
+  - Component
+  - Entitlement
+  - Team
+  - Queue
+  - CustomerOrg
+  GraphEdgeType:
+  - CASE_HAS_SESSION
+  - SESSION_HAS_TURN
+  - CASE_EMITS_CAIRN
+  - CASE_HAS_ROUTE_DECISION
+  - CASE_HAS_ASSIGNMENT_DECISION
+  - CASE_HAS_RECOMMENDATION
+  - TURN_UPDATES_CASE_STATE
+  - ASSET_HAS_CHUNK
+  - EVIDENCE_USES_ASSET
+  - CASE_USED_ASSET
+  - ASSET_GOVERNED_BY_POLICY
+  - ASSET_TESTED_IN_SUITE
+  - ASSET_PROMOTED_FROM_CASE
+  - ASSET_DERIVED_FROM_CAIRN
+  - PRODUCT_HAS_VERSION
+  - SERVICE_OWNS_COMPONENT
+  - TEAM_OWNS_QUEUE
+  - QUEUE_HANDLES_CATEGORY
+  - CUSTOMER_HAS_ENTITLEMENT
+  - CASE_IMPACTS_COMPONENT
+  - KNOWN_ISSUE_AFFECTS_VERSION
+  - TEAM_OWNS_PRODUCT
+  - CASE_RELATES_TO_PRODUCT
+  GraphQueryType:
+  - neighborhood
+  - path_search
+  - ranked_similarity
+  - lineage
+  - routing_context
+entities:
+  GraphNode:
+    required:
+    - node_id
+    - family
+    - node_type
+    - backing_entity_kind
+    - backing_entity_id
+    - tenant_scope
+    - schema_version
+    fields:
+      node_id: Id
+      family: GraphFamily
+      node_type: GraphNodeType
+      backing_entity_kind: string
+      backing_entity_id: Id
+      tenant_scope: TenantId
+      labels:
+      - string
+      attributes: object
+      schema_version: string
+  GraphEdge:
+    required:
+    - edge_id
+    - family
+    - edge_type
+    - from_node_id
+    - to_node_id
+    - schema_version
+    fields:
+      edge_id: Id
+      family: GraphFamily
+      edge_type: GraphEdgeType
+      from_node_id: Id
+      to_node_id: Id
+      attributes: object
+      schema_version: string
+  GraphTraversalQuery:
+    required:
+    - query_id
+    - family
+    - query_type
+    - seed_node_ids
+    - schema_version
+    fields:
+      query_id: Id
+      family: GraphFamily
+      query_type: GraphQueryType
+      seed_node_ids:
+      - Id
+      max_depth: integer
+      filters: object
+      schema_version: string
+profiles:
+  case_graph:
+    core_nodes: [Case, CaseSession, Turn, Cairn, Recommendation, RouteDecision, AssignmentDecision]
+    core_edges: [CASE_HAS_SESSION, SESSION_HAS_TURN, CASE_EMITS_CAIRN, CASE_HAS_ROUTE_DECISION, CASE_HAS_ASSIGNMENT_DECISION, CASE_HAS_RECOMMENDATION, TURN_UPDATES_CASE_STATE]
+  asset_graph:
+    core_nodes: [Asset, AssetChunk, EvidencePacket, PolicyDecision, BenchmarkRun, EvalSuite, EvalCase]
+    core_edges: [ASSET_HAS_CHUNK, EVIDENCE_USES_ASSET, CASE_USED_ASSET, ASSET_GOVERNED_BY_POLICY, ASSET_TESTED_IN_SUITE, ASSET_PROMOTED_FROM_CASE, ASSET_DERIVED_FROM_CAIRN]
+  product_entity_graph:
+    core_nodes: [Product, Version, Service, Component, Entitlement, Team, Queue, CustomerOrg]
+    core_edges: [PRODUCT_HAS_VERSION, SERVICE_OWNS_COMPONENT, TEAM_OWNS_QUEUE, QUEUE_HANDLES_CATEGORY, CUSTOMER_HAS_ENTITLEMENT, CASE_IMPACTS_COMPONENT, KNOWN_ISSUE_AFFECTS_VERSION, TEAM_OWNS_PRODUCT, CASE_RELATES_TO_PRODUCT]
