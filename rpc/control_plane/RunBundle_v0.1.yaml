@@ -1,0 +1,27 @@
+contract: RunBundle.v0.1
+summary: canonical replayable control-plane bundle for governed runs
+
+fields:
+  run_id: string
+  task_id: string
+  descriptor_ref: string
+  workspace_ref: string
+  lane: string
+  policy_refs: [string]
+  evidence_refs: [string]
+  receipt_ref: string?
+  eval_ref: string?
+  negative_evidence_refs: [string]
+  promotion_state:
+    enum:
+      - proposed
+      - admitted
+      - scheduled
+      - executed
+      - evidenced
+      - replayable
+      - promoted
+      - downgraded
+      - retracted
+  supersedes: string?
+  timestamp: string
