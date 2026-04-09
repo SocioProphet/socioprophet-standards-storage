@@ -1,0 +1,29 @@
+{
+  "proof_id": "proof:wv1:incl:controls021",
+  "proof_type": "inclusion",
+  "proof_version": "1",
+  "tree_alg": "sp-merkle-rfc6962-v1",
+  "hash_alg": "sha-256",
+  "subject": {
+    "root_hash": "sha256:c44bbe038a6cf60bb3aeee87c904095594758c320ed9f9bbdcfb95067f5ef29c",
+    "tree_size": 3,
+    "leaf_index": 1,
+    "leaf_record": {
+      "leaf_version": "wv-leaf/1",
+      "leaf_kind": "fact",
+      "primary_id": "fact:controls:trust_a:firm_x:021",
+      "leaf_key": "fact\nfact:controls:trust_a:firm_x:021",
+      "leaf_hash": "sha256:c893abc43f6f4cc2f568ca5880e6c1d0570527f8021eabb92a941abcaea6c932"
+    }
+  },
+  "audit_path": [
+    {
+      "side": "left",
+      "hash": "sha256:256af546baf3520490ea7fc76acc9b42d2e2a4c0171c70076eeb0c1327779191"
+    },
+    {
+      "side": "right",
+      "hash": "sha256:45188cc9ecdc05d9b3821c6bc9c5e5567516eb99d95d052129a8d1a3e86504cf"
+    }
+  ]
+}

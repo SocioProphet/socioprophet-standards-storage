@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.org/proofs/proof-common.schema.json",
+  "title": "ProofCommon",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "proof_id": {
+      "$ref": "../semantic/common.schema.json#/$defs/Id"
+    },
+    "proof_type": {
+      "enum": [
+        "inclusion",
+        "exclusion",
+        "consistency",
+        "snapshot_diff"
+      ]
+    },
+    "proof_version": {
+      "const": "1"
+    },
+    "tree_alg": {
+      "const": "sp-merkle-rfc6962-v1"
+    },
+    "hash_alg": {
+      "const": "sha-256"
+    }
+  },
+  "required": [
+    "proof_id",
+    "proof_type",
+    "proof_version",
+    "tree_alg",
+    "hash_alg"
+  ]
+}

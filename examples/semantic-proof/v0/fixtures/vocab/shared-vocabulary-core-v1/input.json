@@ -1,0 +1,67 @@
+{
+  "vocabulary_id": "sp:semantic-proof-core:1",
+  "version": "1",
+  "canonicalization": {
+    "json_scheme": "rfc8785-jcs",
+    "tree_alg": "sp-merkle-rfc6962-v1",
+    "hash_alg": "sha-256",
+    "key_order": "utf8-byte-lex",
+    "array_classes": [
+      "sequence",
+      "set",
+      "priority_list",
+      "bag"
+    ]
+  },
+  "namespaces": {
+    "entity": "ent",
+    "fact": "fact",
+    "relation_type": "rel",
+    "provenance": "prov",
+    "contradiction": "ctr",
+    "worldview": "wv",
+    "projection": "proj",
+    "proof": "proof",
+    "cairn": "cairn",
+    "log": "log"
+  },
+  "proofs": {
+    "proof_types": [
+      "inclusion",
+      "exclusion",
+      "consistency",
+      "snapshot_diff"
+    ],
+    "verifier_failure_codes": [
+      "E_PROOF_SCHEMA_INVALID",
+      "E_PROOF_VERSION_UNSUPPORTED",
+      "E_PROOF_TREE_ALG_UNSUPPORTED",
+      "E_PROOF_HASH_ALG_UNSUPPORTED",
+      "E_PROOF_LEAF_HASH_MISMATCH",
+      "E_PROOF_AUDIT_PATH_INVALID",
+      "E_PROOF_ROOT_MISMATCH",
+      "E_PROOF_BOUNDARY_INVALID",
+      "E_PROOF_KEY_ORDER_INVALID",
+      "E_PROOF_CONSISTENCY_INVALID",
+      "E_PROOF_DIFF_REF_UNRESOLVED",
+      "E_PROOF_SNAPSHOT_STATE_INVALID"
+    ]
+  },
+  "failures": {
+    "lowering": [
+      "E_REGO_UNSUPPORTED_FEATURE",
+      "E_REGO_IMPORT_INVALID",
+      "E_REGO_DEFAULT_INVALID",
+      "E_REGO_CONTAINS_INVALID",
+      "E_REGO_NOT_INVALID",
+      "E_REGO_EVERY_INVALID",
+      "E_REGO_SOME_INVALID",
+      "E_REGO_BUILTIN_UNSUPPORTED",
+      "E_RULEDSL_PARSE_INVALID",
+      "E_RULEDSL_BINDING_INVALID",
+      "E_RULEDSL_PREDICATE_INVALID",
+      "E_RULEDSL_EMIT_INVALID",
+      "E_RULEDSL_NEGATION_INVALID"
+    ]
+  }
+}
