@@ -1,0 +1,27 @@
+fixture_id: ifc-fixture-projection-downgrade-001
+category: projection_downgrade
+source_projection_kind: incidence_preserving
+target_projection_kind: dyadic_projection
+expected_recoverability_class: lossy_but_task_acceptable
+expected_loss_modes:
+  - role_loss
+  - incidence_property_loss
+  - non_recoverability
+required_review_kind: graph_governance_review
+required_artifacts:
+  - loss_certificate
+  - backend_profile
+safe_task_classes:
+  - retrieval
+  - exploration
+unsafe_task_classes:
+  - policy_reasoning
+  - provenance_audit
+  - identity_resolution
+expected_result:
+  status: review_required
+  verify_should_fail_without_loss_certificate: true
+  verify_should_pass_with_loss_certificate: true
+notes: >-
+  Validates that a downgrade from an incidence-preserving representation to a dyadic
+  projection is blocked unless the downgrade is explicitly certified for bounded tasks.

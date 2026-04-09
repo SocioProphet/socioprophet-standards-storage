@@ -1,0 +1,16 @@
+result_id: ifc-result-reference-stack-001
+fixture_id: ifc-reference-stack-stub-001
+target:
+  name: canonical-relational-ledger + reified-lpg-serving + semantic-publication
+  type: reference_stack
+  version: provisional
+status: review_required
+evidence:
+  - kind: note
+    value: docs/benchmarks/certifications/reference-stack-provisional-certification.md
+  - kind: artifact
+    value: benchmarks/workloads/ifc/reference-stack-certification-stub.yaml
+notes: >-
+  Initial result record for the reference stack. Status remains review_required because
+  executable fixture runs and backend-specific evidence are not yet attached.
+recorded_at: "2026-04-09T08:05:00Z"

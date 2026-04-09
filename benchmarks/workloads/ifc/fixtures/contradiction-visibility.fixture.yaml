@@ -1,0 +1,23 @@
+fixture_id: ifc-fixture-contradiction-visibility-001
+category: contradiction_visibility
+view_family: incidence
+belief_mode: validated_claims
+contradiction_mode: group_by_claimset
+scenario_scope:
+  world_id: default
+  branch: main
+input_claims:
+  - claim:vendor-A-is-controller
+  - claim:vendor-B-is-controller
+input_relation:
+  relation_kind: contradicts
+  visibility_mode: visible
+expected_result:
+  status: pass
+  visible_claimsets: 1
+  visible_contradictions: 1
+  flattened_single_truth_answer_allowed: false
+required_review_kind: graph_governance_review
+notes: >-
+  Validates that contradiction-aware reads keep competing claims visible and grouped,
+  rather than silently flattening them into one answer surface.

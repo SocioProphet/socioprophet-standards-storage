@@ -1,0 +1,42 @@
+{
+  "backend_name": "Relational IFC Ledger",
+  "backend_family": "relational_audit_ledger",
+  "substrate_class": "versioned_knowledge_store",
+  "closest_semantic_fit_to_ifc": "high",
+  "best_role_in_stack": "canonical_truth_layer",
+  "query_models": ["SQL", "typed ledger queries"],
+  "native_higher_order_support": true,
+  "native_reasoning_support": false,
+  "best_projection_kind": "incidence_preserving",
+  "projection_risk": "low",
+  "recoverability_notes": "Intended as the canonical truth and replay layer for IFC. Higher-order relations are represented through normalized relation-instance and incidence tables rather than dyadic collapse.",
+  "supports": [
+    "canonical_truth_storage",
+    "replay_and_audit",
+    "identity_and_lifecycle_tracking",
+    "loss_certificate_anchoring",
+    "governance_control_plane"
+  ],
+  "forbids": [
+    "opaque_embedding_truth_layer",
+    "unreviewed_projection_downgrade_as_canonical_state"
+  ],
+  "review_required_for": [
+    "identity_merge_or_split",
+    "projection_downgrade_exports",
+    "obligation_weakening",
+    "contradiction_visibility_changes"
+  ],
+  "safe_task_classes": [
+    "truth_storage",
+    "audit",
+    "replay",
+    "governance_review",
+    "certification_anchor"
+  ],
+  "unsafe_task_classes": [
+    "embedding_only_serving",
+    "policy_bypass_exports",
+    "unlogged_identity_reconciliation"
+  ]
+}
