@@ -1,0 +1,23 @@
+fixture_id: ifc-fixture-obligation-propagation-001
+category: obligation_propagation
+source_artifact: artifact:claim-export-source-001
+derived_artifact: artifact:claim-export-derived-001
+input_obligation:
+  obligation_kind: attribution
+  propagation_mode: highest_restriction
+  scope:
+    namespaces:
+      - ifc.core
+    relation_families:
+      - Claim
+      - ArtifactDerivation
+    projection_kinds:
+      - semantic_statement
+expected_result:
+  status: pass
+  obligation_present_on_derived_artifact: true
+  weakened_without_review_allowed: false
+required_review_kind: graph_governance_review
+notes: >-
+  Validates that attribution or similar governance obligations survive derivation and
+  publication, and cannot be weakened without explicit review.
