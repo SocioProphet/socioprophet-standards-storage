@@ -1,0 +1,26 @@
+{
+  "schema_version": "0.1.0",
+  "evidence_ref_id": "evref_vendor_policy_001",
+  "source_system": "google_drive",
+  "source_uri": "https://docs.google.com/document/d/vendor-policy-example",
+  "content_digest": {
+    "alg": "sha256",
+    "digest": "9f6c6a7b2f0b4d1f31d1f408dcbcebe7a6579d8f5cb0e00e4e90f9c9702b9d4a"
+  },
+  "locator": {
+    "locator_type": "page_span",
+    "start_page": 3,
+    "end_page": 5
+  },
+  "extractor": {
+    "name": "doc-ingest",
+    "version": "0.1.0"
+  },
+  "classification": {
+    "locality_class": "tenant",
+    "confidentiality": "confidential",
+    "retention_policy_ref": "retention://vendor-risk/90d"
+  },
+  "observed_at": "2026-04-09T09:30:00Z",
+  "fetched_at": "2026-04-09T09:31:00Z"
+}
