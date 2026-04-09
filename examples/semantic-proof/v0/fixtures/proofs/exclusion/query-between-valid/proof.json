@@ -1,0 +1,26 @@
+{
+  "proof_id": "proof:wv1:excl:between:001",
+  "proof_type": "exclusion",
+  "proof_version": "1",
+  "tree_alg": "sp-merkle-rfc6962-v1",
+  "hash_alg": "sha-256",
+  "subject": {
+    "root_hash": "sha256:c44bbe038a6cf60bb3aeee87c904095594758c320ed9f9bbdcfb95067f5ef29c",
+    "tree_size": 3,
+    "query_leaf_key": "fact\nfact:controls:person_z:firm_x:999"
+  },
+  "boundary": {
+    "mode": "between",
+    "left": {
+      "leaf_key": "fact\nfact:controls:trust_a:firm_x:021",
+      "inclusion_proof_ref": "proof:wv1:incl:controls021"
+    },
+    "right": {
+      "leaf_key": "fact\nfact:flags:person_b:sanctions:002",
+      "inclusion_proof_ref": "proof:wv1:incl:flags002"
+    }
+  },
+  "ordering": {
+    "comparator": "utf8-byte-lex"
+  }
+}
