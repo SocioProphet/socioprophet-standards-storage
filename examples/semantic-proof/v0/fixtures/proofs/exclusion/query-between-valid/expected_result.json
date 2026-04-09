@@ -1,0 +1,8 @@
+{
+  "proof_id": "proof:wv1:excl:between:001",
+  "verified": true,
+  "failure_code": null,
+  "details": {
+    "mode": "between"
+  }
+}
