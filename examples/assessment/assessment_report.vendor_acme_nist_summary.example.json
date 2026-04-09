@@ -1,0 +1,28 @@
+{
+  "schema_version": "0.1.0",
+  "report_id": "report_vendor_acme_assessment_001",
+  "receipt_ref": "receipt_vendor_acme_assessment_001",
+  "subject": {
+    "id": "vendor:acme-cloud",
+    "kind": "vendor",
+    "display_name": "Acme Cloud"
+  },
+  "framework": {
+    "id": "nist-800-53-rev5",
+    "version": "rev5"
+  },
+  "summary": {
+    "coverage_percent": 33.3,
+    "pass_count": 0,
+    "partial_count": 1,
+    "fail_count": 0,
+    "warn_count": 0,
+    "finding_count": 1,
+    "evidence_count": 1
+  },
+  "finding_refs": [
+    "finding_nist_ac_2_001"
+  ],
+  "stakeholder_view": "operator",
+  "generated_at": "2026-04-09T10:06:00Z"
+}
