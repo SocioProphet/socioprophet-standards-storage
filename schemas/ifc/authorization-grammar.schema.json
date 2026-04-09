@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.org/schemas/ifc/authorization-grammar.schema.json",
+  "title": "IFC Authorization Grammar",
+  "type": "object",
+  "required": ["policy_id", "principals", "rules"],
+  "properties": {
+    "policy_id": {"type": "string"},
+    "principals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["principal_kind", "principal_id"],
+        "properties": {
+          "principal_kind": {"type": "string", "enum": ["human", "agent", "service", "reviewer_group"]},
+          "principal_id": {"type": "string"},
+          "delegable": {"type": "boolean"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["effect", "principal_ref", "actions", "resource_scope"],
+        "properties": {
+          "effect": {"type": "string", "enum": ["allow", "deny", "review_required"]},
+          "principal_ref": {"type": "string"},
+          "actions": {"type": "array", "items": {"type": "string"}},
+          "resource_scope": {
+            "type": "object",
+            "properties": {
+              "namespaces": {"type": "array", "items": {"type": "string"}},
+              "relation_families": {"type": "array", "items": {"type": "string"}},
+              "projection_kinds": {"type": "array", "items": {"type": "string"}},
+              "branches": {"type": "array", "items": {"type": "string"}}
+            },
+            "additionalProperties": false
+          },
+          "max_delegation_depth": {"type": "integer", "minimum": 0},
+          "requires_review_kind": {"type": "string"},
+          "expires_at": {"type": "string", "format": "date-time"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
