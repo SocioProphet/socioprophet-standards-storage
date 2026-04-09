@@ -1,0 +1,394 @@
+fabric:
+  name: support_cognition_fabric
+  version: 0.1.0
+  status: draft
+  canonical_transport:
+    control_plane: tritrpc
+    event_envelope: cloudevents-1.0
+  trust_zones:
+    - customer_untrusted
+    - retrieved_untrusted
+    - tool_untrusted
+    - derived_untrusted
+    - control_high_trust
+  required_cross_cutting_fields:
+    - tenant_id
+    - trace_id
+    - policy_snapshot_id
+    - provenance_hash
+    - schema_version
+
+type_aliases:
+  Id: string
+  TenantId: string
+  Uri: string
+  Hash: string
+  Timestamp: string
+  Score: number
+  Percentage: number
+  FreeText: string
+
+enums:
+  CaseStatus: [new, active, pending_customer, escalated, resolved, closed]
+  Severity: [s0, s1, s2, s3, s4]
+  Channel: [search, automation, chat, live_chat, open_case, email, portal]
+  ActorType: [customer, analyst, system, specialist_service]
+  Modality: [text, image, pdf, log, table, structured_record, audio, video]
+  AssetType:
+    - doc
+    - ticket
+    - known_issue
+    - runbook
+    - prompt
+    - benchmark_case
+    - translation_memory
+    - policy_note
+    - resolution_note
+    - log_bundle
+    - screenshot
+    - structured_dataset
+  AssetStatus: [draft, validated, deprecated, retired]
+  RecommendationType: [answer, route, assignment, next_best_action, escalation, runbook, clarify]
+  RecommendationStatus: [proposed, approved, rejected, executed]
+  TaskType: [search, answer, route, assign, resolve, translate, summarize, classify, extract]
+  Usefulness: [helpful, neutral, harmful, unknown]
+  StepType: [intake, retrieve, verify, route, assign, answer, plan, execute, escalate, resolve, promote]
+  RetrievalQuality: [low, medium, high]
+  EvidenceCompleteness: [partial, substantial, complete]
+  ContradictionStatus: [none, minor, major]
+  ToolValidity: [unchecked, valid, suspect]
+  ConfidentialityRisk: [low, medium, high]
+  RecommendedMode: [answer, clarify, escalate, plan_confirm_execute, human_owned_execution]
+  PromotionDecision: [pass, hold, fail]
+
+structs:
+  EntityRef:
+    entity_type: string
+    entity_id: Id
+
+  ActorRef:
+    actor_type: ActorType
+    actor_id: Id
+
+  PolicyRef:
+    policy_id: Id
+    policy_version: string
+
+  AttachmentRef:
+    attachment_id: Id
+    asset_id: Id
+    modality: Modality
+
+  ToolCall:
+    tool_name: string
+    invocation_id: Id
+    request_hash: Hash
+    response_hash: Hash
+    status: string
+
+  Override:
+    override_id: Id
+    actor: ActorRef
+    reason: string
+    timestamp: Timestamp
+
+  SpanRef:
+    asset_id: Id
+    chunk_id: Id
+    start_offset: integer
+    end_offset: integer
+
+  ClaimEvidenceLink:
+    claim_id: Id
+    asset_id: Id
+    chunk_id: Id
+    span_ref: SpanRef
+
+  RankedCandidate:
+    candidate_id: Id
+    score: Score
+    rationale_ref: Id
+
+  ConfidenceObject:
+    confidence_id: Id
+    retrieval_quality: RetrievalQuality
+    evidence_completeness: EvidenceCompleteness
+    contradiction_status: ContradictionStatus
+    citation_faithfulness: Percentage
+    tool_result_validity: ToolValidity
+    confidentiality_risk: ConfidentialityRisk
+    recommended_mode: RecommendedMode
+
+entities:
+  Case:
+    required:
+      - case_id
+      - tenant_id
+      - channel
+      - status
+      - severity
+      - domain
+      - category
+      - session_ids
+      - created_at
+      - updated_at
+      - schema_version
+    fields:
+      case_id: Id
+      tenant_id: TenantId
+      channel: Channel
+      status: CaseStatus
+      severity: Severity
+      domain: string
+      category: string
+      product_refs: [EntityRef]
+      entitlement_refs: [EntityRef]
+      policy_refs: [PolicyRef]
+      session_ids: [Id]
+      current_route_decision_id: Id
+      current_assignment_decision_id: Id
+      outcome_id: Id
+      created_at: Timestamp
+      updated_at: Timestamp
+      schema_version: string
+
+  CaseSession:
+    required:
+      - session_id
+      - case_id
+      - participants
+      - modality_mix
+      - turn_ids
+      - working_memory_ref
+      - created_at
+      - schema_version
+    fields:
+      session_id: Id
+      case_id: Id
+      participants: [ActorRef]
+      modality_mix: [Modality]
+      turn_ids: [Id]
+      working_memory_ref: Id
+      created_at: Timestamp
+      schema_version: string
+
+  Turn:
+    required:
+      - turn_id
+      - session_id
+      - seq_no
+      - actor
+      - modality
+      - timestamp
+      - schema_version
+    fields:
+      turn_id: Id
+      session_id: Id
+      seq_no: integer
+      actor: ActorRef
+      modality: Modality
+      content_text: FreeText
+      attachment_refs: [AttachmentRef]
+      extracted_entities: [EntityRef]
+      timestamp: Timestamp
+      schema_version: string
+
+  Cairn:
+    required:
+      - cairn_id
+      - case_id
+      - session_id
+      - step_type
+      - inputs_hash
+      - policy_snapshot_id
+      - timestamp
+      - schema_version
+    fields:
+      cairn_id: Id
+      case_id: Id
+      session_id: Id
+      step_type: StepType
+      inputs_hash: Hash
+      retrieved_evidence_ids: [Id]
+      policy_snapshot_id: Id
+      tool_calls: [ToolCall]
+      model_output_ids: [Id]
+      human_overrides: [Override]
+      confidence_object_id: Id
+      metrics_ref: Id
+      timestamp: Timestamp
+      schema_version: string
+
+  Asset:
+    required:
+      - asset_id
+      - asset_type
+      - tenant_scope
+      - title
+      - source_uri
+      - provenance_hash
+      - sensitivity_tags
+      - status
+      - created_at
+      - schema_version
+    fields:
+      asset_id: Id
+      asset_type: AssetType
+      tenant_scope: TenantId
+      title: string
+      source_uri: Uri
+      provenance_hash: Hash
+      sensitivity_tags: [string]
+      retention_tags: [string]
+      graph_entities: [EntityRef]
+      chunk_ids: [Id]
+      status: AssetStatus
+      created_at: Timestamp
+      schema_version: string
+
+  AssetChunk:
+    required:
+      - chunk_id
+      - asset_id
+      - text_hash
+      - token_count
+      - chunk_order
+      - schema_version
+    fields:
+      chunk_id: Id
+      asset_id: Id
+      text_hash: Hash
+      token_count: integer
+      chunk_order: integer
+      title_hint: string
+      source_locator: string
+      schema_version: string
+
+  AssetUse:
+    required:
+      - asset_use_id
+      - asset_id
+      - case_id
+      - task_type
+      - usefulness
+      - timestamp
+      - schema_version
+    fields:
+      asset_use_id: Id
+      asset_id: Id
+      case_id: Id
+      task_type: TaskType
+      usefulness: Usefulness
+      outcome_link: Id
+      timestamp: Timestamp
+      schema_version: string
+
+  Recommendation:
+    required:
+      - recommendation_id
+      - case_id
+      - recommendation_type
+      - supporting_evidence_ids
+      - confidence_object_id
+      - status
+      - created_at
+      - schema_version
+    fields:
+      recommendation_id: Id
+      case_id: Id
+      recommendation_type: RecommendationType
+      text: FreeText
+      supporting_evidence_ids: [Id]
+      confidence_object_id: Id
+      evidence_packet_id: Id
+      status: RecommendationStatus
+      created_at: Timestamp
+      schema_version: string
+
+  RouteDecision:
+    required:
+      - route_decision_id
+      - case_id
+      - candidate_routes
+      - selected_route
+      - reeval_trigger
+      - created_at
+      - schema_version
+    fields:
+      route_decision_id: Id
+      case_id: Id
+      candidate_routes: [RankedCandidate]
+      selected_route: string
+      reeval_trigger: [string]
+      created_at: Timestamp
+      schema_version: string
+
+  AssignmentDecision:
+    required:
+      - assignment_decision_id
+      - case_id
+      - candidate_owners
+      - selected_owner
+      - created_at
+      - schema_version
+    fields:
+      assignment_decision_id: Id
+      case_id: Id
+      candidate_owners: [RankedCandidate]
+      selected_owner: string
+      created_at: Timestamp
+      schema_version: string
+
+  EvidencePacket:
+    required:
+      - evidence_packet_id
+      - answer_id
+      - evidence_spans
+      - citation_faithfulness_score
+      - evidence_coverage_score
+      - schema_version
+    fields:
+      evidence_packet_id: Id
+      answer_id: Id
+      evidence_spans: [ClaimEvidenceLink]
+      contradiction_flags: [string]
+      missing_info_flags: [string]
+      citation_faithfulness_score: Percentage
+      evidence_coverage_score: Percentage
+      schema_version: string
+
+  BenchmarkRun:
+    required:
+      - benchmark_run_id
+      - build_ref
+      - eval_suite_ids
+      - metrics_ref
+      - promotion_decision
+      - created_at
+      - schema_version
+    fields:
+      benchmark_run_id: Id
+      build_ref: string
+      eval_suite_ids: [Id]
+      metrics_ref: Id
+      promotion_decision: PromotionDecision
+      created_at: Timestamp
+      schema_version: string
+
+invariants:
+  - name: no_action_without_policy
+    rule: "No action-bearing Recommendation may move to approved or executed unless a policy_snapshot_id exists and Verify.completed succeeded."
+  - name: no_cross_tenant_asset_join
+    rule: "Assets referenced in retrieval, EvidencePacket, or Recommendation must match Case.tenant_id unless delegated policy explicitly allows cross-tenant access."
+  - name: every_claim_backed_or_marked_gap
+    rule: "Every answer claim must map to at least one EvidencePacket span or be explicitly marked as missing_info."
+  - name: every_state_transition_emits_cairn
+    rule: "Any Case status change, RouteDecision change, AssignmentDecision change, execution, escalation, or resolution emits a Cairn."
+  - name: asset_promotion_requires_review
+    rule: "New reusable Asset objects derived from live cases remain draft until human review records approval."
+  - name: ranked_not_singular
+    rule: "RouteDecision and AssignmentDecision must preserve ranked candidates and rationales, not only the selected outcome."
+  - name: clarify_when_evidence_insufficient
+    rule: "When ConfidenceObject.evidence_completeness=partial and no safe action exists, system must prefer clarify or escalate over definitive answer."
+  - name: verifier_blocks_execution
+    rule: "Verification failure may still allow clarify/search responses, but blocks execution and promotion."
