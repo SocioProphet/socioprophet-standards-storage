@@ -1,7 +1,6 @@
-<!-- Repo-native markdown form. Duplicate this file before use if a clean template copy should remain immutable. -->
-
-
 # Incident Escalation and Risk Response Form
+
+<!-- Repo-native markdown form. Duplicate this file before use if a clean template copy should remain immutable. -->
 
 ## Incident intake
 - Incident ID:

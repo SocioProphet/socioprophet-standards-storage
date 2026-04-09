@@ -1,7 +1,6 @@
-<!-- Repo-native markdown form. Duplicate this file before use if a clean template copy should remain immutable. -->
-
-
 # Partner Intake and Profile
+
+<!-- Repo-native markdown form. Duplicate this file before use if a clean template copy should remain immutable. -->
 
 ## Identity and legal standing
 - Legal name:
