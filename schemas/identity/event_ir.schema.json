@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.dev/schema/identity/event_ir.schema.json",
+  "title": "Event-IR",
+  "type": "object",
+  "required": [
+    "version",
+    "events"
+  ],
+  "properties": {
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "ts",
+          "actor",
+          "scope",
+          "action",
+          "primes",
+          "attrs"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "ts": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO-8601 timestamp"
+          },
+          "actor": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Local subject id or semantic actor handle"
+          },
+          "action": {
+            "type": "string",
+            "minLength": 1
+          },
+          "primes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "attrs": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "scope": {
+            "type": "object",
+            "required": [
+              "realm",
+              "device",
+              "app"
+            ],
+            "additionalProperties": true,
+            "properties": {
+              "realm": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "CITIZEN_FOG",
+                      "CITIZEN_CLOUD",
+                      "INSTITUTION",
+                      "ADTECH",
+                      "HSM",
+                      "DEVICE",
+                      "APP",
+                      "CLOUD"
+                    ]
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^(CITIZEN_FOG|CITIZEN_CLOUD|INSTITUTION|ADTECH|HSM|DEVICE|APP|CLOUD)_[A-Z0-9]+([A-Z0-9_]*[A-Z0-9])?$"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "device": {
+                "type": "string",
+                "minLength": 1
+              },
+              "app": {
+                "type": "string",
+                "minLength": 1
+              },
+              "jurisdiction": {
+                "type": "string"
+              },
+              "peer": {
+                "type": "string",
+                "description": "remote party id, if any"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

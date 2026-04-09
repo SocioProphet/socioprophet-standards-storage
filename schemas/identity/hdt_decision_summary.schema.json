@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.dev/schema/identity/hdt_decision_summary.schema.json",
+  "title": "HDTDecisionSummary",
+  "description": "Portable summary of an HDT export/readiness decision. \u03a9 is an operational readiness label, not a human ontology.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "subject_ref",
+    "omega_state",
+    "allow_export",
+    "repair_required",
+    "policy_hash",
+    "evidence_hashes",
+    "issued_at",
+    "issuer"
+  ],
+  "properties": {
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subject_ref": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "semantic_actor_ref": {
+              "type": "string",
+              "minLength": 1
+            },
+            "spiffe_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "session_id": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      ]
+    },
+    "omega_state": {
+      "type": "string",
+      "enum": [
+        "ABSENT",
+        "SEEDED",
+        "NORMALIZED",
+        "LINKED",
+        "TRUSTED",
+        "ACTIONABLE",
+        "DELIVERED"
+      ]
+    },
+    "allow_export": {
+      "type": "boolean"
+    },
+    "repair_required": {
+      "type": "boolean"
+    },
+    "policy_hash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "evidence_hashes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^sha256:[a-f0-9]{64}$"
+      },
+      "default": []
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "issuer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "id"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "service",
+            "human",
+            "pipeline"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "spiffe_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "repair_triggers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "reasons": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "m_cbd": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "m_cgt": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "m_nhy": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        }
+      }
+    },
+    "ttl_sec": {
+      "type": "integer",
+      "minimum": 1
+    }
+  }
+}
