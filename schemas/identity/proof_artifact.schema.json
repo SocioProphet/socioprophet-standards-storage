@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.dev/schema/identity/proof_artifact.schema.json",
+  "title": "ProofArtifact",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "claim",
+    "status",
+    "inputs",
+    "domains",
+    "diagnostics"
+  ],
+  "properties": {
+    "claim": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "PROVED",
+        "VIOLATION",
+        "INCONCLUSIVE"
+      ]
+    },
+    "inputs": {
+      "type": "object"
+    },
+    "domains": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "violations": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "counterexample": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "witnesses": {
+      "type": "object"
+    },
+    "precision": {
+      "type": "object"
+    },
+    "schedule": {
+      "type": "object"
+    },
+    "diagnostics": {
+      "type": "object",
+      "required": [
+        "iter_count",
+        "widen_count",
+        "duration_ms"
+      ],
+      "properties": {
+        "iter_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "widen_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "duration_ms": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}
