@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.org/schemas/ifc/backend-profile.schema.json",
+  "title": "IFC Backend Capability Profile",
+  "type": "object",
+  "required": [
+    "backend_name",
+    "backend_family",
+    "substrate_class",
+    "closest_semantic_fit_to_ifc",
+    "best_role_in_stack",
+    "best_projection_kind",
+    "projection_risk",
+    "query_models",
+    "native_higher_order_support",
+    "native_reasoning_support"
+  ],
+  "properties": {
+    "backend_name": {"type": "string"},
+    "backend_family": {"type": "string"},
+    "substrate_class": {
+      "type": "string",
+      "enum": [
+        "operational_lpg",
+        "semantic_graph",
+        "embedded_analytical_graph",
+        "higher_order_reasoning",
+        "graph_overlay",
+        "versioned_knowledge_store",
+        "analytical_projection_engine",
+        "multimodel_document_graph"
+      ]
+    },
+    "closest_semantic_fit_to_ifc": {"type": "string", "enum": ["high", "medium", "low"]},
+    "best_role_in_stack": {"type": "string"},
+    "query_models": {"type": "array", "items": {"type": "string"}},
+    "native_higher_order_support": {"type": "boolean"},
+    "native_reasoning_support": {"type": "boolean"},
+    "best_projection_kind": {
+      "type": "string",
+      "enum": ["incidence_preserving", "star_expansion", "dyadic_projection", "embedding_compression"]
+    },
+    "projection_risk": {"type": "string", "enum": ["low", "medium", "high"]},
+    "recoverability_notes": {"type": "string"},
+    "supports": {"type": "array", "items": {"type": "string"}},
+    "forbids": {"type": "array", "items": {"type": "string"}},
+    "review_required_for": {"type": "array", "items": {"type": "string"}},
+    "safe_task_classes": {"type": "array", "items": {"type": "string"}},
+    "unsafe_task_classes": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": false
+}
