@@ -9,6 +9,7 @@ This package belongs here because the repository already carries standards, cont
 - `framework.md` - operating standard
 - `field-sheet.md` - compact operator sheet
 - `templates/` - operator-facing markdown forms
+- `services-kit/` - customer and service-delivery operating kit derived from the canonical governed CSO standard
 - `../../../schemas/governance/cso-partnerships/` - machine-readable record schemas
 - `../../../examples/governance/cso-partnerships/` - example records
 
