@@ -1,0 +1,21 @@
+result_id: ifc-result-executed-graphdb-publication-001
+fixture_id: ifc-fixture-obligation-propagation-001
+target:
+  name: graphdb_semantic_publication
+  type: backend
+  version: provisional-example
+status: review_required
+evidence:
+  - kind: profile
+    value: schemas/ifc/examples/backend-profile.graphdb.example.json
+  - kind: note
+    value: docs/benchmarks/certifications/graphdb-semantic-publication-provisional.md
+  - kind: artifact
+    value: benchmarks/workloads/ifc/fixtures/obligation-propagation.fixture.yaml
+  - kind: report
+    value: reports/ifc/example-graphdb-publication-run.md
+notes: >-
+  Example of an evidence-bearing result record for the semantic publication layer. The target
+  remains review_required because obligation propagation and contradiction visibility must be
+  preserved when exporting governed claim material into statement-oriented views.
+recorded_at: "2026-04-09T11:10:00Z"
