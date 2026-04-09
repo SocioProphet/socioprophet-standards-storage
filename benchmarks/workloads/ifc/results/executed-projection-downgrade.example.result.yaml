@@ -1,0 +1,21 @@
+result_id: ifc-result-executed-projection-downgrade-001
+fixture_id: ifc-fixture-projection-downgrade-001
+target:
+  name: neo4j_reified_lpg_serving
+  type: backend
+  version: 5.x-example
+status: review_required
+evidence:
+  - kind: profile
+    value: schemas/ifc/examples/backend-profile.neo4j.example.json
+  - kind: certificate
+    value: schemas/ifc/examples/loss-certificate.example.json
+  - kind: artifact
+    value: benchmarks/workloads/ifc/fixtures/projection-downgrade.fixture.yaml
+  - kind: report
+    value: reports/ifc/example-projection-downgrade-run.md
+notes: >-
+  Example of an evidence-bearing result record. The target passed only into review-required
+  status because the downgrade was explicitly certified for retrieval/exploration but remains
+  forbidden for policy reasoning, provenance audit, and identity resolution.
+recorded_at: "2026-04-09T08:30:00Z"
