@@ -1,0 +1,222 @@
+{
+  "fixture_id": "golden-path-v0.1",
+  "description": "Known issue with sufficient evidence, safe answer path, ranked route + assignment, and full Cairn chain.",
+  "case": {
+    "case_id": "case_1001",
+    "tenant_id": "tenant_acme",
+    "channel": "chat",
+    "status": "active",
+    "severity": "s3",
+    "domain": "support",
+    "category": "login_failure",
+    "session_ids": [
+      "sess_1001"
+    ],
+    "current_route_decision_id": "route_1001",
+    "current_assignment_decision_id": "assign_1001",
+    "created_at": "2026-04-06T10:00:00Z",
+    "updated_at": "2026-04-06T10:03:00Z",
+    "schema_version": "0.1.0"
+  },
+  "session": {
+    "session_id": "sess_1001",
+    "case_id": "case_1001",
+    "participants": [
+      {
+        "actor_type": "customer",
+        "actor_id": "cust_88"
+      },
+      {
+        "actor_type": "system",
+        "actor_id": "sys_support"
+      }
+    ],
+    "modality_mix": [
+      "text",
+      "log"
+    ],
+    "turn_ids": [
+      "turn_1",
+      "turn_2"
+    ],
+    "working_memory_ref": "wm_1001",
+    "created_at": "2026-04-06T10:00:00Z",
+    "schema_version": "0.1.0"
+  },
+  "turns": [
+    {
+      "turn_id": "turn_1",
+      "session_id": "sess_1001",
+      "seq_no": 1,
+      "actor": {
+        "actor_type": "customer",
+        "actor_id": "cust_88"
+      },
+      "modality": "text",
+      "content_text": "I cannot log in after password reset.",
+      "attachment_refs": [],
+      "extracted_entities": [],
+      "timestamp": "2026-04-06T10:00:01Z",
+      "schema_version": "0.1.0"
+    },
+    {
+      "turn_id": "turn_2",
+      "session_id": "sess_1001",
+      "seq_no": 2,
+      "actor": {
+        "actor_type": "customer",
+        "actor_id": "cust_88"
+      },
+      "modality": "log",
+      "content_text": "error_code=AUTH-441 token-expired-after-reset",
+      "attachment_refs": [],
+      "extracted_entities": [],
+      "timestamp": "2026-04-06T10:00:15Z",
+      "schema_version": "0.1.0"
+    }
+  ],
+  "assets": [
+    {
+      "asset_id": "asset_known_issue_441",
+      "asset_type": "known_issue",
+      "tenant_scope": "tenant_acme",
+      "title": "AUTH-441 after password reset",
+      "source_uri": "kb://known_issue/auth-441",
+      "provenance_hash": "sha256:known441",
+      "sensitivity_tags": [
+        "internal"
+      ],
+      "retention_tags": [
+        "standard"
+      ],
+      "graph_entities": [],
+      "chunk_ids": [
+        "chunk_441_1"
+      ],
+      "status": "validated",
+      "created_at": "2026-03-30T00:00:00Z",
+      "schema_version": "0.1.0"
+    }
+  ],
+  "evidence_packet": {
+    "evidence_packet_id": "ev_1001",
+    "answer_id": "rec_1001",
+    "evidence_spans": [
+      {
+        "claim_id": "claim_1",
+        "asset_id": "asset_known_issue_441",
+        "chunk_id": "chunk_441_1",
+        "span_ref": {
+          "asset_id": "asset_known_issue_441",
+          "chunk_id": "chunk_441_1",
+          "start_offset": 0,
+          "end_offset": 88
+        }
+      }
+    ],
+    "contradiction_flags": [],
+    "missing_info_flags": [],
+    "citation_faithfulness_score": 0.98,
+    "evidence_coverage_score": 0.96,
+    "schema_version": "0.1.0"
+  },
+  "confidence": {
+    "confidence_id": "conf_1001",
+    "retrieval_quality": "high",
+    "evidence_completeness": "complete",
+    "contradiction_status": "none",
+    "citation_faithfulness": 0.98,
+    "tool_result_validity": "unchecked",
+    "confidentiality_risk": "low",
+    "recommended_mode": "answer"
+  },
+  "route_decision": {
+    "route_decision_id": "route_1001",
+    "case_id": "case_1001",
+    "candidate_routes": [
+      {
+        "candidate_id": "route_self_service",
+        "score": 0.93,
+        "rationale_ref": "known_issue_match"
+      },
+      {
+        "candidate_id": "route_human_general",
+        "score": 0.39,
+        "rationale_ref": "fallback"
+      }
+    ],
+    "selected_route": "route_self_service",
+    "reeval_trigger": [
+      "new_turn",
+      "new_artifact"
+    ],
+    "created_at": "2026-04-06T10:02:00Z",
+    "schema_version": "0.1.0"
+  },
+  "assignment_decision": {
+    "assignment_decision_id": "assign_1001",
+    "case_id": "case_1001",
+    "candidate_owners": [
+      {
+        "candidate_id": "queue_auth_support",
+        "score": 0.84,
+        "rationale_ref": "auth_domain_owner"
+      }
+    ],
+    "selected_owner": "queue_auth_support",
+    "created_at": "2026-04-06T10:02:02Z",
+    "schema_version": "0.1.0"
+  },
+  "recommendation": {
+    "recommendation_id": "rec_1001",
+    "case_id": "case_1001",
+    "recommendation_type": "answer",
+    "text": "This matches known issue AUTH-441. Ask the customer to reissue the password reset and wait 2 minutes before the first login.",
+    "supporting_evidence_ids": [
+      "asset_known_issue_441"
+    ],
+    "confidence_object_id": "conf_1001",
+    "evidence_packet_id": "ev_1001",
+    "status": "proposed",
+    "created_at": "2026-04-06T10:02:05Z",
+    "schema_version": "0.1.0"
+  },
+  "cairns": [
+    {
+      "cairn_id": "cairn_1",
+      "case_id": "case_1001",
+      "session_id": "sess_1001",
+      "step_type": "intake",
+      "inputs_hash": "sha256:intake1",
+      "retrieved_evidence_ids": [],
+      "policy_snapshot_id": "policy_snap_1",
+      "tool_calls": [],
+      "model_output_ids": [],
+      "human_overrides": [],
+      "confidence_object_id": "conf_1001",
+      "metrics_ref": "metrics_1",
+      "timestamp": "2026-04-06T10:00:02Z",
+      "schema_version": "0.1.0"
+    },
+    {
+      "cairn_id": "cairn_2",
+      "case_id": "case_1001",
+      "session_id": "sess_1001",
+      "step_type": "retrieve",
+      "inputs_hash": "sha256:retrieve1",
+      "retrieved_evidence_ids": [
+        "asset_known_issue_441"
+      ],
+      "policy_snapshot_id": "policy_snap_1",
+      "tool_calls": [],
+      "model_output_ids": [
+        "rec_1001"
+      ],
+      "human_overrides": [],
+      "confidence_object_id": "conf_1001",
+      "metrics_ref": "metrics_2",
+      "timestamp": "2026-04-06T10:02:05Z",
+      "schema_version": "0.1.0"
+    }
+  ]
+}

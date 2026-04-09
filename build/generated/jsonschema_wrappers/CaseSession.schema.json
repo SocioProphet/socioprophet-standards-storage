@@ -1,0 +1,1 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://schemas.socioprophet.org/support/v0/CaseSession.schema.json","$ref":"https://schemas.socioprophet.org/support/v0/support-fabric.root.schema.json#/$defs/CaseSession"}

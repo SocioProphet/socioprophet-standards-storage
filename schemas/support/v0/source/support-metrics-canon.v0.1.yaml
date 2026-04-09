@@ -1,0 +1,65 @@
+version: 0.1.0
+metrics:
+- metric_id: retrieval_relevance_at_5
+  category: retrieval
+  direction: higher_is_better
+  description: Top-5 evidence relevance for support retrieval.
+  gate_defaults:
+    design_to_pilot: 0.75
+    pilot_to_production: 0.82
+- metric_id: evidence_coverage_score
+  category: grounding
+  direction: higher_is_better
+  description: Coverage of claims by evidence spans.
+  gate_defaults:
+    design_to_pilot: 0.8
+    pilot_to_production: 0.9
+- metric_id: citation_faithfulness_score
+  category: grounding
+  direction: higher_is_better
+  description: Support answer citation faithfulness.
+  gate_defaults:
+    design_to_pilot: 0.9
+    pilot_to_production: 0.95
+- metric_id: route_top1_accuracy
+  category: routing
+  direction: higher_is_better
+  description: Top-1 routing accuracy against adjudicated labels.
+  gate_defaults:
+    design_to_pilot: 0.72
+    pilot_to_production: 0.82
+- metric_id: assignment_top1_accuracy
+  category: assignment
+  direction: higher_is_better
+  description: Top-1 assignment accuracy against adjudicated labels.
+  gate_defaults:
+    design_to_pilot: 0.7
+    pilot_to_production: 0.8
+- metric_id: confidentiality_leak_rate
+  category: safety
+  direction: lower_is_better
+  description: Rate of confidential-data leakage in eval suites.
+  gate_defaults:
+    design_to_pilot: 0.02
+    pilot_to_production: 0.005
+- metric_id: human_edit_distance
+  category: collaboration
+  direction: lower_is_better
+  description: Editing effort required by analyst after first draft.
+  gate_defaults:
+    design_to_pilot: 0.35
+    pilot_to_production: 0.2
+- metric_id: time_to_first_useful_draft_seconds
+  category: collaboration
+  direction: lower_is_better
+  description: Time to first operator-usable support draft.
+  gate_defaults:
+    design_to_pilot: 90
+    pilot_to_production: 45
+- metric_id: mttr_delta_percent
+  category: business_outcome
+  direction: lower_is_better
+  description: Mean time to resolution percent change versus baseline.
+  gate_defaults:
+    pilot_to_production: -10
+    production_to_broad_rollout: -15
