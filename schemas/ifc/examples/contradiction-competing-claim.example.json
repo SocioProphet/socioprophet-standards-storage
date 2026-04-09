@@ -1,0 +1,13 @@
+{
+  "record_id": "cc-validated-claims-001",
+  "relation_kind": "contradicts",
+  "left_claim": "claim:vendor-A-is-controller",
+  "right_claim": "claim:vendor-B-is-controller",
+  "visibility_mode": "visible",
+  "scenario_scope": {
+    "world_id": "default",
+    "branch": "main"
+  },
+  "resolution_state": "reviewing",
+  "resolution_notes": "Competing validated claims remain visible pending governance review because downstream policy impact differs materially by resolution."
+}
