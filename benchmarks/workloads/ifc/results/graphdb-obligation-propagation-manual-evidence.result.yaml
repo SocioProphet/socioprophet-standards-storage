@@ -1,0 +1,21 @@
+result_id: ifc-result-graphdb-manual-evidence-001
+fixture_id: ifc-fixture-obligation-propagation-001
+target:
+  name: graphdb_semantic_publication
+  type: backend
+  version: provisional-example
+status: review_required
+evidence:
+  - kind: profile
+    value: schemas/ifc/examples/backend-profile.graphdb.example.json
+  - kind: note
+    value: docs/benchmarks/certifications/graphdb-semantic-publication-provisional.md
+  - kind: artifact
+    value: benchmarks/workloads/ifc/fixtures/obligation-propagation.fixture.yaml
+  - kind: report
+    value: benchmarks/harness/results/ifc/manual-graphdb-obligation-propagation-run-001.yaml
+notes: >-
+  Evidence-backed result record for the semantic publication layer. This remains review_required
+  because obligation propagation can pass while contradiction visibility and higher-order-to-
+  statement reduction remain governance-gated.
+recorded_at: "2026-04-10T10:12:00Z"
