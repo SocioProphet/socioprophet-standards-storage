@@ -1,0 +1,33 @@
+run_id: ifc-manual-run-neo4j-001
+execution_mode: manual_review_record
+fixture_id: ifc-fixture-projection-downgrade-001
+target:
+  name: neo4j_reified_lpg_serving
+  type: backend
+  version: provisional-example
+source_projection_kind: incidence_preserving
+target_projection_kind: dyadic_projection
+inputs_reviewed:
+  - schemas/ifc/examples/backend-profile.neo4j.example.json
+  - schemas/ifc/examples/loss-certificate.example.json
+  - benchmarks/workloads/ifc/fixtures/projection-downgrade.fixture.yaml
+checks:
+  - name: projection_kind_declared
+    status: pass
+    notes: source and target projection kinds are explicitly stated.
+  - name: loss_certificate_present
+    status: pass
+    notes: bounded downgrade is accompanied by an explicit loss certificate example.
+  - name: forbidden_use_boundary_declared
+    status: pass
+    notes: policy reasoning, provenance audit, and identity resolution remain forbidden.
+  - name: auto_pass_without_review
+    status: fail
+    notes: downgrade is not allowed to auto-pass; governance review is required.
+overall_status: review_required
+review_kind: graph_governance_review
+notes: >-
+  This is a structured manual evidence record rather than an automated harness execution.
+  It demonstrates how fixture evidence can be captured in a machine-readable form before a
+  full runnable harness exists.
+recorded_at: "2026-04-10T09:40:00Z"
