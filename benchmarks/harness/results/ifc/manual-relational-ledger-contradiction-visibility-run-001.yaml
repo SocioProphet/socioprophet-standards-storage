@@ -1,0 +1,35 @@
+run_id: ifc-manual-run-relational-ledger-001
+execution_mode: manual_review_record
+fixture_id: ifc-fixture-contradiction-visibility-001
+target:
+  name: relational_ifc_ledger
+  type: backend
+  version: provisional-example
+query_posture:
+  view_family: incidence
+  belief_mode: validated_claims
+  contradiction_mode: group_by_claimset
+  scenario_scope:
+    world_id: default
+    branch: main
+inputs_reviewed:
+  - schemas/ifc/examples/backend-profile.relational-ledger.example.json
+  - docs/benchmarks/certifications/relational-ledger-canonical-truth-provisional.md
+  - benchmarks/workloads/ifc/fixtures/contradiction-visibility.fixture.yaml
+checks:
+  - name: contradiction_visibility_preserved
+    status: pass
+    notes: competing validated claims remained visible and grouped by claimset.
+  - name: flattened_single_truth_answer_blocked
+    status: pass
+    notes: canonical read posture did not collapse contradictory claims into one answer.
+  - name: lifecycle_and_truth_anchor_respected
+    status: pass
+    notes: result stayed within the canonical truth-layer semantics.
+overall_status: pass
+review_kind: graph_governance_review
+notes: >-
+  This is a structured manual evidence record rather than an automated harness execution.
+  It demonstrates how contradiction-aware canonical reads can be recorded as evidence for
+  truth-layer certification.
+recorded_at: "2026-04-10T10:05:00Z"
