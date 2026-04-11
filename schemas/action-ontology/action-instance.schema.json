@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.ai/action-ontology/0.1.0/action-instance.schema.json",
+  "title": "Action Ontology Instance Bundle",
+  "type": "object",
+  "required": ["agents", "actionTypes", "states", "actions", "traces"],
+  "properties": {
+    "agents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind"],
+        "properties": {
+          "id": {"type": "string"},
+          "kind": {"const": "Agent"},
+          "capabilities": {
+            "type": "array",
+            "items": {"type": "string"}
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "actionTypes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind"],
+        "properties": {
+          "id": {"type": "string"},
+          "kind": {"const": "ActionType"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "states": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "affordances"],
+        "properties": {
+          "id": {"type": "string"},
+          "kind": {"const": "State"},
+          "affordances": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string"}
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "performedBy", "actionType", "fromState", "toState", "timestamp"],
+        "properties": {
+          "id": {"type": "string"},
+          "kind": {"const": "Action"},
+          "performedBy": {"type": "string"},
+          "actionType": {"type": "string"},
+          "fromState": {"type": "string"},
+          "toState": {"type": "string"},
+          "timestamp": {"type": "string", "format": "date-time"},
+          "cost": {"type": "number"},
+          "probability": {"type": "number"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "traces": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "pattern", "traceKind", "medium", "timestamp"],
+        "properties": {
+          "id": {"type": "string"},
+          "kind": {"const": "Trace"},
+          "pattern": {"type": "string"},
+          "traceKind": {"type": "string"},
+          "medium": {"type": "string"},
+          "timestamp": {"type": "string", "format": "date-time"},
+          "taskId": {"type": "string"},
+          "topicId": {"type": "string"},
+          "messageId": {"type": "string"},
+          "refAction": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
