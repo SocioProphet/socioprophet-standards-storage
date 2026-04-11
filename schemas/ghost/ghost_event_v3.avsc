@@ -1,0 +1,84 @@
+{
+  "type": "record",
+  "name": "GhostEventV3",
+  "namespace": "socioprophet.ghost",
+  "fields": [
+    {"name": "event_id", "type": "string"},
+    {"name": "event_type", "type": {"type": "enum", "name": "GhostEventTypeV3", "symbols": ["layer_touch", "triad_assert", "metric_snapshot", "projection_attempt", "projection_commit", "contradiction_fracture", "entanglement_marker"]}},
+    {"name": "run_id", "type": "string"},
+    {"name": "trace_id", "type": "string"},
+    {"name": "span_id", "type": "string"},
+    {"name": "timestamp", "type": "string"},
+    {"name": "layer_id", "type": {"type": "enum", "name": "GhostLayerV3", "symbols": ["S0", "S1", "S2", "S3", "S4", "S5P"]}},
+    {"name": "theta_ref", "type": ["null", "string"], "default": null},
+    {"name": "scope_ref", "type": ["null", "string"], "default": null},
+    {"name": "policy_ref", "type": ["null", "string"], "default": null},
+    {"name": "registry_ref", "type": ["null", "string"], "default": null},
+    {"name": "prime_registry_ref", "type": ["null", "string"], "default": null},
+    {"name": "prime_registry_state_hash", "type": ["null", "string"], "default": null},
+    {"name": "event_ir_hash", "type": ["null", "string"], "default": null},
+    {
+      "name": "prime_vector",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "PrimeVectorEntryV1",
+          "fields": [
+            {"name": "basis_index", "type": "int"},
+            {"name": "topic_id", "type": "string"},
+            {"name": "prime", "type": "long"},
+            {"name": "exponent", "type": "int"}
+          ]
+        }
+      },
+      "default": []
+    },
+    {"name": "artifact_refs", "type": {"type": "array", "items": "string"}, "default": []},
+    {"name": "canonical_hash", "type": ["null", "string"], "default": null},
+    {
+      "name": "payload",
+      "type": [
+        {"type": "record", "name": "LayerTouchPayloadV3", "fields": [
+          {"name": "step_name", "type": "string"},
+          {"name": "state_ref", "type": "string"},
+          {"name": "confidence", "type": "double"}
+        ]},
+        {"type": "record", "name": "TriadAssertPayloadV3", "fields": [
+          {"name": "source_ref", "type": "string"},
+          {"name": "interaction_ref", "type": "string"},
+          {"name": "observer_ref", "type": "string"},
+          {"name": "trit_state", "type": "int"},
+          {"name": "confidence", "type": "double"}
+        ]},
+        {"type": "record", "name": "MetricSnapshotPayloadV3", "fields": [
+          {"name": "metric_name", "type": "string"},
+          {"name": "metric_value", "type": "double"},
+          {"name": "metric_unit", "type": "string"},
+          {"name": "metric_kind", "type": "string"}
+        ]},
+        {"type": "record", "name": "ProjectionAttemptPayloadV3", "fields": [
+          {"name": "source_state", "type": "string"},
+          {"name": "target_state", "type": "string"},
+          {"name": "projection_basis", "type": {"type": "array", "items": "string"}},
+          {"name": "confidence", "type": "double"}
+        ]},
+        {"type": "record", "name": "ProjectionCommitPayloadV3", "fields": [
+          {"name": "source_state", "type": "string"},
+          {"name": "target_state", "type": "string"},
+          {"name": "validation_outcome_ref", "type": "string"}
+        ]},
+        {"type": "record", "name": "ContradictionFracturePayloadV3", "fields": [
+          {"name": "reason_code", "type": "string"},
+          {"name": "severity", "type": "double"},
+          {"name": "state_ref", "type": ["null", "string"], "default": null}
+        ]},
+        {"type": "record", "name": "EntanglementMarkerPayloadV3", "fields": [
+          {"name": "left_ref", "type": "string"},
+          {"name": "right_ref", "type": "string"},
+          {"name": "coupling_strength", "type": "double"}
+        ]}
+      ]
+    }
+  ]
+}
