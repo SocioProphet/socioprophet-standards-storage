@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.dev/schema/conversational/conversation_envelope.schema.json",
+  "title": "ConversationEnvelope",
+  "description": "Canonical normalized message/event envelope for the conversational mesh.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "event_uuid",
+    "direction",
+    "channel",
+    "channel_mode",
+    "contact_uuid",
+    "conversation_uuid",
+    "timestamp_ingested",
+    "content_type",
+    "trust_tier",
+    "fragility_tier"
+  ],
+  "properties": {
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "event_uuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "direction": {
+      "type": "string",
+      "enum": ["inbound", "outbound"]
+    },
+    "channel": {
+      "type": "string",
+      "enum": [
+        "matrix",
+        "sms",
+        "rcs",
+        "telegram",
+        "signal",
+        "messenger",
+        "instagram",
+        "imessage",
+        "slack",
+        "voice"
+      ]
+    },
+    "channel_mode": {
+      "type": "string",
+      "enum": ["native", "puppet", "relay", "pstn", "sip"]
+    },
+    "bridge_instance_id": {
+      "type": "string"
+    },
+    "remote_account_id": {
+      "type": "string"
+    },
+    "remote_chat_id": {
+      "type": "string"
+    },
+    "remote_message_id": {
+      "type": "string"
+    },
+    "contact_uuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "conversation_uuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "timestamp_remote": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "timestamp_ingested": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "content_type": {
+      "type": "string",
+      "enum": ["text", "image", "audio", "video", "file", "reaction", "membership", "call"]
+    },
+    "body": {
+      "type": "string"
+    },
+    "media_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "reply_to_remote_id": {
+      "type": "string"
+    },
+    "thread_key": {
+      "type": "string"
+    },
+    "e2ee_state": {
+      "type": "string",
+      "enum": ["native_e2ee", "bridge_visible", "unknown"]
+    },
+    "trust_tier": {
+      "type": "string",
+      "enum": ["T0", "T1", "T2", "T3", "T4"]
+    },
+    "fragility_tier": {
+      "type": "string",
+      "enum": ["F0", "F1", "F2", "F3"]
+    },
+    "consent_flags": {
+      "type": "object",
+      "additionalProperties": true,
+      "default": {}
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": true,
+      "default": {}
+    }
+  }
+}
