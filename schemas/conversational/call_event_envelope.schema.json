@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.dev/schema/conversational/call_event_envelope.schema.json",
+  "title": "CallEventEnvelope",
+  "description": "Canonical call state transition for telephony events linked to canonical conversation fabric.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "call_event_uuid",
+    "direction",
+    "carrier_channel",
+    "call_state",
+    "started_at",
+    "contact_uuid",
+    "conversation_uuid",
+    "routing_outcome"
+  ],
+  "properties": {
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "call_event_uuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "direction": {
+      "type": "string",
+      "enum": ["inbound", "outbound"]
+    },
+    "carrier_channel": {
+      "type": "string",
+      "enum": ["pstn", "sip", "matrix_voip", "webrtc"]
+    },
+    "source_number": {
+      "type": "string",
+      "minLength": 1
+    },
+    "destination_number": {
+      "type": "string",
+      "minLength": 1
+    },
+    "call_state": {
+      "type": "string",
+      "enum": ["ringing", "answered", "active", "held", "transferred", "voicemail", "missed", "ended"]
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ended_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "duration_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "recording_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "transcript_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "contact_uuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "conversation_uuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "routing_outcome": {
+      "type": "string",
+      "enum": ["bot", "human", "voicemail", "callback_queue", "transferred"]
+    },
+    "consent_flags": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}
