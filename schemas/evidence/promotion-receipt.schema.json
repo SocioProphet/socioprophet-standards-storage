@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.ai/evidence/0.1.0/promotion-receipt.schema.json",
+  "allOf": [
+    { "$ref": "receipt-common.schema.json" },
+    {
+      "type": "object",
+      "required": ["kind", "candidateRef", "assetClassBefore", "assetClassAfter", "decision"],
+      "properties": {
+        "kind": { "const": "PromotionReceipt" },
+        "candidateRef": { "type": "string" },
+        "promotedObjectRef": { "type": ["string", "null"] },
+        "assetClassBefore": { "type": "string" },
+        "assetClassAfter": { "type": "string" },
+        "decision": { "type": "string", "enum": ["approve", "reject", "restrict", "supersede"] },
+        "duplicateCheckRef": { "type": ["string", "null"] },
+        "reviewSessionRef": { "type": ["string", "null"] },
+        "approverRef": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    }
+  ]
+}
