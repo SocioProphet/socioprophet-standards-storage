@@ -1,0 +1,26 @@
+{
+  "agents": [
+    {"id": "agent.manager", "kind": "Agent", "capabilities": ["award"]},
+    {"id": "agent.workerA", "kind": "Agent", "capabilities": ["executeTask", "consume"]}
+  ],
+  "actionTypes": [
+    {"id": "award", "kind": "ActionType"},
+    {"id": "executeTask", "kind": "ActionType"},
+    {"id": "consume", "kind": "ActionType"}
+  ],
+  "states": [
+    {"id": "state.open", "kind": "State", "affordances": ["award"]},
+    {"id": "state.awarded", "kind": "State", "affordances": ["executeTask", "consume"]},
+    {"id": "state.done", "kind": "State", "affordances": []}
+  ],
+  "actions": [
+    {"id": "action.consume.x", "kind": "Action", "performedBy": "agent.workerA", "actionType": "consume", "fromState": "state.awarded", "toState": "state.awarded", "timestamp": "2026-04-11T19:43:00Z"},
+    {"id": "action.exec.x", "kind": "Action", "performedBy": "agent.workerA", "actionType": "executeTask", "fromState": "state.awarded", "toState": "state.done", "timestamp": "2026-04-11T19:43:05Z"}
+  ],
+  "traces": [
+    {"id": "trace.cfp.x", "kind": "Trace", "pattern": "ContractNet", "traceKind": "cfp", "medium": "bus:tasks", "timestamp": "2026-04-11T19:42:50Z", "taskId": "task-x"},
+    {"id": "trace.bid.x", "kind": "Trace", "pattern": "ContractNet", "traceKind": "bid", "medium": "bus:tasks", "timestamp": "2026-04-11T19:42:55Z", "taskId": "task-x"},
+    {"id": "trace.ack.x", "kind": "Trace", "pattern": "PubSub", "traceKind": "ack", "medium": "topic:tasks", "timestamp": "2026-04-11T19:43:01Z", "topicId": "tasks", "messageId": "msg-x", "refAction": "action.consume.x"},
+    {"id": "trace.done.x", "kind": "Trace", "pattern": "ContractNet", "traceKind": "done", "medium": "bus:tasks", "timestamp": "2026-04-11T19:43:06Z", "taskId": "task-x", "refAction": "action.exec.x"}
+  ]
+}
