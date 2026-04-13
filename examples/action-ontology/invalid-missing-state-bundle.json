@@ -1,0 +1,38 @@
+{
+  "agents": [
+    {
+      "id": "agent.alice",
+      "kind": "Agent",
+      "capabilities": [
+        "observe"
+      ]
+    }
+  ],
+  "actionTypes": [
+    {
+      "id": "observe",
+      "kind": "ActionType"
+    }
+  ],
+  "states": [
+    {
+      "id": "state.known",
+      "kind": "State",
+      "affordances": [
+        "observe"
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "action.bad.001",
+      "kind": "Action",
+      "performedBy": "agent.alice",
+      "actionType": "observe",
+      "fromState": "state.unknown",
+      "toState": "state.known",
+      "timestamp": "2026-04-11T19:40:00Z"
+    }
+  ],
+  "traces": []
+}
