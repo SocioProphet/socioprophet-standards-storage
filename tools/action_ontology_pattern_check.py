@@ -60,7 +60,6 @@ def check_pubsub(doc):
     if not pubs:
         return ["PubSub: missing publish trace with topicId and messageId"]
 
-    # validate every publish, not just the first one
     for p in pubs:
         topic = p.get("topicId")
         msgid = p.get("messageId")
@@ -83,6 +82,23 @@ def check_pubsub(doc):
     return errs
 
 
+def check_contractnet_pubsub_bridge(doc):
+    errs = []
+    traces = doc.get("traces", [])
+    cfps = [t for t in traces if t.get("pattern") == "ContractNet" and t.get("traceKind") == "cfp" and t.get("taskId")]
+    if not cfps:
+        return ["Bridge: missing ContractNet cfp trace with taskId"]
+    for cfp in cfps:
+        task_id = cfp.get("taskId")
+        matching_publishes = [
+            t for t in traces
+            if t.get("pattern") == "PubSub" and t.get("traceKind") == "publish" and t.get("taskId") == task_id
+        ]
+        if not matching_publishes:
+            errs.append(f"Bridge: missing PubSub publish trace for taskId={task_id}")
+    return errs
+
+
 def main():
     root = Path(__file__).resolve().parents[1] / "examples" / "action-ontology"
     failures = []
@@ -98,6 +114,16 @@ def main():
         errs = check_pubsub(load(pubsub_path))
         if errs:
             failures.append((pubsub_path.name, errs))
+
+    bridge_path = root / "contractnet-pubsub-bridge-bundle.json"
+    if bridge_path.exists():
+        doc = load(bridge_path)
+        errs = []
+        errs.extend(check_contract_net(doc))
+        errs.extend(check_pubsub(doc))
+        errs.extend(check_contractnet_pubsub_bridge(doc))
+        if errs:
+            failures.append((bridge_path.name, errs))
 
     if failures:
         for name, errs in failures:

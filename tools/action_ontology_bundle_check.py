@@ -46,6 +46,8 @@ def main():
     root = Path(__file__).resolve().parents[1] / "examples" / "action-ontology"
     failures = []
     for p in sorted(root.glob("*.json")):
+        if "invalid" in p.name:
+            continue
         errs = check_bundle(load(p))
         if errs:
             failures.append((p.name, errs))
