@@ -1,0 +1,20 @@
+{
+  "agents": [
+    {"id": "agent.publisher", "kind": "Agent", "capabilities": ["writeTrace"]},
+    {"id": "agent.subscriber", "kind": "Agent", "capabilities": ["consume"]}
+  ],
+  "actionTypes": [
+    {"id": "consume", "kind": "ActionType"},
+    {"id": "writeTrace", "kind": "ActionType"}
+  ],
+  "states": [
+    {"id": "state.pending", "kind": "State", "affordances": ["consume"]},
+    {"id": "state.done", "kind": "State", "affordances": []}
+  ],
+  "actions": [
+    {"id": "action.consume.bad", "kind": "Action", "performedBy": "agent.subscriber", "actionType": "consume", "fromState": "state.pending", "toState": "state.done", "timestamp": "2026-04-11T19:42:00Z"}
+  ],
+  "traces": [
+    {"id": "trace.publish.bad", "kind": "Trace", "pattern": "PubSub", "traceKind": "publish", "medium": "topic:alerts", "timestamp": "2026-04-11T19:41:59Z", "topicId": "alerts", "messageId": "msg-bad"}
+  ]
+}
