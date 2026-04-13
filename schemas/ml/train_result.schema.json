@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sourceos.local/schemas/ml/v1/train_result.schema.json",
+  "title": "TrainResult",
+  "type": "object",
+  "required": ["registeredModelRef", "metricsRef", "sbomRef"],
+  "properties": {
+    "registeredModelRef": { "type": "string", "minLength": 1 },
+    "metricsRef": { "type": "string", "minLength": 1 },
+    "sbomRef": { "type": "string", "minLength": 1 },
+    "validationReportRef": { "type": ["string", "null"] },
+    "checkpointRefs": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}
