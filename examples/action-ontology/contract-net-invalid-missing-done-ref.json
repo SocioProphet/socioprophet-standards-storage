@@ -1,0 +1,7 @@
+{
+  "agents": [
+    {"id": "agent.manager", "kind": "Agent", "capabilities": ["award"]}, {"id": "agent.workerA", "kind": "Agent", "capabilities": ["executeTask"]}],
+  "actionTypes": [{"id": "award", "kind": "ActionType"}, {"id": "executeTask", "kind": "ActionType"}],
+  "states": [{"id": "state.open", "kind": "State", "affordances": ["award"]}, {"id": "state.done", "kind": "State", "affordances": []}],
+  "actions": [{"id": "action.exec.bad", "kind": "Action", "performedBy": "agent.workerA", "actionType": "executeTask", "fromState": "state.open", "toState": "state.done", "timestamp": "2026-04-11T19:41:00Z"}],
+  "traces": [{"id": "trace.cfp.bad", "kind": "Trace", "pattern": "ContractNet", "traceKind": "cfp", "medium": "bus:tasks", "timestamp": "2026-04-11T19:40:00Z", "taskId": "task-bad"}, {"id": "trace.bid.bad", "kind": "Trace", "pattern": "ContractNet", "traceKind": "bid", "medium": "bus:tasks", "timestamp": "2026-04-11T19:40:10Z", "taskId": "task-bad"}, {"id": "trace.done.bad", "kind": "Trace", "pattern": "ContractNet", "traceKind": "done", "medium": "bus:tasks", "timestamp": "2026-04-11T19:41:01Z", "taskId": "task-bad"}]}
