@@ -1,0 +1,9 @@
+{
+  "id": "urn:sp:evidence:connector:gdrive-rclone",
+  "kind": "ConnectorProfile",
+  "specVersion": "0.1.0",
+  "connectorType": "gdrive",
+  "displayName": "Google Drive via rclone",
+  "capabilities": ["list", "export", "hash", "metadata"],
+  "sessionVolatility": "low"
+}
