@@ -1,0 +1,62 @@
+event_envelope:
+  required:
+    - schema_version
+    - event_id
+    - scenario_id
+    - epoch
+    - event_type
+    - proof_ref
+    - sphere_from
+    - sphere_to
+    - token_tier
+    - delta_ep
+    - quality
+    - payload
+  fields:
+    schema_version: "1.0.0"
+    event_id: string
+    scenario_id: string
+    epoch: int
+    event_type: enum[mint,burn,stake,settle,slash,transfer_price,collateralize,governance_fee,reserve_recovery,documentation_decay,bridge_top_up]
+    proof_ref: string
+    sphere_from: int
+    sphere_to: int
+    token_tier: enum[micro,credit,reserve,none]
+    delta_ep: number
+    quality: object
+    payload: object
+
+events:
+  - type: heller.mint
+    subject: HellerEventEnvelope
+    payload_schema: socioprophet.heller.v1.HellerEventEnvelope
+  - type: heller.burn
+    subject: HellerEventEnvelope
+    payload_schema: socioprophet.heller.v1.HellerEventEnvelope
+  - type: heller.stake
+    subject: HellerEventEnvelope
+    payload_schema: socioprophet.heller.v1.HellerEventEnvelope
+  - type: heller.settle
+    subject: HellerEventEnvelope
+    payload_schema: socioprophet.heller.v1.HellerEventEnvelope
+  - type: heller.slash
+    subject: HellerEventEnvelope
+    payload_schema: socioprophet.heller.v1.HellerEventEnvelope
+  - type: heller.transfer_price
+    subject: HellerEventEnvelope
+    payload_schema: socioprophet.heller.v1.HellerEventEnvelope
+  - type: heller.collateralize
+    subject: HellerEventEnvelope
+    payload_schema: socioprophet.heller.v1.HellerEventEnvelope
+  - type: heller.governance_fee
+    subject: HellerEventEnvelope
+    payload_schema: socioprophet.heller.v1.HellerEventEnvelope
+  - type: heller.reserve_recovery
+    subject: HellerEventEnvelope
+    payload_schema: socioprophet.heller.v1.HellerEventEnvelope
+  - type: heller.documentation_decay
+    subject: HellerEventEnvelope
+    payload_schema: socioprophet.heller.v1.HellerEventEnvelope
+  - type: heller.bridge_top_up
+    subject: HellerEventEnvelope
+    payload_schema: socioprophet.heller.v1.HellerEventEnvelope
