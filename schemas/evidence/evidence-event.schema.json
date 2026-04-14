@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.ai/evidence/0.1.0/evidence-event.schema.json",
+  "type": "object",
+  "required": [
+    "id",
+    "kind",
+    "specVersion",
+    "eventType",
+    "timestampUtc",
+    "blobRef"
+  ],
+  "properties": {
+    "id": { "type": "string" },
+    "kind": { "const": "EvidenceEvent" },
+    "specVersion": { "$ref": "common.schema.json#/$defs/specVersion" },
+    "eventType": { "type": "string" },
+    "timestampUtc": { "$ref": "common.schema.json#/$defs/utcTimestamp" },
+    "blobRef": { "type": "string" },
+    "entityRefs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "surface": { "type": "string" },
+    "tokenSet": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "excerpt": { "type": "string" },
+    "parserRunRef": { "type": "string" },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

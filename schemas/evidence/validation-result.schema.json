@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.ai/evidence/0.1.0/validation-result.schema.json",
+  "type": "object",
+  "required": [
+    "id",
+    "kind",
+    "specVersion",
+    "targetRef",
+    "validatorName",
+    "validatorVersion",
+    "ruleSet",
+    "status",
+    "emittedAtUtc"
+  ],
+  "properties": {
+    "id": { "type": "string" },
+    "kind": { "const": "ValidationResult" },
+    "specVersion": { "$ref": "common.schema.json#/$defs/specVersion" },
+    "targetRef": { "type": "string" },
+    "validatorName": { "type": "string" },
+    "validatorVersion": { "type": "string" },
+    "ruleSet": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["pass", "warn", "fail"]
+    },
+    "emittedAtUtc": { "$ref": "common.schema.json#/$defs/utcTimestamp" },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

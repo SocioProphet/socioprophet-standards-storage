@@ -1,0 +1,12 @@
+{
+  "id": "urn:sp:evidence:blob:sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "kind": "EvidenceBlob",
+  "specVersion": "0.1.0",
+  "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "byteLength": 1234,
+  "contentType": "text/plain",
+  "collectedTimeUtc": "2026-04-14T06:45:05Z",
+  "storageUri": "s3://evidence/raw/sha256/aa/aa/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "sourceLocator": "file:///tmp/sample.log",
+  "acquisitionRunId": "urn:sp:evidence:acquisition:RUN0001"
+}

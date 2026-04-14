@@ -1,0 +1,10 @@
+{
+  "id": "urn:sp:evidence:acquisition:RUN0001",
+  "kind": "AcquisitionRun",
+  "specVersion": "0.1.0",
+  "connectorProfileId": "urn:sp:evidence:connector:gdrive-rclone",
+  "startedAtUtc": "2026-04-14T06:45:00Z",
+  "selectionExpression": "folder:case-001",
+  "toolchain": ["rclone", "evidence-broker"],
+  "status": "running"
+}

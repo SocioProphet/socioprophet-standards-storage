@@ -1,0 +1,12 @@
+{
+  "id": "urn:sp:evidence:parserrun:PARSER0001",
+  "kind": "ParserRun",
+  "specVersion": "0.1.0",
+  "parserName": "plain_text_log_parser",
+  "parserVersion": "0.1.0",
+  "inputBlobRefs": [
+    "urn:sp:evidence:blob:sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  ],
+  "startedAtUtc": "2026-04-14T06:45:10Z",
+  "status": "succeeded"
+}
