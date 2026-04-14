@@ -1,0 +1,70 @@
+{
+  "agents": [
+    {"id": "agent.manager", "kind": "Agent", "capabilities": ["award", "writeTrace"]},
+    {"id": "agent.workerA", "kind": "Agent", "capabilities": ["propose", "executeTask", "writeTrace"]},
+    {"id": "agent.workerB", "kind": "Agent", "capabilities": ["propose", "executeTask", "writeTrace"]}
+  ],
+  "actionTypes": [
+    {"id": "propose", "kind": "ActionType"},
+    {"id": "award", "kind": "ActionType"},
+    {"id": "executeTask", "kind": "ActionType"},
+    {"id": "writeTrace", "kind": "ActionType"}
+  ],
+  "states": [
+    {"id": "state.open", "kind": "State", "affordances": ["propose", "writeTrace"]},
+    {"id": "state.awarded", "kind": "State", "affordances": ["executeTask", "writeTrace"]},
+    {"id": "state.done", "kind": "State", "affordances": ["writeTrace"]}
+  ],
+  "actions": [
+    {
+      "id": "action.award.001",
+      "kind": "Action",
+      "performedBy": "agent.manager",
+      "actionType": "award",
+      "fromState": "state.open",
+      "toState": "state.awarded",
+      "timestamp": "2026-04-11T19:10:00Z"
+    },
+    {
+      "id": "action.exec.001",
+      "kind": "Action",
+      "performedBy": "agent.workerA",
+      "actionType": "executeTask",
+      "fromState": "state.awarded",
+      "toState": "state.done",
+      "timestamp": "2026-04-11T19:12:00Z",
+      "cost": 3,
+      "probability": 1
+    }
+  ],
+  "traces": [
+    {
+      "id": "trace.cfp.001",
+      "kind": "Trace",
+      "pattern": "ContractNet",
+      "traceKind": "cfp",
+      "medium": "bus:tasks",
+      "timestamp": "2026-04-11T19:08:00Z",
+      "taskId": "task-001"
+    },
+    {
+      "id": "trace.bid.A",
+      "kind": "Trace",
+      "pattern": "ContractNet",
+      "traceKind": "bid",
+      "medium": "bus:tasks",
+      "timestamp": "2026-04-11T19:08:30Z",
+      "taskId": "task-001"
+    },
+    {
+      "id": "trace.done.001",
+      "kind": "Trace",
+      "pattern": "ContractNet",
+      "traceKind": "done",
+      "medium": "bus:tasks",
+      "timestamp": "2026-04-11T19:12:01Z",
+      "taskId": "task-001",
+      "refAction": "action.exec.001"
+    }
+  ]
+}
