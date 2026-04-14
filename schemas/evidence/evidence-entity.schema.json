@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.ai/evidence/0.1.0/evidence-entity.schema.json",
+  "type": "object",
+  "required": [
+    "id",
+    "kind",
+    "specVersion",
+    "entityType",
+    "stableKey"
+  ],
+  "properties": {
+    "id": { "type": "string" },
+    "kind": { "const": "EvidenceEntity" },
+    "specVersion": { "$ref": "common.schema.json#/$defs/specVersion" },
+    "entityType": { "type": "string" },
+    "stableKey": { "type": "string" },
+    "displayName": { "type": "string" },
+    "aliases": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "serviceDomain": { "type": "string" },
+    "accountId": { "type": "string" },
+    "deviceId": { "type": "string" },
+    "teamId": { "type": "string" },
+    "mdmUuid": { "type": "string" },
+    "email": { "type": "string" }
+  },
+  "additionalProperties": false
+}
