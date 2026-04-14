@@ -1,7 +1,11 @@
-.PHONY: validate cso-governance-validate cso-governance-scaffold
+.PHONY: validate action-ontology-validate cso-governance-validate cso-governance-scaffold
 
 validate:
 	./.venv/bin/python tools/validate.py 2>/dev/null || python3 tools/validate.py
+	bash tools/action_ontology_validate_all.sh
+
+action-ontology-validate:
+	bash tools/action_ontology_validate_all.sh
 
 CSO_GOVERNANCE_OUTPUT ?= build/cso-governance-pack
 CSO_GOVERNANCE_NAME ?= Generated Governed CSO Pack
