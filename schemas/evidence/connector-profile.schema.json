@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.ai/evidence/0.1.0/connector-profile.schema.json",
+  "type": "object",
+  "required": [
+    "id",
+    "kind",
+    "specVersion",
+    "connectorType",
+    "displayName",
+    "capabilities",
+    "sessionVolatility",
+    "policyProfile"
+  ],
+  "properties": {
+    "id": { "type": "string" },
+    "kind": { "const": "ConnectorProfile" },
+    "specVersion": { "$ref": "common.schema.json#/$defs/specVersion" },
+    "connectorType": { "type": "string" },
+    "displayName": { "type": "string" },
+    "capabilities": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "sessionVolatility": {
+      "type": "string",
+      "enum": ["ephemeral", "low", "medium", "high"]
+    },
+    "policyProfile": { "type": "string" },
+    "accountRef": { "type": "string" },
+    "mountMode": { "type": "string" },
+    "headlessCapable": { "type": "boolean" }
+  },
+  "additionalProperties": false
+}
