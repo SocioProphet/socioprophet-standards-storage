@@ -1,0 +1,21 @@
+result_id: ifc-result-neo4j-manual-evidence-001
+fixture_id: ifc-fixture-projection-downgrade-001
+target:
+  name: neo4j_reified_lpg_serving
+  type: backend
+  version: provisional-example
+status: review_required
+evidence:
+  - kind: profile
+    value: schemas/ifc/examples/backend-profile.neo4j.example.json
+  - kind: certificate
+    value: schemas/ifc/examples/loss-certificate.example.json
+  - kind: artifact
+    value: benchmarks/workloads/ifc/fixtures/projection-downgrade.fixture.yaml
+  - kind: report
+    value: benchmarks/harness/results/ifc/manual-neo4j-projection-downgrade-run-001.yaml
+notes: >-
+  Evidence-backed result record for the Neo4j serving path. This remains review_required
+  because the downgrade is acceptable only for bounded task classes and must not auto-pass
+  into policy reasoning, provenance audit, or identity resolution workflows.
+recorded_at: "2026-04-10T09:42:00Z"
