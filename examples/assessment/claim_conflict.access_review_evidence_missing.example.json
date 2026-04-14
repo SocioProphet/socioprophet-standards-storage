@@ -1,0 +1,12 @@
+{
+  "schema_version": "0.1.0",
+  "conflict_id": "conflict_access_review_evidence_missing_001",
+  "left_claim_ref": "claim_admin_accounts_reviewed_quarterly_001",
+  "control_requirement_ref": "ctrlreq_nist_ac_2_001",
+  "conflict_type": "insufficient_proof",
+  "severity": "high",
+  "rationale": "A policy assertion exists, but the required access review record and identity-system export were not provided as evidence.",
+  "evidence_refs": [
+    "evref_vendor_policy_001"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "query_id": "q-claims-effective-now-001",
+  "view_family": "incidence",
+  "belief_mode": "validated_claims",
+  "contradiction_mode": "group_by_claimset",
+  "scenario_scope": {
+    "world_id": "default",
+    "branch": "main"
+  },
+  "match": [
+    {"bind": "c", "type": "Claim"},
+    {"bind": "e", "type": "Entity", "via": "about"}
+  ],
+  "where": [
+    {"eq": ["e.id", "entity:acme-corp"]},
+    {"eq": ["c.status", "validated"]}
+  ],
+  "return": [
+    {"field": "c.id"},
+    {"field": "c.status"},
+    {"field": "c.valid_time"}
+  ]
+}

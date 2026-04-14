@@ -1,0 +1,33 @@
+{
+  "$id": "sp.ghost_signature_envelope.v0.2",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Ghost Signature Envelope",
+  "type": "object",
+  "required": [
+    "schema_ref",
+    "algorithm",
+    "subject_type",
+    "subject_ref",
+    "canonical_hash",
+    "signer_ref",
+    "key_id",
+    "scope_ref",
+    "issued_at",
+    "nonce",
+    "signature"
+  ],
+  "properties": {
+    "schema_ref": {"type": "string"},
+    "algorithm": {"type": "string", "enum": ["ed25519"]},
+    "subject_type": {"type": "string"},
+    "subject_ref": {"type": "string"},
+    "canonical_hash": {"type": "string"},
+    "signer_ref": {"type": "string"},
+    "key_id": {"type": "string"},
+    "scope_ref": {"type": "string"},
+    "issued_at": {"type": "string"},
+    "nonce": {"type": "string"},
+    "signature": {"type": "string"}
+  },
+  "additionalProperties": false
+}

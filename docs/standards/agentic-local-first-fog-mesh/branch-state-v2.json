@@ -1,0 +1,33 @@
+{
+  "spec_id": "agentic-local-first-fog-mesh",
+  "version": "v1",
+  "supersedes": [
+    "preservation-manifest.json"
+  ],
+  "notes": [
+    "This ledger exists because the original preservation manifest predates the CI validator, gate schema, workflow, and current-state note.",
+    "The branch itself is the primary preservation surface.",
+    "The canonical validator entrypoint is validate_mesh_spec_ci.py."
+  ],
+  "inventory": [
+    "README.md",
+    "CURRENT-STATE.md",
+    "canonical-v1-rfc.md",
+    "control-plane-mapping.md",
+    "preservation-manifest.json",
+    "branch-state-v2.json",
+    "validate_mesh_spec.py",
+    "validate_mesh_spec_ci.py",
+    "registry/decisions.yaml",
+    "registry/krs.yaml",
+    "registry/nfrs.yaml",
+    "registry/owners.yaml",
+    "registry/control_plane_gates.yaml",
+    "schemas/decisions.schema.json",
+    "schemas/krs.schema.json",
+    "schemas/nfrs.schema.json",
+    "schemas/owners.schema.json",
+    "schemas/control_plane_gates.schema.json",
+    ".github/workflows/validate-mesh-spec.yml"
+  ]
+}

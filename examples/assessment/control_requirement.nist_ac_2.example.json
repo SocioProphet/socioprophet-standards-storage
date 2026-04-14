@@ -1,0 +1,16 @@
+{
+  "schema_version": "0.1.0",
+  "control_requirement_id": "ctrlreq_nist_ac_2_001",
+  "framework_id": "nist-800-53-rev5",
+  "framework_version": "rev5",
+  "control_id": "AC-2",
+  "row_id": "ac-2-account-management",
+  "title": "Account management requires periodic review evidence",
+  "description": "The assessed subject must provide policy evidence, access review records, and an identity-system export sufficient to support account-management review assertions.",
+  "required_proof_classes": [
+    "policy_document",
+    "access_review_record",
+    "identity_system_export"
+  ],
+  "decision_policy": "require_approval"
+}

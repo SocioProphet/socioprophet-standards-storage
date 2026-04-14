@@ -1,0 +1,14 @@
+{
+  "incident_id": "INC-STARTER-001",
+  "date_reported": "2026-04-07",
+  "incident_type": "starter_case",
+  "programme": "Golden Example Governed CSO Pack",
+  "partner": "Golden Example Governed CSO Pack",
+  "immediate_risk_to_people": "Replace with real intake details if an incident occurs.",
+  "data_involved": false,
+  "safeguarding_involved": false,
+  "civic_space_risk": false,
+  "fraud_risk": false,
+  "escalation_owner": "Governance Lead",
+  "status": "open"
+}

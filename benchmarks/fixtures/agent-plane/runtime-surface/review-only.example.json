@@ -1,0 +1,17 @@
+{
+  "pty": false,
+  "workdir": ".worktrees/pr-123",
+  "background": false,
+  "reviewOnly": true,
+  "worktreeStrategy": "named",
+  "sandboxMode": "user",
+  "networkMode": "allowlist",
+  "egressAllowlist": [
+    "code-host"
+  ],
+  "elevated": false,
+  "protectedPaths": [
+    "protected-branch"
+  ],
+  "approvalProfile": "review-lane"
+}

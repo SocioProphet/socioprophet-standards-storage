@@ -1,0 +1,17 @@
+{
+  "id": "urn:srcos:release-receipt:fixture-001",
+  "type": "ReleaseReceipt",
+  "specVersion": "2.1.0-agentplane-draft",
+  "releaseTarget": "agent-plane-runtime-law-fixtures",
+  "sourceRef": "urn:srcos:artifact:fixture-bundle-001",
+  "artifactHashes": [
+    "sha256:fixture-artifact-001"
+  ],
+  "checks": [
+    "schema-validated",
+    "receipt-linked",
+    "artifact-present"
+  ],
+  "status": "verified",
+  "verifiedAt": "2026-04-06T00:00:07Z"
+}

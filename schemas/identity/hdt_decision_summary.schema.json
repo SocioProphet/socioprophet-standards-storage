@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://socioprophet.dev/schema/identity/hdt_decision_summary.schema.json",
   "title": "HDTDecisionSummary",
-  "description": "Portable summary of an HDT export/readiness decision. Ω is an operational readiness label, not a human ontology.",
+  "description": "Portable summary of an HDT export/readiness decision. \u03a9 is an operational readiness label, not a human ontology.",
   "type": "object",
   "additionalProperties": false,
   "required": [

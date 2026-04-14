@@ -1,0 +1,15 @@
+{
+  "type": "record",
+  "name": "PolicyDecisionOutput",
+  "namespace": "org.socioprophet.policy.v1",
+  "doc": "Output payload for policy.v1.Decision/Evaluate in the first local-hybrid slice.",
+  "fields": [
+    {"name": "allow", "type": "boolean"},
+    {"name": "reason", "type": "string"},
+    {"name": "approvedDestinationZone", "type": ["null", "string"], "default": null},
+    {"name": "requiredTransformations", "type": {"type": "array", "items": "string"}},
+    {"name": "maxContextBytes", "type": ["null", "long"], "default": null},
+    {"name": "ttlSeconds", "type": ["null", "int"], "default": null},
+    {"name": "policyHash", "type": "string"}
+  ]
+}

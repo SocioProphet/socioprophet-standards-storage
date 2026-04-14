@@ -1,0 +1,18 @@
+{
+  "type": "record",
+  "name": "CairnMaterializeOutput",
+  "namespace": "org.socioprophet.replay.v1",
+  "doc": "Response payload for replay.v1.Cairn/Materialize in the first local-hybrid slice.",
+  "fields": [
+    {"name": "cairnId", "type": "string"},
+    {"name": "replayHandle", "type": "string"},
+    {"name": "artifacts", "type": {"type": "array", "items": {
+      "type": "record",
+      "name": "CairnArtifact",
+      "fields": [
+        {"name": "artifactId", "type": "string"},
+        {"name": "digest", "type": "string"}
+      ]
+    }}}
+  ]
+}

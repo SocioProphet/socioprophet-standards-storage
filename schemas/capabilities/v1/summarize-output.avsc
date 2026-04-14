@@ -1,0 +1,17 @@
+{
+  "type": "record",
+  "name": "SummarizeOutput",
+  "namespace": "org.socioprophet.capabilities.v1",
+  "doc": "Output payload for summarize.abstractive.v1 in the first local-hybrid slice.",
+  "fields": [
+    {"name": "summary", "type": "string"},
+    {"name": "risks", "type": {"type": "array", "items": {
+      "type": "record",
+      "name": "SummarizeRisk",
+      "fields": [
+        {"name": "id", "type": "string"},
+        {"name": "text", "type": "string"}
+      ]
+    }}}
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.local/schemas/krs.schema.json",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[A-Za-z0-9.-]+)?$"
+    },
+    "spec_id": {
+      "type": "string",
+      "pattern": "^RFC-SPEC-[0-9]{4}$"
+    },
+    "krs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^KR-[A-Z]+-[0-9]{2}$"
+          },
+          "tag": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "#local_agent",
+              "#fog_mesh",
+              "#synthetic_data",
+              "#secure_updates",
+              null
+            ]
+          },
+          "area": {
+            "type": "string",
+            "pattern": "^[a-z_]+$"
+          },
+          "metric": {
+            "type": "string",
+            "pattern": "^[a-z0-9_]+$"
+          },
+          "threshold": {
+            "type": "object",
+            "properties": {
+              "operator": {
+                "type": "string",
+                "enum": [
+                  "eq",
+                  "lt",
+                  "lte",
+                  "gt",
+                  "gte"
+                ]
+              },
+              "value": {
+                "type": [
+                  "number",
+                  "integer"
+                ]
+              },
+              "unit": {
+                "type": "string",
+                "minLength": 1
+              },
+              "condition": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "operator",
+              "value",
+              "unit"
+            ],
+            "additionalProperties": false
+          },
+          "severity_on_breach": {
+            "type": "string",
+            "pattern": "^[a-z0-9_]+$"
+          },
+          "owner": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9 _/&.-]*$"
+          }
+        },
+        "required": [
+          "id",
+          "tag",
+          "area",
+          "metric",
+          "threshold",
+          "severity_on_breach",
+          "owner"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "version",
+    "spec_id",
+    "krs"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,19 @@
+result_id: ifc-result-graphdb-publication-001
+fixture_id: ifc-fixture-obligation-propagation-001
+target:
+  name: graphdb_semantic_publication
+  type: backend
+  version: provisional
+status: review_required
+evidence:
+  - kind: note
+    value: docs/benchmarks/certifications/graphdb-semantic-publication-provisional.md
+  - kind: profile
+    value: schemas/ifc/examples/backend-profile.graphdb.example.json
+  - kind: artifact
+    value: benchmarks/workloads/ifc/fixtures/obligation-propagation.fixture.yaml
+notes: >-
+  GraphDB publication is provisionally acceptable for statement-oriented semantic publication.
+  Review remains required for higher-order-to-statement reduction, contradiction visibility changes,
+  and any weakening of propagated obligations.
+recorded_at: "2026-04-09T08:18:00Z"

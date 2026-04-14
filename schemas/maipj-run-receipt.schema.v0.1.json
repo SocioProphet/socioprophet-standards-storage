@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MAIPJ Run Receipt v0.1",
+  "type": "object",
+  "required": [
+    "receipt_id",
+    "trace_id",
+    "task",
+    "context",
+    "placement",
+    "model_runtime",
+    "energy_j",
+    "outcome",
+    "evidence",
+    "replay"
+  ],
+  "properties": {
+    "receipt_id": { "type": "string" },
+    "trace_id": { "type": "string" },
+    "span_id": { "type": ["string", "null"] },
+    "timestamp": { "type": ["string", "null"] },
+    "task": {
+      "type": "object",
+      "required": ["family", "case_id", "mission_weight", "utility_rubric_version", "latency_slo_ms", "risk_class"],
+      "properties": {
+        "family": { "type": "string" },
+        "case_id": { "type": "string" },
+        "mission_weight": { "type": "number" },
+        "utility_rubric_version": { "type": "string" },
+        "latency_slo_ms": { "type": "number" },
+        "risk_class": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "context": { "type": "object" },
+    "placement": { "type": "object" },
+    "model_runtime": { "type": "object" },
+    "energy_j": {
+      "type": "object",
+      "required": ["inference", "data_move", "network", "storage", "control", "idle", "total"],
+      "properties": {
+        "train_amortized": { "type": "number" },
+        "inference": { "type": "number" },
+        "data_move": { "type": "number" },
+        "network": { "type": "number" },
+        "storage": { "type": "number" },
+        "control": { "type": "number" },
+        "idle": { "type": "number" },
+        "cooling_adjusted": { "type": "number" },
+        "replay": { "type": "number" },
+        "total": { "type": "number" },
+        "accounting_boundary": { "type": ["string", "null"] },
+        "estimation_model": { "type": ["string", "null"] }
+      },
+      "additionalProperties": true
+    },
+    "outcome": { "type": "object" },
+    "evidence": { "type": "object" },
+    "replay": { "type": "object" }
+  },
+  "additionalProperties": true
+}

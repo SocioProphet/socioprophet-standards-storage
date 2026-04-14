@@ -1,0 +1,35 @@
+run_id: ifc-manual-run-graphdb-001
+execution_mode: manual_review_record
+fixture_id: ifc-fixture-obligation-propagation-001
+target:
+  name: graphdb_semantic_publication
+  type: backend
+  version: provisional-example
+projection_posture:
+  view_family: semantic_statement
+  belief_mode: validated_claims
+  contradiction_mode: include_conflicts
+  scenario_scope:
+    world_id: default
+    branch: main
+inputs_reviewed:
+  - schemas/ifc/examples/backend-profile.graphdb.example.json
+  - docs/benchmarks/certifications/graphdb-semantic-publication-provisional.md
+  - benchmarks/workloads/ifc/fixtures/obligation-propagation.fixture.yaml
+checks:
+  - name: obligation_propagation_preserved
+    status: pass
+    notes: attribution-style obligations were carried forward into the publication artifact posture.
+  - name: contradiction_visibility_not_weakened
+    status: review_required
+    notes: publication views remain review-gated when contradiction visibility could be suppressed by downstream export choices.
+  - name: publication_not_treated_as_truth_layer
+    status: pass
+    notes: semantic publication remained bounded to publication/governance use and not canonical truth authority.
+overall_status: review_required
+review_kind: graph_governance_review
+notes: >-
+  This is a structured manual evidence record rather than an automated harness execution.
+  It demonstrates how publication-layer obligation and contradiction checks can be captured
+  before a full runnable harness exists.
+recorded_at: "2026-04-10T10:10:00Z"

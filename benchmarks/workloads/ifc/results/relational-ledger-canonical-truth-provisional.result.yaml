@@ -1,0 +1,19 @@
+result_id: ifc-result-relational-ledger-001
+fixture_id: ifc-reference-stack-stub-001
+target:
+  name: relational_ifc_ledger
+  type: backend
+  version: provisional
+status: review_required
+evidence:
+  - kind: note
+    value: docs/benchmarks/certifications/relational-ledger-canonical-truth-provisional.md
+  - kind: profile
+    value: schemas/ifc/examples/backend-profile.relational-ledger.example.json
+  - kind: artifact
+    value: benchmarks/workloads/ifc/reference-stack-certification-stub.yaml
+notes: >-
+  The relational IFC ledger is provisionally accepted as the canonical truth anchor.
+  Review remains required until executable fixture evidence is attached for contradiction handling,
+  obligation propagation, identity/lifecycle tracking, and downgrade export controls.
+recorded_at: "2026-04-09T08:24:00Z"

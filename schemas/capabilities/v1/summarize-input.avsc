@@ -1,0 +1,24 @@
+{
+  "type": "record",
+  "name": "SummarizeInput",
+  "namespace": "org.socioprophet.capabilities.v1",
+  "doc": "Input payload for summarize.abstractive.v1 in the first local-hybrid slice.",
+  "fields": [
+    {"name": "kind", "type": "string"},
+    {"name": "objective", "type": "string"},
+    {"name": "context", "type": {
+      "type": "record",
+      "name": "SummarizeContext",
+      "fields": [
+        {"name": "chunks", "type": {"type": "array", "items": {
+          "type": "record",
+          "name": "SummarizeChunk",
+          "fields": [
+            {"name": "chunkId", "type": "string"},
+            {"name": "text", "type": "string"}
+          ]
+        }}}
+      ]
+    }}
+  ]
+}

@@ -1,0 +1,32 @@
+version: 0.1.0
+reason_codes:
+- code: prompt_injection_detected
+  severity: high
+  effect_hint: escalate
+- code: restricted_billing_data
+  severity: high
+  effect_hint: escalate
+- code: cross_tenant_request
+  severity: critical
+  effect_hint: deny
+- code: insufficient_clearance
+  severity: high
+  effect_hint: deny
+- code: missing_customer_verification
+  severity: medium
+  effect_hint: clarify
+- code: evidence_insufficient
+  severity: medium
+  effect_hint: clarify
+- code: policy_snapshot_missing
+  severity: critical
+  effect_hint: deny
+- code: tool_permission_missing
+  severity: high
+  effect_hint: deny
+- code: retention_restriction
+  severity: high
+  effect_hint: transform
+- code: sensitive_attachment_requires_redaction
+  severity: high
+  effect_hint: transform

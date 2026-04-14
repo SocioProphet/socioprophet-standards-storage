@@ -1,0 +1,99 @@
+version: 0.1.0
+enums:
+  PolicyEffect:
+  - allow
+  - deny
+  - transform
+  - escalate
+  - require_human_review
+  SuiteType:
+  - component
+  - scenario
+  - confidentiality
+  - collaboration
+  - multimodal
+  GateScope:
+  - design_to_pilot
+  - pilot_to_production
+  - production_to_broad_rollout
+  ConfidentialityTier:
+  - low
+  - medium
+  - high
+  - restricted
+entities:
+  PolicyDecision:
+    required:
+    - decision_id
+    - policy_snapshot_id
+    - subject_kind
+    - subject_id
+    - decision_effect
+    - reason_codes
+    - created_at
+    - schema_version
+    fields:
+      decision_id: Id
+      policy_snapshot_id: Id
+      subject_kind: string
+      subject_id: Id
+      decision_effect: PolicyEffect
+      reason_codes:
+      - string
+      redaction_directives:
+      - string
+      allowed_transformations:
+      - string
+      retention_effect: string
+      overrideable: boolean
+      created_at: Timestamp
+      schema_version: string
+  EvalSuite:
+    required:
+    - suite_id
+    - name
+    - suite_type
+    - case_ids
+    - gate_id
+    - schema_version
+    fields:
+      suite_id: Id
+      name: string
+      suite_type: SuiteType
+      description: string
+      case_ids:
+      - Id
+      gate_id: Id
+      schema_version: string
+  EvalCase:
+    required:
+    - eval_case_id
+    - suite_id
+    - title
+    - input_refs
+    - expected_outcome
+    - schema_version
+    fields:
+      eval_case_id: Id
+      suite_id: Id
+      title: string
+      input_refs:
+      - string
+      expected_outcome: object
+      tags:
+      - string
+      confidentiality_tier: ConfidentialityTier
+      schema_version: string
+  PromotionGate:
+    required:
+    - gate_id
+    - scope
+    - metric_thresholds
+    - schema_version
+    fields:
+      gate_id: Id
+      scope: GateScope
+      metric_thresholds: object
+      failure_categories:
+      - string
+      schema_version: string

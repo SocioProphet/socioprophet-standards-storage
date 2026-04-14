@@ -1,0 +1,37 @@
+{
+  "backend_name": "LadybugDB",
+  "backend_family": "embedded_graph",
+  "substrate_class": "embedded_analytical_graph",
+  "closest_semantic_fit_to_ifc": "medium",
+  "best_role_in_stack": "embedded_local_execution_and_analytical_sidecar",
+  "query_models": ["Cypher-like graph queries"],
+  "native_higher_order_support": false,
+  "native_reasoning_support": false,
+  "best_projection_kind": "star_expansion",
+  "projection_risk": "medium",
+  "recoverability_notes": "Useful as an embedded local graph substrate and analytical sidecar; higher-order IFC semantics require explicit reification and governed export/import boundaries.",
+  "supports": [
+    "embedded_local_queries",
+    "analytical_sidecar_workloads",
+    "developer_local_graph_runtime"
+  ],
+  "forbids": [
+    "claim_native_higher_order_reasoning",
+    "treat_local_embedded_projection_as_governance_authority"
+  ],
+  "review_required_for": [
+    "dyadic_projection_from_incidence_data",
+    "promotion_of_local_results_to_canonical_truth",
+    "obligation_weakening_on_export"
+  ],
+  "safe_task_classes": [
+    "local_analysis",
+    "developer_validation",
+    "sidecar_exploration"
+  ],
+  "unsafe_task_classes": [
+    "unreviewed_policy_reasoning",
+    "canonical_truth_storage",
+    "lossless_higher_order_claims"
+  ]
+}

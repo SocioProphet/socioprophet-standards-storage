@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.ai/evidence/0.1.0/evidence-blob.schema.json",
+  "type": "object",
+  "required": [
+    "id",
+    "kind",
+    "specVersion",
+    "sha256",
+    "byteLength",
+    "contentType",
+    "collectedTimeUtc",
+    "storageUri",
+    "sourceLocator",
+    "acquisitionRunId"
+  ],
+  "properties": {
+    "id": { "type": "string" },
+    "kind": { "const": "EvidenceBlob" },
+    "specVersion": { "$ref": "common.schema.json#/$defs/specVersion" },
+    "sha256": { "$ref": "common.schema.json#/$defs/sha256Hex" },
+    "byteLength": { "type": "integer", "minimum": 0 },
+    "contentType": { "type": "string" },
+    "collectedTimeUtc": { "$ref": "common.schema.json#/$defs/utcTimestamp" },
+    "storageUri": { "type": "string" },
+    "sourceLocator": { "type": "string" },
+    "acquisitionRunId": { "type": "string" }
+  },
+  "additionalProperties": false
+}

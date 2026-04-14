@@ -29,32 +29,32 @@ Adopt a **multi-plane identity control plane** with the following normative spli
 1. **Workload identity plane**
    - Principal form: `spiffe_id` plus short-lived workload credentials.
    - Owning repo/lane: `trusted-service-identity`.
-   - Purpose: answer “which workload or service is acting?”
+   - Purpose: answer "which workload or service is acting?"
 
 2. **Semantic human/event identity plane**
    - Principal semantic forms: Event-IR, prime-topic vectors/encodings, merge-admissibility proofs.
    - Owning repo/lane: `identity-is-prime-reference`.
-   - Purpose: answer “what identity-relevant meaning is present, and is a merge/inference/disclosure admissible?”
+   - Purpose: answer "what identity-relevant meaning is present, and is a merge/inference/disclosure admissible?"
 
 3. **Human artifact readiness/export plane**
    - Principal forms: Ω state, export/repair decisions, readiness summaries.
    - Owning repo/lane: `human-digital-twin`.
-   - Purpose: answer “is this outward-facing human artifact allowed to cross a boundary?”
+   - Purpose: answer "is this outward-facing human artifact allowed to cross a boundary?"
 
 4. **Runtime grant/policy plane**
    - Principal forms: `Grant`, `PolicyDecision`, `AttestationBundle`, `LedgerEvent`, optional `session_id`.
    - Owning repo/lane: `mcp-a2a-zero-trust`.
-   - Purpose: answer “is this concrete action allowed right now, under which constraints, and with which evidence?”
+   - Purpose: answer "is this concrete action allowed right now, under which constraints, and with which evidence?"
 
 5. **Transport/receipt plane**
    - Principal forms: canonical frame bytes, AUX bundle profile, transport receipts.
    - Owning repo/lane: `TriTRPC`.
-   - Purpose: answer “what exact bytes were exchanged, and can we verify/replay them?”
+   - Purpose: answer "what exact bytes were exchanged, and can we verify/replay them?"
 
 6. **Execution/evidence plane**
    - Principal forms: validated bundles, execution records, evidence packs, replay handles.
    - Owning repo/lane: `agentplane`.
-   - Purpose: answer “what actually ran, under which identity/policy inputs, and can we replay it?”
+   - Purpose: answer "what actually ran, under which identity/policy inputs, and can we replay it?"
 
 `socioprophet-standards-storage` becomes the single normative publication and conformance home for the composition across these planes.
 
@@ -103,3 +103,10 @@ What must be built next:
 - Zero-trust schema extensions for semantic/export proof references.
 - TriTRPC AUX profile.
 - agentplane evidence binding.
+
+## Follow-on work
+- publish Event-IR and ProofArtifact schemas in standards-storage
+- publish HDT decision summary schema
+- extend runtime governance schemas with proof refs
+- define TriTRPC AUX carriage profile for policy/evidence refs
+- wire agentplane to validate and replay the full chain

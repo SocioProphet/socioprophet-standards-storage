@@ -1,0 +1,52 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://socioprophet.org/schemas/ifc/fixture-result.schema.yaml
+title: IFC Fixture Result
+type: object
+required:
+  - result_id
+  - fixture_id
+  - target
+  - status
+  - recorded_at
+properties:
+  result_id:
+    type: string
+  fixture_id:
+    type: string
+  target:
+    type: object
+    required:
+      - name
+      - type
+    properties:
+      name:
+        type: string
+      type:
+        type: string
+        enum: [backend, adapter, reference_stack]
+      version:
+        type: string
+    additionalProperties: false
+  status:
+    type: string
+    enum: [pass, fail, review_required, blocked]
+  evidence:
+    type: array
+    items:
+      type: object
+      required:
+        - kind
+        - value
+      properties:
+        kind:
+          type: string
+          enum: [log, report, certificate, profile, note, artifact]
+        value:
+          type: string
+      additionalProperties: false
+  notes:
+    type: string
+  recorded_at:
+    type: string
+    format: date-time
+additionalProperties: false

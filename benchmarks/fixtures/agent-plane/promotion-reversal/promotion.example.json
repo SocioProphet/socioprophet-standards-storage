@@ -1,0 +1,8 @@
+{
+  "kind": "PromotionArtifact",
+  "bundle": "openclaw-review-lane",
+  "capturedAt": "2026-04-06T00:00:04Z",
+  "promotionReceiptRef": "urn:srcos:receipt:promotion:fixture-001",
+  "promotedObjectRef": "urn:srcos:artifact:review-summary-001",
+  "reviewSessionRef": "urn:srcos:session:fixture-review-001"
+}

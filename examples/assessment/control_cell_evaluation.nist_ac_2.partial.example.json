@@ -1,0 +1,30 @@
+{
+  "schema_version": "0.1.0",
+  "evaluation_id": "eval_nist_ac_2_001",
+  "control_requirement_ref": "ctrlreq_nist_ac_2_001",
+  "row_id": "ac-2-account-management",
+  "trace_id": "trace_vendor_acme_assessment_001",
+  "status": "partial",
+  "decision": "require_approval",
+  "confidence": 0.89,
+  "supporting_evidence_refs": [
+    "evref_vendor_policy_001"
+  ],
+  "missing_proof_classes": [
+    "access_review_record",
+    "identity_system_export"
+  ],
+  "claim_refs": [
+    "claim_admin_accounts_reviewed_quarterly_001"
+  ],
+  "conflict_refs": [
+    "conflict_access_review_evidence_missing_001"
+  ],
+  "rationale": "The vendor policy states that quarterly reviews occur, but the runtime evidence set lacks both the underlying review record and the identity export needed to substantiate the claim.",
+  "evaluator": {
+    "name": "control-evaluator",
+    "version": "0.1.0",
+    "policy_bundle_id": "policy-bundle://vendor-assessment/nist-800-53-rev5",
+    "policy_bundle_version": "0.1.0"
+  }
+}

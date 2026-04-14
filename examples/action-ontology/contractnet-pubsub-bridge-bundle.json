@@ -1,0 +1,146 @@
+{
+  "agents": [
+    {
+      "id": "agent.manager",
+      "kind": "Agent",
+      "capabilities": [
+        "award",
+        "writeTrace"
+      ]
+    },
+    {
+      "id": "agent.workerA",
+      "kind": "Agent",
+      "capabilities": [
+        "propose",
+        "executeTask",
+        "writeTrace",
+        "consume"
+      ]
+    }
+  ],
+  "actionTypes": [
+    {
+      "id": "award",
+      "kind": "ActionType"
+    },
+    {
+      "id": "executeTask",
+      "kind": "ActionType"
+    },
+    {
+      "id": "consume",
+      "kind": "ActionType"
+    },
+    {
+      "id": "writeTrace",
+      "kind": "ActionType"
+    }
+  ],
+  "states": [
+    {
+      "id": "state.open",
+      "kind": "State",
+      "affordances": [
+        "writeTrace"
+      ]
+    },
+    {
+      "id": "state.awarded",
+      "kind": "State",
+      "affordances": [
+        "executeTask",
+        "consume",
+        "writeTrace"
+      ]
+    },
+    {
+      "id": "state.done",
+      "kind": "State",
+      "affordances": [
+        "writeTrace"
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "action.award.010",
+      "kind": "Action",
+      "performedBy": "agent.manager",
+      "actionType": "award",
+      "fromState": "state.open",
+      "toState": "state.awarded",
+      "timestamp": "2026-04-11T19:30:00Z"
+    },
+    {
+      "id": "action.consume.010",
+      "kind": "Action",
+      "performedBy": "agent.workerA",
+      "actionType": "consume",
+      "fromState": "state.awarded",
+      "toState": "state.awarded",
+      "timestamp": "2026-04-11T19:30:03Z"
+    },
+    {
+      "id": "action.exec.010",
+      "kind": "Action",
+      "performedBy": "agent.workerA",
+      "actionType": "executeTask",
+      "fromState": "state.awarded",
+      "toState": "state.done",
+      "timestamp": "2026-04-11T19:30:10Z"
+    }
+  ],
+  "traces": [
+    {
+      "id": "trace.cfp.010",
+      "kind": "Trace",
+      "pattern": "ContractNet",
+      "traceKind": "cfp",
+      "medium": "bus:tasks",
+      "timestamp": "2026-04-11T19:29:50Z",
+      "taskId": "task-010"
+    },
+    {
+      "id": "trace.bid.010",
+      "kind": "Trace",
+      "pattern": "ContractNet",
+      "traceKind": "bid",
+      "medium": "bus:tasks",
+      "timestamp": "2026-04-11T19:29:55Z",
+      "taskId": "task-010"
+    },
+    {
+      "id": "trace.publish.010",
+      "kind": "Trace",
+      "pattern": "PubSub",
+      "traceKind": "publish",
+      "medium": "topic:tasks",
+      "timestamp": "2026-04-11T19:30:01Z",
+      "topicId": "tasks",
+      "messageId": "msg-010",
+      "taskId": "task-010"
+    },
+    {
+      "id": "trace.ack.010",
+      "kind": "Trace",
+      "pattern": "PubSub",
+      "traceKind": "ack",
+      "medium": "topic:tasks",
+      "timestamp": "2026-04-11T19:30:04Z",
+      "topicId": "tasks",
+      "messageId": "msg-010",
+      "refAction": "action.consume.010"
+    },
+    {
+      "id": "trace.done.010",
+      "kind": "Trace",
+      "pattern": "ContractNet",
+      "traceKind": "done",
+      "medium": "bus:tasks",
+      "timestamp": "2026-04-11T19:30:11Z",
+      "taskId": "task-010",
+      "refAction": "action.exec.010"
+    }
+  ]
+}

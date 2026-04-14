@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PartnershipIncidentRecord",
+  "type": "object",
+  "required": [
+    "incident_id",
+    "incident_type",
+    "date_reported"
+  ],
+  "properties": {
+    "incident_id": {
+      "type": "string"
+    },
+    "date_reported": {
+      "type": "string",
+      "format": "date"
+    },
+    "incident_type": {
+      "type": "string"
+    },
+    "programme": {
+      "type": "string"
+    },
+    "partner": {
+      "type": "string"
+    },
+    "immediate_risk_to_people": {
+      "type": "string"
+    },
+    "data_involved": {
+      "type": "boolean"
+    },
+    "safeguarding_involved": {
+      "type": "boolean"
+    },
+    "civic_space_risk": {
+      "type": "boolean"
+    },
+    "fraud_risk": {
+      "type": "boolean"
+    },
+    "escalation_owner": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "contained",
+        "under_review",
+        "closed"
+      ]
+    }
+  }
+}

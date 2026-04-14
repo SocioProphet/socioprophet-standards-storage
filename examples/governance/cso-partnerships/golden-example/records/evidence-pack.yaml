@@ -1,0 +1,9 @@
+partner_profile: records/partner-profile.json
+instrument_decision: templates/instrument-decision-worksheet.md
+capacity_assessment: templates/capacity-assessment-sheet.md
+safeguarding_record: local/safeguarding-record.md
+data_schedule: local/data-schedule.md
+approvals:
+  - local/approvals.md
+reporting_calendar: local/reporting-calendar.md
+closeout_note: local/closeout-note.md

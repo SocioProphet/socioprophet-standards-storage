@@ -1,0 +1,36 @@
+{
+  "policy_id": "ifc-policy-core-001",
+  "principals": [
+    {"principal_kind": "agent", "principal_id": "agentplane:compiler", "delegable": false},
+    {"principal_kind": "human", "principal_id": "role:graph-governance-reviewer", "delegable": true}
+  ],
+  "rules": [
+    {
+      "effect": "allow",
+      "principal_ref": "agentplane:compiler",
+      "actions": ["compile_reified_lpg", "emit_loss_certificate"],
+      "resource_scope": {
+        "namespaces": ["ifc.core"],
+        "relation_families": ["Claim", "Observation", "ActionExecution"],
+        "projection_kinds": ["incidence_preserving", "star_expansion"],
+        "branches": ["feature/*"]
+      },
+      "max_delegation_depth": 0,
+      "expires_at": "2026-12-31T23:59:59Z"
+    },
+    {
+      "effect": "review_required",
+      "principal_ref": "role:graph-governance-reviewer",
+      "actions": ["approve_projection_downgrade", "approve_identity_merge"],
+      "resource_scope": {
+        "namespaces": ["ifc.core"],
+        "relation_families": ["Claim"],
+        "projection_kinds": ["dyadic_projection"],
+        "branches": ["main", "release/*"]
+      },
+      "max_delegation_depth": 1,
+      "requires_review_kind": "graph_governance_review",
+      "expires_at": "2026-12-31T23:59:59Z"
+    }
+  ]
+}

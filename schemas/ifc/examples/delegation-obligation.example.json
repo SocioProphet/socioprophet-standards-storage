@@ -1,0 +1,15 @@
+{
+  "record_id": "do-obligation-001",
+  "record_kind": "obligation",
+  "subject": "artifact:graph-publication-export-001",
+  "scope": {
+    "namespaces": ["ifc.core"],
+    "relation_families": ["Claim", "ArtifactDerivation"],
+    "projection_kinds": ["semantic_statement"],
+    "branches": ["main"]
+  },
+  "obligation_kind": "attribution",
+  "propagation_mode": "highest_restriction",
+  "expires_at": "2026-12-31T23:59:59Z",
+  "notes": "Derived publication artifacts must preserve attribution obligations from source claim sets and supporting observations."
+}

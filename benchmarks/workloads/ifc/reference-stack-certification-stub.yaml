@@ -1,0 +1,28 @@
+fixture_id: ifc-reference-stack-stub-001
+stack_name: canonical-relational-ledger + reified-lpg-serving + semantic-publication
+stack_components:
+  - role: canonical_truth_layer
+    name: relational_ifc_ledger
+    projection_kind: incidence_preserving
+  - role: operational_serving_layer
+    name: neo4j_reified_lpg
+    projection_kind: star_expansion
+  - role: semantic_publication_layer
+    name: graphdb_statement_view
+    projection_kind: semantic_statement
+
+expected_checks:
+  - name: projection_posture_declared
+    expected: pass
+  - name: loss_certificates_present_for_downgrades
+    expected: pass
+  - name: unsafe_task_classes_blocked
+    expected: pass
+  - name: contradiction_visibility_preserved
+    expected: review_required
+  - name: obligation_propagation_declared
+    expected: review_required
+
+notes: >-
+  This is a certification stub only. It declares the minimum reference-stack posture
+  and the expected check categories but does not yet include executable fixture data.

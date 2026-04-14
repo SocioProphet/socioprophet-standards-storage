@@ -1,0 +1,78 @@
+event_envelope:
+  required:
+    - id
+    - specversion
+    - type
+    - source
+    - subject
+    - time
+    - tenant_id
+    - trace_id
+    - trust_zone
+    - schema_ref
+    - payload_hash
+    - payload
+  fields:
+    id: string
+    specversion: "1.0"
+    type: string
+    source: string
+    subject: string
+    time: string
+    tenant_id: string
+    trace_id: string
+    trust_zone: string
+    policy_snapshot_id: string
+    schema_ref: string
+    payload_hash: string
+    payload: object
+
+events:
+  - type: support.case.created
+    subject: Case
+    payload_schema: support.case.v0.1
+  - type: support.session.created
+    subject: CaseSession
+    payload_schema: support.session.v0.1
+  - type: support.turn.ingested
+    subject: Turn
+    payload_schema: support.turn.v0.1
+  - type: support.retrieve.planned
+    subject: Cairn
+    payload_schema: support.cairn.v0.1
+  - type: support.retrieve.completed
+    subject: Cairn
+    payload_schema: support.cairn.v0.1
+  - type: support.verify.completed
+    subject: EvidencePacket
+    payload_schema: support.evidence_packet.v0.1
+  - type: support.route.scored
+    subject: RouteDecision
+    payload_schema: support.route_decision.v0.1
+  - type: support.assignment.scored
+    subject: AssignmentDecision
+    payload_schema: support.assignment_decision.v0.1
+  - type: support.recommendation.proposed
+    subject: Recommendation
+    payload_schema: support.recommendation.v0.1
+  - type: support.execution.approved
+    subject: Recommendation
+    payload_schema: support.recommendation.v0.1
+  - type: support.execution.completed
+    subject: Cairn
+    payload_schema: support.cairn.v0.1
+  - type: support.case.escalated
+    subject: Case
+    payload_schema: support.case.v0.1
+  - type: support.case.resolved
+    subject: Case
+    payload_schema: support.case.v0.1
+  - type: support.asset.used
+    subject: AssetUse
+    payload_schema: support.asset_use.v0.1
+  - type: support.asset.promoted
+    subject: Asset
+    payload_schema: support.asset.v0.1
+  - type: support.benchmark.completed
+    subject: BenchmarkRun
+    payload_schema: support.benchmark_run.v0.1

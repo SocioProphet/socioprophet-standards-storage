@@ -1,0 +1,16 @@
+{
+  "type": "record",
+  "name": "AssetPromoted",
+  "namespace": "socioprophet.events.assets.v1",
+  "fields": [
+    {"name": "eventId", "type": "string"},
+    {"name": "eventType", "type": "string", "default": "asset.promoted"},
+    {"name": "occurredAt", "type": "string"},
+    {"name": "actorRef", "type": "string"},
+    {"name": "sourceDescriptorId", "type": "string"},
+    {"name": "targetDescriptorId", "type": "string"},
+    {"name": "orderId", "type": "string"},
+    {"name": "contentSpaceRef", "type": "string"},
+    {"name": "evidenceRefs", "type": {"type": "array", "items": "string"}}
+  ]
+}

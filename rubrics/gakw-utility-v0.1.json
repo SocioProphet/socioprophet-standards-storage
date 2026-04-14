@@ -1,0 +1,11 @@
+{
+  "rubric_id": "gakw-utility-v0.1",
+  "family": "assistive_knowledge_work",
+  "dimensions": [
+    {"name": "quality", "weight": 0.35},
+    {"name": "calibration", "weight": 0.2},
+    {"name": "robustness", "weight": 0.2},
+    {"name": "latency", "weight": 0.15},
+    {"name": "policy_and_approval", "weight": 0.1}
+  ]
+}

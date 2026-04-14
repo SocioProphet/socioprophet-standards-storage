@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.org/semantic/common.schema.json",
+  "title": "Common Semantic Types",
+  "type": "object",
+  "$defs": {
+    "Id": {
+      "type": "string",
+      "pattern": "^[a-z]+:[A-Za-z0-9_.:-]+$"
+    },
+    "IsoTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "NullableIsoTime": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "TimeInterval": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "from": {
+          "$ref": "#/$defs/IsoTime"
+        },
+        "to": {
+          "$ref": "#/$defs/NullableIsoTime"
+        }
+      },
+      "required": [
+        "from",
+        "to"
+      ]
+    },
+    "Score01": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    }
+  }
+}

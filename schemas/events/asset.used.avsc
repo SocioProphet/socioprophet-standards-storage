@@ -1,0 +1,16 @@
+{
+  "type": "record",
+  "name": "AssetUsed",
+  "namespace": "socioprophet.events.assets.v1",
+  "fields": [
+    {"name": "eventId", "type": "string"},
+    {"name": "eventType", "type": "string", "default": "asset.used"},
+    {"name": "occurredAt", "type": "string"},
+    {"name": "actorRef", "type": "string"},
+    {"name": "descriptorId", "type": "string"},
+    {"name": "taskRef", "type": ["null", "string"], "default": null},
+    {"name": "caseRef", "type": ["null", "string"], "default": null},
+    {"name": "outcome", "type": ["null", "string"], "default": null},
+    {"name": "feedbackScore", "type": ["null", "int"], "default": null}
+  ]
+}

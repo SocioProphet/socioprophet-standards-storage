@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "EvidenceAppendOutput",
+  "namespace": "org.socioprophet.evidence.v1",
+  "doc": "Response payload for evidence.v1.Event/Append in the first local-hybrid slice.",
+  "fields": [
+    {"name": "appended", "type": "boolean"},
+    {"name": "journalOffset", "type": "long"},
+    {"name": "evidenceDigest", "type": "string"}
+  ]
+}
