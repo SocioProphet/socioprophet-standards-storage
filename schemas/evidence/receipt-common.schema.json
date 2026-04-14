@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.ai/evidence/0.1.0/receipt-common.schema.json",
+  "type": "object",
+  "required": [
+    "id",
+    "kind",
+    "specVersion",
+    "subjectRef",
+    "issuedTimeUtc",
+    "scopeRef",
+    "policyWitnessThreshold",
+    "witnesses"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^urn:srcos:receipt:"
+    },
+    "kind": { "type": "string" },
+    "specVersion": { "$ref": "common.schema.json#/$defs/specVersion" },
+    "subjectRef": { "type": "string" },
+    "issuedTimeUtc": { "$ref": "common.schema.json#/$defs/utcTimestamp" },
+    "scopeRef": { "type": "string" },
+    "contentSpaceRef": {
+      "type": ["string", "null"],
+      "pattern": "^content-space:|^$"
+    },
+    "policyWitnessThreshold": { "type": "integer", "minimum": 0 },
+    "witnesses": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "provenanceRootRef": { "type": ["string", "null"] },
+    "evidenceRefs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "upstreamReceiptIds": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}

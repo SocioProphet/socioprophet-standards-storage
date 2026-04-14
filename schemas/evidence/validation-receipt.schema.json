@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.ai/evidence/0.1.0/validation-receipt.schema.json",
+  "allOf": [
+    { "$ref": "receipt-common.schema.json" },
+    {
+      "type": "object",
+      "required": ["kind", "valid"],
+      "properties": {
+        "kind": { "const": "ValidationReceipt" },
+        "validationArtifactRef": { "type": ["string", "null"] },
+        "valid": { "type": "boolean" },
+        "checkSummary": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "status"],
+            "properties": {
+              "name": { "type": "string" },
+              "status": { "type": "string", "enum": ["pass", "fail", "warn"] },
+              "message": { "type": ["string", "null"] }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  ]
+}

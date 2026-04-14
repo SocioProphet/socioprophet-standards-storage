@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.ai/evidence/0.1.0/execution-receipt.schema.json",
+  "allOf": [
+    { "$ref": "receipt-common.schema.json" },
+    {
+      "type": "object",
+      "required": ["kind", "bundleRef", "backendIntent"],
+      "properties": {
+        "kind": { "const": "ExecutionReceipt" },
+        "bundleRef": { "type": "string" },
+        "controlGateArtifactRef": { "type": ["string", "null"] },
+        "validationArtifactRef": { "type": ["string", "null"] },
+        "runArtifactRef": { "type": ["string", "null"] },
+        "backendIntent": {
+          "type": "string",
+          "enum": ["qemu", "microvm", "lima-process", "fleet"]
+        }
+      },
+      "additionalProperties": false
+    }
+  ]
+}

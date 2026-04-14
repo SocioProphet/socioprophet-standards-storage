@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.ai/evidence/0.1.0/observation-receipt.schema.json",
+  "allOf": [
+    { "$ref": "receipt-common.schema.json" },
+    {
+      "type": "object",
+      "required": ["kind", "observerRef", "sourceSystem", "sourceLocator", "localityClass"],
+      "properties": {
+        "kind": { "const": "ObservationReceipt" },
+        "observerRef": { "type": "string" },
+        "sourceSystem": { "type": "string" },
+        "sourceLocator": { "type": "string" },
+        "blobSha256": {
+          "type": ["string", "null"],
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "localityClass": {
+          "type": "string",
+          "enum": ["local", "edge", "remote", "imported"]
+        }
+      },
+      "additionalProperties": false
+    }
+  ]
+}

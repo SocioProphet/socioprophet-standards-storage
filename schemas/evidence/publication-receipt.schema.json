@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.ai/evidence/0.1.0/publication-receipt.schema.json",
+  "allOf": [
+    { "$ref": "receipt-common.schema.json" },
+    {
+      "type": "object",
+      "required": ["kind", "publishedObjectRef", "publicationScope"],
+      "properties": {
+        "kind": { "const": "PublicationReceipt" },
+        "publishedObjectRef": { "type": "string" },
+        "publicationScope": { "type": "string" },
+        "duplicateCheckRef": { "type": ["string", "null"] },
+        "publicationArtifactRef": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    }
+  ]
+}
