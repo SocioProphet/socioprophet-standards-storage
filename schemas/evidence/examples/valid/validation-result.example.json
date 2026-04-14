@@ -1,0 +1,11 @@
+{
+  "id": "urn:sp:evidence:validation:VALID0001",
+  "kind": "ValidationResult",
+  "specVersion": "0.1.0",
+  "targetRef": "urn:sp:evidence:item:sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "validatorName": "schema-validator",
+  "validatorVersion": "0.1.0",
+  "ruleSet": "core",
+  "status": "pass",
+  "emittedAtUtc": "2026-04-14T06:45:15Z"
+}
