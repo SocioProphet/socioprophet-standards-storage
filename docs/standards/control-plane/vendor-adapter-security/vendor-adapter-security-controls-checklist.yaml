@@ -1,0 +1,209 @@
+schema_version: "1.0"
+artifact_type: "security_control_checklist"
+artifact_name: "vendor_adapter_security_controls"
+title: "Vendor Adapter Security Control Checklist"
+status: "draft"
+version: "0.1.0"
+scope:
+  applies_to:
+    - "vendor adapters"
+    - "local model gateways"
+    - "tool-calling inference gateways"
+    - "administrative observability surfaces attached to gateways"
+  excludes:
+    - "closed model runtime internals"
+    - "non-gateway application business logic unless it changes gateway trust boundaries"
+objectives:
+  - id: "OBJ-001"
+    name: "Prevent semantic trust collapse"
+    description: "Prevent model output from being treated as executable intent without explicit structured authorization."
+  - id: "OBJ-002"
+    name: "Constrain capability scope"
+    description: "Ensure advertised capability does not silently become executable capability."
+  - id: "OBJ-003"
+    name: "Isolate administrative surfaces"
+    description: "Prevent debug and admin endpoints from inheriting inference-plane exposure without distinct controls."
+controls:
+  - id: "VAS-001"
+    title: "Non-loopback binds require authentication"
+    category: "binding_auth"
+    priority: "P0"
+    normative_statement: "A non-loopback bind MUST require explicit authentication by default."
+    rationale: "Browser-origin checks are not authentication and do not restrict non-browser clients."
+    check:
+      type: "startup_configuration"
+      logic: "FAIL if bind_address not in ['127.0.0.1','::1','localhost'] and auth_required != true"
+      evidence:
+        - "startup logs"
+        - "effective runtime configuration"
+        - "integration test result"
+    remediation:
+      - "Require bearer token or stronger auth for non-loopback binds."
+      - "Refuse startup unless an explicit unsafe override is provided."
+  - id: "VAS-002"
+    title: "Origin checks are secondary browser controls only"
+    category: "binding_auth"
+    priority: "P1"
+    normative_statement: "Origin validation MUST NOT be treated as authentication or network access control."
+    rationale: "Nil-Origin and non-browser clients can bypass browser-only assumptions."
+    check:
+      type: "design_review"
+      logic: "FAIL if security model documentation or middleware treats origin validation as the primary access-control boundary"
+      evidence:
+        - "middleware code"
+        - "security docs"
+  - id: "VAS-003"
+    title: "Administrative and debug surfaces are isolated"
+    category: "admin_surface"
+    priority: "P0"
+    normative_statement: "Administrative and debug routes MUST be loopback-only by default or protected by distinct authorization scope."
+    rationale: "Debug traces often expose prompts, tool traces, and operational metadata."
+    check:
+      type: "route_policy"
+      logic: "FAIL if debug/admin routes share the inference auth policy without additional isolation"
+      evidence:
+        - "route registration"
+        - "auth middleware config"
+        - "integration test result"
+  - id: "VAS-004"
+    title: "Advertised tools do not widen executable scope"
+    category: "capability_scope"
+    priority: "P0"
+    normative_statement: "Server-discovered tools MAY be advertised but MUST NOT silently widen executable scope for a request."
+    rationale: "Ambient capability injection creates semantic execution risk."
+    check:
+      type: "request_execution_policy"
+      logic: "FAIL if omitted tool declarations result in executable tool availability"
+      evidence:
+        - "request handler code"
+        - "unit/integration tests"
+  - id: "VAS-005"
+    title: "Executable tool intent must be structured"
+    category: "tool_intent"
+    priority: "P0"
+    normative_statement: "Executable tool intent MUST arrive in a dedicated structured field or envelope."
+    rationale: "Heuristic extraction from prose or markdown collapses descriptive text into execution."
+    check:
+      type: "parser_policy"
+      logic: "FAIL if prose, markdown fences, quoted examples, or mixed-content text can trigger execution"
+      evidence:
+        - "tool parser code"
+        - "negative tests"
+  - id: "VAS-006"
+    title: "No permissive argument coercion for execution"
+    category: "tool_intent"
+    priority: "P0"
+    normative_statement: "Malformed, partial, or ambiguous tool arguments MUST fail closed."
+    rationale: "Coercing empty strings or plain strings into valid execution payloads hides ambiguity."
+    check:
+      type: "parser_policy"
+      logic: "FAIL if empty arguments become '{}' or plain strings are automatically wrapped into structured execution payloads"
+      evidence:
+        - "argument normalization code"
+        - "negative tests"
+  - id: "VAS-007"
+    title: "Planning and execution are separate phases"
+    category: "execution_policy"
+    priority: "P0"
+    normative_statement: "Planning and execution MUST be separate phases, with side-effectful tools approval-gated by policy unless explicitly authorized."
+    rationale: "Collapsing planning into execution removes the policy boundary."
+    check:
+      type: "execution_flow"
+      logic: "FAIL if model output directly causes side-effectful tool execution without an explicit execution mode or policy check"
+      evidence:
+        - "handler control flow"
+        - "policy engine integration"
+        - "integration tests"
+  - id: "VAS-008"
+    title: "Tool identifiers are unambiguous"
+    category: "routing_integrity"
+    priority: "P0"
+    normative_statement: "Duplicate or ambiguous tool identifiers MUST fail closed."
+    rationale: "Silent overwrite or implicit precedence causes hidden routing drift."
+    check:
+      type: "startup_validation"
+      logic: "FAIL if duplicate tool names are accepted and resolved by overwrite"
+      evidence:
+        - "tool registry construction"
+        - "startup tests"
+  - id: "VAS-009"
+    title: "Sensitive credentials never traverse unsafe transport"
+    category: "transport_hygiene"
+    priority: "P0"
+    normative_statement: "Sensitive credentials MUST NOT be sent over unsafe transport paths."
+    rationale: "Credential transport over insecure channels creates immediate compromise risk."
+    check:
+      type: "transport_policy"
+      logic: "FAIL if bearer tokens or equivalent secrets are sent over non-loopback plaintext transport"
+      evidence:
+        - "client transport code"
+        - "negative transport tests"
+  - id: "VAS-010"
+    title: "Response and subprocess outputs are bounded"
+    category: "transport_hygiene"
+    priority: "P1"
+    normative_statement: "Remote responses and subprocess output MUST be bounded and observable."
+    rationale: "Unbounded output creates memory and diagnostics failures."
+    check:
+      type: "resource_policy"
+      logic: "FAIL if remote payload sizes are unbounded or subprocess stderr is fully discarded in all modes"
+      evidence:
+        - "client code"
+        - "resource tests"
+  - id: "VAS-011"
+    title: "Unsupported features are declared explicitly"
+    category: "protocol_honesty"
+    priority: "P1"
+    normative_statement: "Unsupported API features MUST return explicit errors rather than degraded or silent behavior."
+    rationale: "False parity claims cause incorrect client behavior and hidden risk."
+    check:
+      type: "api_contract"
+      logic: "FAIL if unsupported endpoints or parameters are silently accepted or emulated without truthful capability declaration"
+      evidence:
+        - "route handlers"
+        - "API compatibility tests"
+  - id: "VAS-012"
+    title: "Security-relevant docs and runtime behavior stay aligned"
+    category: "docs_runtime_consistency"
+    priority: "P1"
+    normative_statement: "Security-sensitive CLI help, documentation, startup warnings, and runtime behavior MUST remain aligned."
+    rationale: "Naming drift around dangerous flags leads to insecure operation."
+    check:
+      type: "documentation_consistency"
+      logic: "FAIL if security docs, CLI help, startup banners, and effective behavior disagree on dangerous modes"
+      evidence:
+        - "security docs"
+        - "CLI help output"
+        - "startup banner text"
+verification_profiles:
+  - id: "VP-001"
+    name: "startup_policy"
+    covers: ["VAS-001", "VAS-003", "VAS-008", "VAS-012"]
+  - id: "VP-002"
+    name: "request_and_execution_policy"
+    covers: ["VAS-004", "VAS-005", "VAS-006", "VAS-007", "VAS-011"]
+  - id: "VP-003"
+    name: "transport_and_observability"
+    covers: ["VAS-009", "VAS-010"]
+acceptance_gates:
+  - id: "AG-001"
+    description: "Non-loopback startup without auth fails hard by default."
+    maps_to: ["VAS-001"]
+  - id: "AG-002"
+    description: "Requests without explicit tool scope cannot execute tools."
+    maps_to: ["VAS-004", "VAS-007"]
+  - id: "AG-003"
+    description: "Model prose containing JSON-like content cannot trigger execution."
+    maps_to: ["VAS-005", "VAS-006"]
+  - id: "AG-004"
+    description: "Duplicate tool names fail closed."
+    maps_to: ["VAS-008"]
+  - id: "AG-005"
+    description: "Debug and admin surfaces are not exposed on the main inference plane without distinct authorization."
+    maps_to: ["VAS-003"]
+  - id: "AG-006"
+    description: "Unsafe credential transport is blocked."
+    maps_to: ["VAS-009"]
+  - id: "AG-007"
+    description: "Unsupported API features return explicit errors."
+    maps_to: ["VAS-011"]
