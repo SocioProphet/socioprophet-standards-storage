@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sourceos.local/schemas/ml/v1/beam_lineage_manifest.v1.json",
+  "title": "BeamLineageManifest",
+  "type": "object",
+  "required": ["pipelineName", "pipelineVersion", "runner", "sourceDatasetRefs", "outputArtifactRefs", "capturedAt"],
+  "properties": {
+    "pipelineName": { "type": "string", "minLength": 1 },
+    "pipelineVersion": { "type": "string", "minLength": 1 },
+    "runner": { "type": "string", "enum": ["direct", "dataflow", "portable"] },
+    "sourceDatasetRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "transformStages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "operator": { "type": "string" },
+          "inputRecordCount": { "type": "integer", "minimum": 0 },
+          "outputRecordCount": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "partitioningStrategy": { "type": ["string", "null"] },
+    "outputArtifactRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "capturedAt": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false
+}
