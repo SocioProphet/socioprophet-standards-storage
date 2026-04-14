@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sourceos.local/schemas/ml/v1/model_metrics.v1.json",
+  "title": "ModelMetrics",
+  "type": "object",
+  "required": ["modelName", "modelVersion", "primaryMetric", "finalMetrics", "capturedAt"],
+  "properties": {
+    "modelName": { "type": "string", "minLength": 1 },
+    "modelVersion": { "type": "string", "minLength": 1 },
+    "primaryMetric": { "type": "string", "minLength": 1 },
+    "finalMetrics": {
+      "type": "object",
+      "properties": {
+        "accuracy": { "type": "number" },
+        "precision": { "type": "number" },
+        "recall": { "type": "number" },
+        "f1": { "type": "number" },
+        "auc": { "type": "number" },
+        "loss": { "type": "number" }
+      },
+      "additionalProperties": { "type": "number" }
+    },
+    "epochMetrics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["epoch"],
+        "properties": {
+          "epoch": { "type": "integer", "minimum": 0 },
+          "accuracy": { "type": "number" },
+          "precision": { "type": "number" },
+          "recall": { "type": "number" },
+          "f1": { "type": "number" },
+          "auc": { "type": "number" },
+          "loss": { "type": "number" }
+        },
+        "additionalProperties": { "type": "number" }
+      }
+    },
+    "capturedAt": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false
+}

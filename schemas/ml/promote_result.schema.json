@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sourceos.local/schemas/ml/v1/promote_result.schema.json",
+  "title": "PromoteResult",
+  "type": "object",
+  "required": ["promotionRecordRef", "trafficShiftRef"],
+  "properties": {
+    "promotionRecordRef": { "type": "string", "minLength": 1 },
+    "trafficShiftRef": { "type": "string", "minLength": 1 },
+    "executionEvidenceRef": { "type": ["string", "null"] }
+  },
+  "additionalProperties": false
+}

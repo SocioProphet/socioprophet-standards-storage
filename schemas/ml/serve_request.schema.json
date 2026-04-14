@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sourceos.local/schemas/ml/v1/serve_request.schema.json",
+  "title": "ServeRequest",
+  "type": "object",
+  "required": ["registeredModelRef", "deploymentSpecRef"],
+  "properties": {
+    "registeredModelRef": { "type": "string", "minLength": 1 },
+    "deploymentSpecRef": { "type": "string", "minLength": 1 }
+  },
+  "additionalProperties": false
+}

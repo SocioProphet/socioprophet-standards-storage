@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sourceos.local/schemas/ml/v1/serve_result.schema.json",
+  "title": "ServeResult",
+  "type": "object",
+  "required": ["serveDeploymentRef"],
+  "properties": {
+    "serveDeploymentRef": { "type": "string", "minLength": 1 },
+    "deploymentStatusRef": { "type": ["string", "null"] }
+  },
+  "additionalProperties": false
+}

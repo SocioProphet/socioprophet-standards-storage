@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sourceos.local/schemas/ml/v1/promote_request.schema.json",
+  "title": "PromoteRequest",
+  "type": "object",
+  "required": ["serveDeploymentRef"],
+  "properties": {
+    "serveDeploymentRef": { "type": "string", "minLength": 1 }
+  },
+  "additionalProperties": false
+}

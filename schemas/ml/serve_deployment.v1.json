@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sourceos.local/schemas/ml/v1/serve_deployment.v1.json",
+  "title": "ServeDeployment",
+  "type": "object",
+  "required": [
+    "deploymentId",
+    "modelName",
+    "modelVersion",
+    "ckModelRef",
+    "artifactHash",
+    "deploymentTarget",
+    "trafficPercent",
+    "canary",
+    "deployedAt"
+  ],
+  "properties": {
+    "deploymentId": { "type": "string", "minLength": 1 },
+    "modelName": { "type": "string", "minLength": 1 },
+    "modelVersion": { "type": "string", "minLength": 1 },
+    "ckModelRef": { "type": "string", "minLength": 1 },
+    "artifactHash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "deploymentTarget": { "type": "string", "minLength": 1 },
+    "trafficPercent": { "type": "number", "minimum": 0, "maximum": 100 },
+    "canary": { "type": "boolean" },
+    "fallbackVersion": { "type": ["string", "null"] },
+    "authMode": { "type": "string", "enum": ["oidc", "api-key", "mtls"] },
+    "mtlsRequired": { "type": "boolean" },
+    "deploymentConfigRef": { "type": ["string", "null"] },
+    "deployedAt": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false
+}
