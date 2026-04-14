@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.ai/evidence/0.1.0/parser-run.schema.json",
+  "type": "object",
+  "required": [
+    "id",
+    "kind",
+    "specVersion",
+    "parserName",
+    "parserVersion",
+    "inputBlobRefs",
+    "startedAtUtc",
+    "status"
+  ],
+  "properties": {
+    "id": { "type": "string" },
+    "kind": { "const": "ParserRun" },
+    "specVersion": { "$ref": "common.schema.json#/$defs/specVersion" },
+    "parserName": { "type": "string" },
+    "parserVersion": { "type": "string" },
+    "inputBlobRefs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "startedAtUtc": { "$ref": "common.schema.json#/$defs/utcTimestamp" },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "running", "succeeded", "failed"]
+    },
+    "endedAtUtc": { "$ref": "common.schema.json#/$defs/utcTimestamp" },
+    "configDigest": { "$ref": "common.schema.json#/$defs/sha256Hex" },
+    "producedItemRefs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "producedEventRefs": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}
