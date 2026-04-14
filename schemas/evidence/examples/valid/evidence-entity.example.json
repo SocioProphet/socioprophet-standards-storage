@@ -1,0 +1,8 @@
+{
+  "id": "urn:sp:evidence:entity:sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "kind": "EvidenceEntity",
+  "specVersion": "0.1.0",
+  "entityType": "device",
+  "stableKey": "device:iphone13pro",
+  "displayName": "This iPhone 13 Pro"
+}
