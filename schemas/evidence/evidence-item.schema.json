@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.ai/evidence/0.1.0/evidence-item.schema.json",
+  "type": "object",
+  "required": [
+    "id",
+    "kind",
+    "specVersion",
+    "blobRefs",
+    "canonicalType",
+    "primaryTimestampUtc",
+    "normalizationStatus"
+  ],
+  "properties": {
+    "id": { "type": "string" },
+    "kind": { "const": "EvidenceItem" },
+    "specVersion": { "$ref": "common.schema.json#/$defs/specVersion" },
+    "blobRefs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "canonicalType": { "type": "string" },
+    "primaryTimestampUtc": { "$ref": "common.schema.json#/$defs/utcTimestamp" },
+    "normalizationStatus": {
+      "type": "string",
+      "enum": ["raw", "parsed", "normalized", "rejected"]
+    },
+    "summary": { "type": "string" },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

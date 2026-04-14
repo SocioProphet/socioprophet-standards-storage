@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.ai/evidence/0.1.0/acquisition-run.schema.json",
+  "type": "object",
+  "required": [
+    "id",
+    "kind",
+    "specVersion",
+    "connectorProfileId",
+    "startedAtUtc",
+    "selectionExpression",
+    "toolchain",
+    "status"
+  ],
+  "properties": {
+    "id": { "type": "string" },
+    "kind": { "const": "AcquisitionRun" },
+    "specVersion": { "$ref": "common.schema.json#/$defs/specVersion" },
+    "connectorProfileId": { "type": "string" },
+    "startedAtUtc": { "$ref": "common.schema.json#/$defs/utcTimestamp" },
+    "selectionExpression": { "type": "string" },
+    "toolchain": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "running", "partial", "succeeded", "failed"]
+    },
+    "endedAtUtc": { "$ref": "common.schema.json#/$defs/utcTimestamp" },
+    "rawCount": { "type": "integer", "minimum": 0 },
+    "successCount": { "type": "integer", "minimum": 0 },
+    "failureCount": { "type": "integer", "minimum": 0 }
+  },
+  "additionalProperties": false
+}
