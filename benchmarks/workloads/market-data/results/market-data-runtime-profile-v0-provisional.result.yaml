@@ -1,0 +1,18 @@
+result_id: market-data-runtime-profile-result-001
+fixture_id: market-data-runtime-profile-stub-001
+target:
+  name: market_data_runtime_profile_v0
+  type: runtime_profile
+  version: provisional
+status: review_required
+evidence:
+  - kind: note
+    value: reports/market-data/example-runtime-profile-run.md
+  - kind: artifact
+    value: benchmarks/workloads/market-data/market-data-runtime-certification-stub.yaml
+notes: >-
+  The market-data runtime profile is provisionally accepted as the runtime conformance
+  layer for ingest, normalization, replay, and evidence handling, subject to executable
+  fixture evidence for deterministic replay, gap handling, entitlement propagation,
+  and late/out-of-order observation treatment.
+recorded_at: "2026-04-13T21:15:00Z"

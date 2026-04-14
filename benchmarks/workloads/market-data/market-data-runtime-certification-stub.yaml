@@ -1,0 +1,31 @@
+fixture_id: market-data-runtime-profile-stub-001
+stack_name: raw-event-stream + canonical-runtime-profile + replay-evidence
+stack_components:
+  - role: raw_event_stream
+    name: marketdata_event_bus
+    projection_kind: append_only
+  - role: runtime_profile
+    name: market_data_runtime_profile_v0
+    projection_kind: normalized_runtime_conformance
+  - role: evidence_and_replay
+    name: marketdata_replay_receipts
+    projection_kind: deterministic_replay
+
+expected_checks:
+  - name: raw_events_append_only
+    expected: pass
+  - name: runtime_profile_authority_declared
+    expected: pass
+  - name: storage_authority_remains_upstream
+    expected: pass
+  - name: replay_receipts_emit_output_hash
+    expected: review_required
+  - name: gap_and_late_event_visibility_preserved
+    expected: review_required
+  - name: entitlement_tags_propagate
+    expected: review_required
+
+notes: >-
+  This is a certification stub for market-data runtime profile readiness. It asserts
+  the minimum authority split and replay/evidence posture without yet attaching
+  executable fixture traces for quote, trade, bar, and receipt conformance.
