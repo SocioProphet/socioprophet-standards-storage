@@ -1,0 +1,21 @@
+result_id: ifc-result-executed-relational-ledger-001
+fixture_id: ifc-fixture-contradiction-visibility-001
+target:
+  name: relational_ifc_ledger
+  type: backend
+  version: provisional-example
+status: pass
+evidence:
+  - kind: profile
+    value: schemas/ifc/examples/backend-profile.relational-ledger.example.json
+  - kind: note
+    value: docs/benchmarks/certifications/relational-ledger-canonical-truth-provisional.md
+  - kind: artifact
+    value: benchmarks/workloads/ifc/fixtures/contradiction-visibility.fixture.yaml
+  - kind: report
+    value: reports/ifc/example-relational-ledger-canonical-run.md
+notes: >-
+  Example of an evidence-bearing result record for the canonical truth layer. This example is
+  marked pass because contradiction-aware canonical reads preserved competing validated claims
+  without flattening them into a single truth answer.
+recorded_at: "2026-04-10T09:05:00Z"
