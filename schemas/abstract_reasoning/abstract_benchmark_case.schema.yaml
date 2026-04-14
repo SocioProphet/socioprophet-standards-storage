@@ -1,0 +1,36 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://socioprophet.org/schemas/abstract_reasoning/abstract_benchmark_case.schema.yaml
+title: Abstract Benchmark Case
+type: object
+required:
+  - case_id
+  - workload_id
+  - family
+  - representation_mode
+  - answer_mode
+  - contamination_risk
+properties:
+  case_id:
+    type: string
+  workload_id:
+    type: string
+  family:
+    type: string
+    enum: [ARC, ACRE, RAVEN, BIG_BENCH_F, EVALS_P, EVALS_S, PVR, SYNTHETIC_BACKTRACK]
+  representation_mode:
+    type: string
+    enum: [natural_language, symbolic, mixed]
+  answer_mode:
+    type: string
+    enum: [open_ended, multiple_choice, program_induction]
+  contamination_risk:
+    type: string
+    enum: [low, medium, high]
+  example_count:
+    type: integer
+    minimum: 1
+  source_ref:
+    type: string
+  notes:
+    type: string
+additionalProperties: false

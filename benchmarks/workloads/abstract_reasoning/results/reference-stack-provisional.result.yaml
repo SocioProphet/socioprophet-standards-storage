@@ -1,0 +1,17 @@
+result_id: abstract-reasoning-reference-stack-001
+fixture_id: abstract-reasoning-reference-stack-stub-001
+target:
+  name: planner + verifier + governed execution reference stack
+  type: reference_stack
+  version: provisional
+status: review_required
+evidence:
+  - kind: note
+    value: docs/benchmarks/abstract_reasoning/reference-stack-provisional-certification.md
+  - kind: artifact
+    value: benchmarks/workloads/abstract_reasoning_workloads.yaml
+notes: >-
+  Initial abstract-reasoning result record for the reference stack. Status remains
+  review_required until semantic correctness, compile-semantic-gap, counterexample
+  resistance, and contamination review are attached for the reference workload suite.
+recorded_at: "2026-04-11T20:30:00Z"

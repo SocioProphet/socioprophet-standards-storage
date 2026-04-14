@@ -1,0 +1,70 @@
+# Abstract Reasoning Workloads Suite (Benchmark Definitions)
+
+workloads:
+  - id: A01
+    name: ARC-style grid transformation
+    family: ARC
+    representation_modes: [symbolic]
+    answer_modes: [open_ended, program_induction]
+    metrics: [semantic_accuracy, counterexample_resistance, example_count_sensitivity]
+    contamination_risk: high
+
+  - id: A02
+    name: ACRE-style causal activation abstraction
+    family: ACRE
+    representation_modes: [natural_language, symbolic]
+    answer_modes: [multiple_choice]
+    metrics: [semantic_accuracy, representation_sensitivity]
+    contamination_risk: medium
+
+  - id: A03
+    name: RAVEN-style matrix continuation
+    family: RAVEN
+    representation_modes: [natural_language, symbolic]
+    answer_modes: [multiple_choice, open_ended]
+    metrics: [semantic_accuracy, representation_sensitivity, contamination_adjusted_score]
+    contamination_risk: high
+
+  - id: A04
+    name: BIG-Bench function induction
+    family: BIG_BENCH_F
+    representation_modes: [natural_language]
+    answer_modes: [open_ended, program_induction]
+    parameters:
+      example_count: [2, 4, 8, 16]
+    metrics: [semantic_accuracy, compile_rate, compile_semantic_gap]
+    contamination_risk: high
+
+  - id: A05
+    name: Evals-P symbolic rule discrimination
+    family: EVALS_P
+    representation_modes: [natural_language]
+    answer_modes: [multiple_choice]
+    metrics: [semantic_accuracy]
+    contamination_risk: medium
+
+  - id: A06
+    name: Evals-S symbolic rule reconstruction
+    family: EVALS_S
+    representation_modes: [natural_language]
+    answer_modes: [open_ended]
+    metrics: [semantic_accuracy, explanation_validity]
+    contamination_risk: medium
+
+  - id: A07
+    name: Pointer-value retrieval abstraction
+    family: PVR
+    representation_modes: [natural_language]
+    answer_modes: [open_ended, program_induction]
+    parameters:
+      example_count: [4, 8, 12, 16]
+    metrics: [semantic_accuracy, compile_rate, compile_semantic_gap, counterexample_resistance]
+    contamination_risk: medium
+
+  - id: A08
+    name: Backtracking-required synthetic abstraction
+    family: SYNTHETIC_BACKTRACK
+    representation_modes: [symbolic, mixed]
+    answer_modes: [open_ended, program_induction]
+    metrics: [semantic_accuracy, backtrack_success_rate, counterexample_resistance]
+    contamination_risk: low

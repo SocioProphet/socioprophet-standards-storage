@@ -1,0 +1,53 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://socioprophet.org/schemas/abstract_reasoning/abstract_benchmark_report.schema.yaml
+title: Abstract Benchmark Report
+type: object
+required:
+  - report_id
+  - subject
+  - summary
+  - recorded_at
+properties:
+  report_id:
+    type: string
+  subject:
+    type: object
+    required:
+      - name
+      - type
+    properties:
+      name:
+        type: string
+      type:
+        type: string
+        enum: [model, planner, hybrid_system, reference_stack]
+      version:
+        type: string
+    additionalProperties: false
+  summary:
+    type: object
+    required:
+      - pass_count
+      - fail_count
+      - review_required_count
+    properties:
+      pass_count:
+        type: integer
+        minimum: 0
+      fail_count:
+        type: integer
+        minimum: 0
+      review_required_count:
+        type: integer
+        minimum: 0
+      overall_notes:
+        type: string
+    additionalProperties: false
+  run_refs:
+    type: array
+    items:
+      type: string
+  recorded_at:
+    type: string
+    format: date-time
+additionalProperties: false
