@@ -1,0 +1,49 @@
+{
+  "schema_version": "0.1.0",
+  "receipt_id": "receipt_vendor_acme_assessment_001",
+  "trace_id": "trace_vendor_acme_assessment_001",
+  "assessment_scope": {
+    "subject_id": "vendor:acme-cloud",
+    "subject_kind": "vendor",
+    "framework_id": "nist-800-53-rev5",
+    "framework_version": "rev5"
+  },
+  "policy_bundle": {
+    "id": "policy-bundle://vendor-assessment/nist-800-53-rev5",
+    "version": "0.1.0"
+  },
+  "evaluator_versions": {
+    "claim_extractor": "claim-extractor@0.1.0",
+    "control_evaluator": "control-evaluator@0.1.0",
+    "finding_generator": "finding-generator@0.1.0"
+  },
+  "evidence_digests": [
+    {
+      "evidence_ref_id": "evref_vendor_policy_001",
+      "digest": {
+        "alg": "sha256",
+        "digest": "9f6c6a7b2f0b4d1f31d1f408dcbcebe7a6579d8f5cb0e00e4e90f9c9702b9d4a"
+      }
+    }
+  ],
+  "evaluation_refs": [
+    "eval_nist_ac_2_001"
+  ],
+  "finding_refs": [
+    "finding_nist_ac_2_001"
+  ],
+  "replay": {
+    "manifest_ref": "replay://vendor-acme-assessment/001",
+    "bundle_ref": "bundle://agentplane/vendor-acme-assessment@0.1.0",
+    "replayable": true
+  },
+  "summary": {
+    "pass_count": 0,
+    "partial_count": 1,
+    "fail_count": 0,
+    "warn_count": 0,
+    "finding_count": 1,
+    "evidence_count": 1
+  },
+  "sealed_at": "2026-04-09T10:05:00Z"
+}

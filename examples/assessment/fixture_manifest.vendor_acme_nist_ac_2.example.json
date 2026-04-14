@@ -1,0 +1,34 @@
+{
+  "fixture_set_id": "fixture_vendor_acme_nist_ac_2_001",
+  "schema_pack_version": "0.1.0",
+  "subject_id": "vendor:acme-cloud",
+  "framework_id": "nist-800-53-rev5",
+  "control_id": "AC-2",
+  "row_id": "ac-2-account-management",
+  "fixtures": {
+    "evidence_refs": [
+      "evref_vendor_policy_001"
+    ],
+    "claims": [
+      "claim_admin_accounts_reviewed_quarterly_001"
+    ],
+    "claim_conflicts": [
+      "conflict_access_review_evidence_missing_001"
+    ],
+    "control_requirements": [
+      "ctrlreq_nist_ac_2_001"
+    ],
+    "evaluations": [
+      "eval_nist_ac_2_001"
+    ],
+    "findings": [
+      "finding_nist_ac_2_001"
+    ],
+    "receipts": [
+      "receipt_vendor_acme_assessment_001"
+    ],
+    "reports": [
+      "report_vendor_acme_assessment_001"
+    ]
+  }
+}
