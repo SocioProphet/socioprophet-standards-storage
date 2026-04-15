@@ -1,0 +1,39 @@
+workload_id: contract-intelligence-extraction
+name: Contract Intelligence Extraction
+context: contract_intelligence
+purpose: >-
+  Evaluate structural parsing and semantic extraction quality for clauses,
+  obligations, prohibitions, rights, exceptions, temporal windows, and
+  interpretation evidence.
+metrics:
+  - clause_segmentation_f1
+  - clause_typing_f1
+  - obligation_extraction_f1
+  - right_extraction_f1
+  - prohibition_extraction_f1
+  - exception_capture_f1
+  - timeframe_extraction_f1
+  - ambiguity_detection_f1
+  - replay_stability
+inputs:
+  - benchmark_cases
+  - clause_sets
+  - obligation_sets
+  - interpretation_evidence_sets
+slices:
+  - modal_obligations
+  - prohibitions
+  - conditional_clauses
+  - temporal_clauses
+  - amendment_chains
+  - cross_reference_heavy
+  - definition_dependent
+  - tables_and_schedules
+  - contradictory_clauses
+  - noisy_ocr
+pass_criteria:
+  obligation_extraction_f1_min: 0.85
+  replay_stability_min: 0.99
+notes:
+  - Structural and semantic stages must be scored separately.
+  - Ambiguity handling is a required capability, not a parser failure mode.
