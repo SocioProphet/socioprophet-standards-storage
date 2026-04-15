@@ -1,0 +1,23 @@
+{
+  "type": "record",
+  "name": "ReviewerFeedback",
+  "namespace": "socioprophet.contract_intelligence.v1",
+  "fields": [
+    {"name": "feedback_id", "type": "string"},
+    {"name": "document_id", "type": "string"},
+    {"name": "artifact_ref", "type": "string"},
+    {"name": "reviewer_id", "type": "string"},
+    {"name": "label", "type": "string"},
+    {"name": "rationale", "type": ["null", "string"], "default": null},
+    {"name": "span_refs", "type": {"type": "array", "items": {
+      "type": "record",
+      "name": "FeedbackSpanRef",
+      "fields": [
+        {"name": "start", "type": "long"},
+        {"name": "end", "type": "long"},
+        {"name": "label", "type": ["null", "string"], "default": null}
+      ]
+    }}},
+    {"name": "utc_timestamp", "type": "string"}
+  ]
+}
