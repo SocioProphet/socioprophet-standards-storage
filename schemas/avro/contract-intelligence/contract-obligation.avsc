@@ -1,0 +1,39 @@
+{
+  "type": "record",
+  "name": "ContractObligation",
+  "namespace": "socioprophet.contract_intelligence.v1",
+  "fields": [
+    {"name": "obligation_id", "type": "string"},
+    {"name": "document_id", "type": "string"},
+    {"name": "clause_id", "type": "string"},
+    {"name": "obligation_type", "type": "string"},
+    {"name": "actor", "type": ["null", "string"], "default": null},
+    {"name": "counterparty", "type": ["null", "string"], "default": null},
+    {"name": "beneficiary", "type": ["null", "string"], "default": null},
+    {"name": "action", "type": "string"},
+    {"name": "object", "type": ["null", "string"], "default": null},
+    {"name": "condition", "type": ["null", "string"], "default": null},
+    {"name": "exception", "type": ["null", "string"], "default": null},
+    {"name": "trigger", "type": ["null", "string"], "default": null},
+    {"name": "timeframe", "type": ["null", "string"], "default": null},
+    {"name": "effective_window", "type": ["null", {
+      "type": "record",
+      "name": "EffectiveWindow",
+      "fields": [
+        {"name": "start", "type": ["null", "string"], "default": null},
+        {"name": "end", "type": ["null", "string"], "default": null}
+      ]
+    }], "default": null},
+    {"name": "confidence", "type": ["null", "double"], "default": null},
+    {"name": "rule_hits", "type": {"type": "array", "items": "string"}},
+    {"name": "model_scores", "type": {"type": "map", "values": "double"}},
+    {"name": "provenance", "type": {"type": "array", "items": {
+      "type": "record",
+      "name": "ObligationProvenanceRef",
+      "fields": [
+        {"name": "source_path", "type": "string"},
+        {"name": "confidence", "type": ["null", "double"], "default": null}
+      ]
+    }}}
+  ]
+}
