@@ -1,0 +1,30 @@
+{
+  "case_id": "privacy-data-processing-case-001",
+  "document_ref": "benchmarks/fixtures/contract-intelligence/privacy-data-processing-case-001.txt",
+  "gold_profile": {
+    "language": "en",
+    "jurisdiction": "EU",
+    "region": "EU",
+    "domain": "privacy",
+    "subdomain": "data_processing"
+  },
+  "gold_clauses": [
+    "controller notification to supervisory authority within 72 hours unless low risk",
+    "controller communication to data subject without undue delay where high risk",
+    "processor prohibition on processing except on documented instructions"
+  ],
+  "gold_obligations": [
+    "controller must notify supervisory authority within 72 hours unless breach unlikely to result in risk",
+    "controller must communicate breach to data subject without undue delay where high risk",
+    "processor must not process personal data except on documented instructions from controller"
+  ],
+  "slice_tags": [
+    "modal_obligations",
+    "prohibitions",
+    "conditional_clauses",
+    "temporal_clauses",
+    "definition_dependent"
+  ],
+  "difficulty": "medium",
+  "notes": "Initial golden lane fixture aligned to privacy/data-processing pattern pack example."
+}
