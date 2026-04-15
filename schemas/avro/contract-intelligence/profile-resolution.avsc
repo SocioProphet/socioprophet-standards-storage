@@ -1,0 +1,38 @@
+{
+  "type": "record",
+  "name": "ProfileResolution",
+  "namespace": "socioprophet.contract_intelligence.v1",
+  "fields": [
+    {"name": "document_id", "type": "string"},
+    {"name": "language", "type": "string"},
+    {"name": "jurisdiction", "type": ["null", "string"], "default": null},
+    {"name": "region", "type": ["null", "string"], "default": null},
+    {"name": "domain", "type": "string"},
+    {"name": "subdomain", "type": ["null", "string"], "default": null},
+    {"name": "confidence", "type": ["null", "double"], "default": null},
+    {"name": "resolver_evidence", "type": {
+      "type": "array",
+      "items": {
+        "type": "record",
+        "name": "ResolverEvidence",
+        "fields": [
+          {"name": "source", "type": "string"},
+          {"name": "reason", "type": "string"},
+          {"name": "score", "type": ["null", "double"], "default": null}
+        ]
+      }
+    }},
+    {"name": "selected_schema_pack", "type": "string"},
+    {"name": "selected_pattern_pack", "type": "string"},
+    {"name": "selected_model_pack", "type": "string"},
+    {"name": "pack_versions", "type": ["null", {
+      "type": "record",
+      "name": "PackVersions",
+      "fields": [
+        {"name": "schema", "type": ["null", "string"], "default": null},
+        {"name": "pattern", "type": ["null", "string"], "default": null},
+        {"name": "model", "type": ["null", "string"], "default": null}
+      ]
+    }], "default": null}
+  ]
+}
