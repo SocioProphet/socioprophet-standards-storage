@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.org/contract-intelligence/document-artifact.schema.json",
+  "title": "Contract Intelligence Document Artifact",
+  "type": "object",
+  "required": [
+    "artifact_type",
+    "artifact_id",
+    "version",
+    "utc_timestamp",
+    "content_hash",
+    "mime_type",
+    "canonical_text"
+  ],
+  "properties": {
+    "artifact_type": {
+      "type": "string",
+      "const": "document_artifact"
+    },
+    "artifact_id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "tenant_id": {
+      "type": "string"
+    },
+    "story_id": {
+      "type": "string"
+    },
+    "utc_timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_ref": {
+      "type": "object",
+      "properties": {
+        "uri": { "type": "string" },
+        "source_type": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "content_hash": {
+      "type": "string"
+    },
+    "mime_type": {
+      "type": "string"
+    },
+    "language_hint": {
+      "type": "string"
+    },
+    "jurisdiction_hint": {
+      "type": "string"
+    },
+    "canonical_text": {
+      "type": "string"
+    },
+    "layout_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "page": { "type": "integer", "minimum": 1 },
+          "bbox": {
+            "type": "array",
+            "items": { "type": "number" },
+            "minItems": 4,
+            "maxItems": 4
+          },
+          "span_start": { "type": "integer", "minimum": 0 },
+          "span_end": { "type": "integer", "minimum": 0 }
+        },
+        "required": ["page", "span_start", "span_end"],
+        "additionalProperties": false
+      }
+    },
+    "section_spans": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/span" }
+    },
+    "paragraph_spans": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/span" }
+    },
+    "sentence_spans": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/span" }
+    },
+    "normalization_log": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["step", "description"],
+        "properties": {
+          "step": { "type": "string" },
+          "description": { "type": "string" },
+          "tool": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "provenance": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source_path"],
+        "properties": {
+          "source_path": { "type": "string" },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "$defs": {
+    "span": {
+      "type": "object",
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "type": "integer", "minimum": 0 },
+        "end": { "type": "integer", "minimum": 0 },
+        "label": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
