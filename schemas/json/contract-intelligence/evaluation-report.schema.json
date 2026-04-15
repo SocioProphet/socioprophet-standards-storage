@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.org/contract-intelligence/evaluation-report.schema.json",
+  "title": "Contract Intelligence Evaluation Report",
+  "type": "object",
+  "required": ["run_id"],
+  "properties": {
+    "run_id": { "type": "string" },
+    "model_pack_id": { "type": "string" },
+    "pattern_pack_id": { "type": "string" },
+    "metrics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "value"],
+        "properties": {
+          "name": { "type": "string" },
+          "value": { "type": "number" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "slice_metrics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["slice", "metrics"],
+        "properties": {
+          "slice": { "type": "string" },
+          "metrics": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "value"],
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "number" }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "error_buckets": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "regressions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "promotion_recommendation": { "type": "string" }
+  },
+  "additionalProperties": false
+}
