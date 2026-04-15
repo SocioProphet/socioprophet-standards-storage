@@ -1,0 +1,30 @@
+workload_id: contract-intelligence-routing
+name: Contract Intelligence Routing
+context: contract_intelligence
+purpose: >-
+  Evaluate profile-resolution quality across language, jurisdiction, domain,
+  subdomain, and pack-selection decisions for contractual and regulatory documents.
+metrics:
+  - routing_accuracy
+  - language_accuracy
+  - jurisdiction_accuracy
+  - domain_accuracy
+  - subdomain_accuracy
+  - pack_selection_accuracy
+  - replay_stability
+inputs:
+  - benchmark_cases
+  - profile_resolution_outputs
+slices:
+  - multilingual
+  - multi_jurisdiction
+  - domain_ambiguous
+  - subdomain_ambiguous
+  - noisy_ocr
+  - formatting_damaged
+pass_criteria:
+  routing_accuracy_min: 0.90
+  replay_stability_min: 0.99
+notes:
+  - Profile resolution is first-class and must not be hidden inside extraction logic.
+  - Pattern-pack and model-pack selection must be benchmarked independently where possible.
