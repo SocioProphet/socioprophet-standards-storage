@@ -1,0 +1,30 @@
+{
+  "type": "record",
+  "name": "ContractClause",
+  "namespace": "socioprophet.contract_intelligence.v1",
+  "fields": [
+    {"name": "clause_id", "type": "string"},
+    {"name": "document_id", "type": "string"},
+    {"name": "section_path", "type": {"type": "array", "items": "string"}},
+    {"name": "clause_type", "type": "string"},
+    {"name": "text", "type": "string"},
+    {"name": "span", "type": {
+      "type": "record",
+      "name": "Span",
+      "fields": [
+        {"name": "start", "type": "long"},
+        {"name": "end", "type": "long"},
+        {"name": "label", "type": ["null", "string"], "default": null}
+      ]
+    }},
+    {"name": "cross_refs", "type": {"type": "array", "items": "string"}},
+    {"name": "provenance", "type": {"type": "array", "items": {
+      "type": "record",
+      "name": "ClauseProvenanceRef",
+      "fields": [
+        {"name": "source_path", "type": "string"},
+        {"name": "confidence", "type": ["null", "double"], "default": null}
+      ]
+    }}}
+  ]
+}
