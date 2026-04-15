@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.org/contract-intelligence/reviewer-feedback.schema.json",
+  "title": "Contract Intelligence Reviewer Feedback",
+  "type": "object",
+  "required": [
+    "feedback_id",
+    "document_id",
+    "artifact_ref",
+    "reviewer_id",
+    "label",
+    "utc_timestamp"
+  ],
+  "properties": {
+    "feedback_id": { "type": "string" },
+    "document_id": { "type": "string" },
+    "artifact_ref": { "type": "string" },
+    "reviewer_id": { "type": "string" },
+    "label": { "type": "string" },
+    "rationale": { "type": "string" },
+    "span_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["start", "end"],
+        "properties": {
+          "start": { "type": "integer", "minimum": 0 },
+          "end": { "type": "integer", "minimum": 0 },
+          "label": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "utc_timestamp": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false
+}
