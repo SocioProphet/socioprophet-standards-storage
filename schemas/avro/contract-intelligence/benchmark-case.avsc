@@ -1,0 +1,25 @@
+{
+  "type": "record",
+  "name": "BenchmarkCase",
+  "namespace": "socioprophet.contract_intelligence.v1",
+  "fields": [
+    {"name": "case_id", "type": "string"},
+    {"name": "document_ref", "type": "string"},
+    {"name": "gold_profile", "type": ["null", {
+      "type": "record",
+      "name": "BenchmarkGoldProfile",
+      "fields": [
+        {"name": "language", "type": ["null", "string"], "default": null},
+        {"name": "jurisdiction", "type": ["null", "string"], "default": null},
+        {"name": "region", "type": ["null", "string"], "default": null},
+        {"name": "domain", "type": ["null", "string"], "default": null},
+        {"name": "subdomain", "type": ["null", "string"], "default": null}
+      ]
+    }], "default": null},
+    {"name": "gold_clauses", "type": {"type": "array", "items": "string"}},
+    {"name": "gold_obligations", "type": {"type": "array", "items": "string"}},
+    {"name": "slice_tags", "type": {"type": "array", "items": "string"}},
+    {"name": "difficulty", "type": ["null", "string"], "default": null},
+    {"name": "notes", "type": ["null", "string"], "default": null}
+  ]
+}
