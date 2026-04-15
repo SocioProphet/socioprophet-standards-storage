@@ -1,0 +1,28 @@
+{
+  "case_id": "amendment-effective-window-case-001",
+  "document_ref": "benchmarks/fixtures/contract-intelligence/amendment-effective-window-case-001.txt",
+  "gold_profile": {
+    "language": "en",
+    "jurisdiction": "generic_common_law",
+    "region": "generic_common_law",
+    "domain": "contracts",
+    "subdomain": "amendment_effective_window"
+  },
+  "gold_clauses": [
+    "amendment effective as of January 1 2026 to master services agreement",
+    "master agreement remains in force except as expressly modified",
+    "automatic renewal unless either party gives 60 days written notice",
+    "pricing changes apply retroactive to October 1 2025"
+  ],
+  "gold_obligations": [
+    "either party may prevent renewal by giving written notice at least 60 days before end of term"
+  ],
+  "slice_tags": [
+    "amendment_chains",
+    "temporal_clauses",
+    "conditional_clauses",
+    "cross_reference_heavy"
+  ],
+  "difficulty": "medium",
+  "notes": "Second golden lane fixture aligned to amendment/effective-window pattern pack example."
+}
