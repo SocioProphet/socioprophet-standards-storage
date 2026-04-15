@@ -1,0 +1,29 @@
+{
+  "type": "record",
+  "name": "EvaluationReport",
+  "namespace": "socioprophet.contract_intelligence.v1",
+  "fields": [
+    {"name": "run_id", "type": "string"},
+    {"name": "model_pack_id", "type": ["null", "string"], "default": null},
+    {"name": "pattern_pack_id", "type": ["null", "string"], "default": null},
+    {"name": "metrics", "type": {"type": "array", "items": {
+      "type": "record",
+      "name": "MetricValue",
+      "fields": [
+        {"name": "name", "type": "string"},
+        {"name": "value", "type": "double"}
+      ]
+    }}},
+    {"name": "slice_metrics", "type": {"type": "array", "items": {
+      "type": "record",
+      "name": "SliceMetric",
+      "fields": [
+        {"name": "slice", "type": "string"},
+        {"name": "metrics", "type": {"type": "array", "items": "MetricValue"}}
+      ]
+    }}},
+    {"name": "error_buckets", "type": {"type": "array", "items": "string"}},
+    {"name": "regressions", "type": {"type": "array", "items": "string"}},
+    {"name": "promotion_recommendation", "type": ["null", "string"], "default": null}
+  ]
+}
