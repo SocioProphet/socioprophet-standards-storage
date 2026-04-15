@@ -1,0 +1,26 @@
+{
+  "type": "record",
+  "name": "DocumentArtifact",
+  "namespace": "socioprophet.contract_intelligence.v1",
+  "fields": [
+    {"name": "artifact_type", "type": "string"},
+    {"name": "artifact_id", "type": "string"},
+    {"name": "version", "type": "string"},
+    {"name": "tenant_id", "type": ["null", "string"], "default": null},
+    {"name": "story_id", "type": ["null", "string"], "default": null},
+    {"name": "utc_timestamp", "type": "string"},
+    {"name": "source_ref", "type": ["null", {
+      "type": "record",
+      "name": "SourceRef",
+      "fields": [
+        {"name": "uri", "type": ["null", "string"], "default": null},
+        {"name": "source_type", "type": ["null", "string"], "default": null}
+      ]
+    }], "default": null},
+    {"name": "content_hash", "type": "string"},
+    {"name": "mime_type", "type": "string"},
+    {"name": "language_hint", "type": ["null", "string"], "default": null},
+    {"name": "jurisdiction_hint", "type": ["null", "string"], "default": null},
+    {"name": "canonical_text", "type": "string"}
+  ]
+}
