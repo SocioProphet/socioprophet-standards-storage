@@ -1,0 +1,122 @@
+{
+  "bindingVersion": "v0.1",
+  "canonicalSources": {
+    "workflowRun": "sociosphere.WorkflowRun",
+    "executionEnvelope": "sociosphere.ExecutionEnvelope",
+    "executionRecord": "sociosphere.ExecutionRecord",
+    "runBundle": "standards-storage.RunBundle",
+    "normalizedReceipt": "standards-storage.maipj-run-receipt",
+    "transportBinding": "TriTRPC.receipt_binding"
+  },
+  "workflowRun": {
+    "runId": "run-demo-001",
+    "workflowRef": "workflow://agentic-workbench/demo-local-run",
+    "workflowDigest": "sha256:0fe7287e778d169f7a301e9fdb5e356af77326da64c109134c673e7de3c68047",
+    "createdAt": "2026-04-16T05:30:00Z",
+    "status": "succeeded",
+    "caller": {
+      "spiffeId": "spiffe://sourceos.local/workbench/demo-user",
+      "aumDigest": "sha256:291fe26bea42f33f894c074b90e5d4d14b5242fda4d083ff1c06251bcde9b788",
+      "sessionId": "sess-demo-001"
+    },
+    "inputDigest": "sha256:a9d7323b6b1d8e69a42f27cbcf23ba29e59760edc39dbcd96bd476201c96ab09",
+    "ledgerHeadHash": "sha256:4c8a1616f603eff9ff61513d9db4392f05237ade4e6237161558980adeea65b1"
+  },
+  "executionEnvelope": {
+    "envelopeId": "env-demo-001",
+    "runId": "run-demo-001",
+    "stepId": "step-demo-local",
+    "subject": {
+      "spiffeId": "spiffe://sourceos.local/workbench/demo-user",
+      "aumDigest": "sha256:291fe26bea42f33f894c074b90e5d4d14b5242fda4d083ff1c06251bcde9b788",
+      "sessionId": "sess-demo-001"
+    },
+    "policyDecisionRef": "policy-decision://demo-001",
+    "inputDigest": "sha256:a9d7323b6b1d8e69a42f27cbcf23ba29e59760edc39dbcd96bd476201c96ab09",
+    "transportContext": {
+      "transport": "local",
+      "bundleRef": "bundle://transport-demo-001"
+    },
+    "createdAt": "2026-04-16T05:30:05Z"
+  },
+  "executionRecord": {
+    "recordId": "exec-record-demo-001",
+    "runId": "run-demo-001",
+    "phase": "result",
+    "status": "succeeded",
+    "createdAt": "2026-04-16T05:30:10Z",
+    "artifactRefs": [
+      {
+        "artifactId": "artifact-output-001",
+        "kind": "output",
+        "uri": "file:///srv/fog/projects/demo/output.json",
+        "digest": "sha256:3c89e2f010e3b6e7a847cc0dee360f9806b03c8f0ef94e4209daeb8c1ef6b51f",
+        "mediaType": "application/json"
+      },
+      {
+        "artifactId": "artifact-trace-001",
+        "kind": "trace",
+        "uri": "file:///srv/fog/logs/demo/run-demo-001.trace.json",
+        "digest": "sha256:cbd0cb474c703df8749b98bfaad46f562e75bda79491f206f431497ab7554b0c",
+        "mediaType": "application/json"
+      }
+    ],
+    "policyRef": "policy://demo/local",
+    "signatureRef": "sig://demo-exec-record-001"
+  },
+  "runBundle": {
+    "bundleId": "run-bundle-demo-001",
+    "run": {
+      "runId": "run-demo-001",
+      "workflowDigest": "sha256:0fe7287e778d169f7a301e9fdb5e356af77326da64c109134c673e7de3c68047",
+      "inputDigest": "sha256:a9d7323b6b1d8e69a42f27cbcf23ba29e59760edc39dbcd96bd476201c96ab09"
+    },
+    "execution": {
+      "envelopeId": "env-demo-001",
+      "subjectRef": "spiffe://sourceos.local/workbench/demo-user"
+    },
+    "records": [
+      "exec-record-demo-001"
+    ],
+    "receiptRefs": [
+      "receipt://maipj-run-demo-001",
+      "receipt://publication-demo-001"
+    ]
+  },
+  "maipjRunReceipt": {
+    "receiptId": "maipj-run-demo-001",
+    "status": "succeeded",
+    "action": "LocalWorkflowRun",
+    "subjectRef": "workflow-run://run-demo-001",
+    "createdAt": "2026-04-16T05:30:12Z",
+    "context": {
+      "runId": "run-demo-001",
+      "workflowRunSha256": "sha256:101f66924bb73d0d937a577d7eb43be51b49743519e180af4bbefc58adff6f50",
+      "executionEnvelopeSha256": "sha256:154d578d12ddbf56cab08a23e604f0865c8619c7308d37406d5241d18d5092f2",
+      "runtimeProfileRef": "profile://runtime/local-python-fastapi"
+    },
+    "placement": {
+      "mode": "local",
+      "schedulerKind": "local"
+    },
+    "runtime": {
+      "cpu": "2",
+      "memory": "1Gi",
+      "gpu": 0
+    },
+    "evidence": {
+      "eventRef": "file:///tmp/prophet-platform/events/workflow-local-runner/corr-workflow-001.event.json",
+      "payloadRef": "file:///tmp/prophet-platform/payloads/workflow-local-runner/corr-workflow-001.payload.json"
+    },
+    "outcome": {
+      "result": "success",
+      "replayable": true
+    }
+  },
+  "publicationReceipt": {
+    "receiptId": "publication-demo-001",
+    "status": "succeeded",
+    "subjectRef": "workflow-run://run-demo-001",
+    "catalogRef": "catalog://workflow-local-runner/corr-workflow-001"
+  }
+}
