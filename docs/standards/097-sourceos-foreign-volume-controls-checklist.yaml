@@ -1,0 +1,27 @@
+version: 0.1
+standard: 097-sourceos-foreign-volume-and-cross-os-mount-interop
+controls:
+  - id: fv-001
+    title: Foreign system volumes default to read-only
+    requirement: MUST
+  - id: fv-002
+    title: Foreign system volumes use nodev nosuid noexec by default
+    requirement: MUST
+  - id: fv-003
+    title: Exchange volumes remain separate from substrate-sensitive and audit-critical state
+    requirement: MUST
+  - id: fv-004
+    title: Import workflows prefer copy-in over in-place mutation
+    requirement: SHOULD
+  - id: fv-005
+    title: Substrate-sensitive foreign assets require privileged mutation paths
+    requirement: MUST
+  - id: fv-006
+    title: Rootless containers forbid foreign system volumes by default
+    requirement: MUST
+  - id: fv-007
+    title: Explicit read-write exceptions capture operator intent and resulting posture
+    requirement: MUST
+  - id: fv-008
+    title: Apple dual-boot devices classify macOS system and data volumes as foreign system volumes
+    requirement: MUST
