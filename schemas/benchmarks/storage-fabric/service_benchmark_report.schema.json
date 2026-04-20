@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ServiceBenchmarkReport",
+  "type": "object",
+  "required": ["generatedAt", "packageVersion", "executionMode", "engineStatus", "results"],
+  "properties": {
+    "generatedAt": {"type": "string"},
+    "packageVersion": {"type": "string"},
+    "executionMode": {"type": "string"},
+    "engineStatus": {"type": "string"},
+    "results": {"type": "array", "items": {"type": "object"}}
+  },
+  "additionalProperties": true
+}
