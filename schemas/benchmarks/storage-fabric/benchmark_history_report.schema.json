@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BenchmarkHistoryReport",
+  "type": "object",
+  "required": ["generatedAt", "packageVersion", "baselineVersion", "summary"],
+  "properties": {
+    "generatedAt": {"type": "string"},
+    "packageVersion": {"type": "string"},
+    "baselineVersion": {"type": "string"},
+    "historicalReferenceVersions": {"type": "array", "items": {"type": "string"}},
+    "historyPolicy": {"type": "object"},
+    "summary": {"type": "object"},
+    "referenceBenchmarkDiffs": {"type": "array", "items": {"type": "object"}},
+    "serviceBenchmarkDiffs": {"type": "array", "items": {"type": "object"}},
+    "rankingDiffs": {"type": "array", "items": {"type": "object"}},
+    "baselineSources": {"type": "object"},
+    "currentSources": {"type": "object"}
+  },
+  "additionalProperties": true
+}
