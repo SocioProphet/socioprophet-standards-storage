@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "StorageBenchmarkReport",
+  "type": "object",
+  "required": ["generatedAt", "suiteVersion", "results", "summaryByRole"],
+  "properties": {
+    "generatedAt": {"type": "string"},
+    "suiteVersion": {"type": "string"},
+    "environment": {"type": "object"},
+    "analysisPolicy": {"type": "object"},
+    "samplingWindow": {"type": "object"},
+    "results": {"type": "array", "items": {"type": "object"}},
+    "summaryByRole": {"type": "object"}
+  },
+  "additionalProperties": true
+}
