@@ -4,7 +4,11 @@ This repository defines platform contexts (event stream, artifacts, search, vect
 
 The detailed Knowledge Context standards (micro-publications, meriotopographic relations, masking/tokenization/IR/vector flows, office/editor integration, agent-first + human validation gates) live in the sibling standards repository:
 
-- socioprophet-standards-knowledge (to be created; MIT license; identical repo skeleton + validation gates)
+- `SocioProphet/socioprophet-standards-knowledge` (active; public; executable standards package with schemas, RPC metadata, fixtures, and verification tooling)
+
+Related repositories:
+- `SocioProphet/ontogenesis` — ontology modules, SHACL validation, mappings, and signed semantic supply-chain assets
+- `SocioProphet/sociosphere` — workspace governance, manifest/lock coordination, and policy propagation
 
 ## Requirements
 - Knowledge Context MUST comply with:
