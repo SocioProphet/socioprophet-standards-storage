@@ -1,8 +1,11 @@
-.PHONY: validate action-ontology-validate cso-governance-validate cso-governance-scaffold
+.PHONY: validate action-ontology-validate cso-governance-validate cso-governance-scaffold multidomain-geospatial-validate
 
 validate:
 	./.venv/bin/python tools/validate.py 2>/dev/null || python3 tools/validate.py
 	bash tools/action_ontology_validate_all.sh
+
+multidomain-geospatial-validate:
+	./.venv/bin/python tools/validate_multidomain_geospatial.py 2>/dev/null || python3 tools/validate_multidomain_geospatial.py
 
 action-ontology-validate:
 	bash tools/action_ontology_validate_all.sh
