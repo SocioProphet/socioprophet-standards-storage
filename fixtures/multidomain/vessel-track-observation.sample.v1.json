@@ -1,0 +1,45 @@
+{
+  "record_type": "VesselTrackObservation",
+  "record_id": "vessel-track:sample:imo-0000000:2026-04-27T18:00:00Z",
+  "source": {
+    "source_id": "sample-ais-feed",
+    "source_type": "AIS",
+    "license_ref": "sample-only",
+    "attribution": "Synthetic fixture for SocioProphet standards validation",
+    "access_tier": "open"
+  },
+  "observed_at": "2026-04-27T18:00:00Z",
+  "received_at": "2026-04-27T18:00:05Z",
+  "processed_at": "2026-04-27T18:00:10Z",
+  "geometry_ref": {
+    "crs": "EPSG:4326",
+    "encoding": "geojson",
+    "value": {
+      "type": "Point",
+      "coordinates": [-74.006, 40.7128]
+    },
+    "precision_policy": "public_sample"
+  },
+  "payload": {
+    "vessel_ref": "vessel:sample:imo-0000000",
+    "mmsi": "000000000",
+    "course_over_ground": 91.2,
+    "speed_over_ground_knots": 12.4,
+    "navigation_status": "under_way_using_engine"
+  },
+  "confidence": {
+    "score": 0.81,
+    "method": "synthetic_fixture"
+  },
+  "provenance": {
+    "chain": ["fixture:generated"],
+    "derived_from": ["sample-ais-feed:event:0001"],
+    "runtime_boundary_id": "runtime:ais-ingest:v0"
+  },
+  "governance": {
+    "privacy_tier": "public",
+    "safety_tier": "standard",
+    "retention_tier": "sample",
+    "redistribution": "allowed"
+  }
+}
