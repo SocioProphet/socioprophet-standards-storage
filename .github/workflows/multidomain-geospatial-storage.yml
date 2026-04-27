@@ -1,0 +1,21 @@
+name: Multi-Domain Geospatial Storage Standards
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate:
+    name: Validate storage contracts and fixtures
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Validate multi-domain geospatial storage contracts
+        run: make multidomain-geospatial-validate
