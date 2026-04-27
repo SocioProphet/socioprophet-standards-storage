@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://standards.socioprophet.ai/storage/multidomain_geospatial_record.v1.schema.json",
+  "title": "SocioProphet Multi-Domain Geospatial Record v1",
+  "type": "object",
+  "required": ["record_type", "record_id", "source", "observed_at", "geometry_ref", "provenance", "governance"],
+  "properties": {
+    "record_type": {
+      "type": "string",
+      "enum": [
+        "SpaceAssetRecord",
+        "OrbitEphemerisRecord",
+        "GroundStationContactEvent",
+        "TelemetryObservation",
+        "EarthObservationProductRecord",
+        "VesselTrackObservation",
+        "AirTrackObservation",
+        "SensorObservationEnvelope",
+        "MultiDomainFusionEvent",
+        "SensitiveGeoPolicyRecord",
+        "MapLayerManifest",
+        "RuntimeBoundaryEvidenceRecord"
+      ]
+    },
+    "record_id": {"type": "string", "minLength": 3},
+    "source": {
+      "type": "object",
+      "required": ["source_id", "source_type", "license_ref"],
+      "properties": {
+        "source_id": {"type": "string"},
+        "source_type": {"type": "string"},
+        "license_ref": {"type": "string"},
+        "attribution": {"type": "string"},
+        "access_tier": {"type": "string", "enum": ["open", "restricted", "authorized", "customer_owned", "classified_external"]}
+      },
+      "additionalProperties": true
+    },
+    "observed_at": {"type": "string"},
+    "received_at": {"type": "string"},
+    "processed_at": {"type": "string"},
+    "geometry_ref": {
+      "type": "object",
+      "required": ["crs", "encoding"],
+      "properties": {
+        "crs": {"type": "string"},
+        "encoding": {"type": "string", "enum": ["geojson", "wkt", "h3", "s2", "tile", "ephemeris", "none"]},
+        "value": {},
+        "precision_policy": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "payload": {"type": "object"},
+    "confidence": {
+      "type": "object",
+      "properties": {
+        "score": {"type": "number", "minimum": 0, "maximum": 1},
+        "method": {"type": "string"},
+        "uncertainty": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["chain", "derived_from"],
+      "properties": {
+        "chain": {"type": "array", "items": {"type": "string"}},
+        "derived_from": {"type": "array", "items": {"type": "string"}},
+        "runtime_boundary_id": {"type": "string"},
+        "evidence_bundle_id": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "governance": {
+      "type": "object",
+      "required": ["privacy_tier", "safety_tier", "retention_tier", "redistribution"],
+      "properties": {
+        "privacy_tier": {"type": "string", "enum": ["public", "internal", "sensitive", "restricted", "redacted"]},
+        "safety_tier": {"type": "string", "enum": ["standard", "sensitive_geo", "public_safety", "defense_authorized", "export_controlled"]},
+        "retention_tier": {"type": "string"},
+        "redistribution": {"type": "string", "enum": ["allowed", "attribution_required", "restricted", "prohibited"]},
+        "redaction_policy_ref": {"type": "string"}
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}
