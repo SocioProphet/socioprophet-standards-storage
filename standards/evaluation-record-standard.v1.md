@@ -12,7 +12,7 @@ Depends on:
 
 This standard defines how evaluation records are stored for people, agents, models, services, curricula, ontologies, OS/fleet lifecycle systems, Atlas bundles, and Prophet Platform capabilities.
 
-The storage standard is deliberately evidence-first. Scores without artifacts are insufficient. Reviews without sources are insufficient. Claims without reproducible records are insufficient.
+The storage standard is deliberately evidence-first. Scores without artifacts are insufficient. Reviews without sources are insufficient. Claims without reproducible records are insufficient. Forward progress without regression evidence is insufficient.
 
 ## Required object: EvaluationRecord
 
@@ -25,6 +25,7 @@ evaluation_task_refs: list of EvaluationTask references
 attempt_refs: list of EvaluationAttempt references
 rubric_refs: list of Rubric references
 metric_refs: list of Metric references
+prior_regression_check_ref: EpochRegressionCheck reference where epochs exist
 result_summary: concise result statement
 result: pass | pass_with_findings | remediation_required | fail | blocked | restricted_handling | unknown
 evidence_bundle_ref: EvidenceBundle reference
@@ -40,7 +41,7 @@ updated_at: ISO-8601 datetime
 id: stable identifier
 evaluation_task_ref: EvaluationTask reference
 subject_ref: evaluated subject
-attempt_mode: open_book | closed_book_simulated | timed | sandboxed | tool_allowed | no_tool | project_review | benchmark_run | service_probe | lifecycle_run | ontology_validation | other
+attempt_mode: open_book | closed_book_simulated | timed | sandboxed | tool_allowed | no_tool | project_review | benchmark_run | service_probe | lifecycle_run | ontology_validation | regression_rerun | stochastic_repeat | other
 started_at: ISO-8601 datetime
 completed_at: ISO-8601 datetime
 inputs: artifact references
@@ -57,7 +58,7 @@ status: completed | incomplete | invalidated | remediation_required | blocked
 ```yaml
 id: stable identifier
 evaluation_record_ref: EvaluationRecord reference
-finding_ref: Angel finding, rubric finding, metric miss, or review issue
+finding_ref: Angel finding, rubric finding, metric miss, regression finding, or review issue
 severity: blocker | high | medium | low | info
 owner: repo, team, person, or agent
 required_action: what must change
@@ -77,6 +78,35 @@ invariants_tested: what should transfer unchanged
 adaptations_observed: what changed in the new context
 tasks: EvaluationTask references
 result: pass | pass_with_findings | remediation_required | fail | unknown
+evidence_bundle_ref: EvidenceBundle reference
+```
+
+## Required object: EpochRegressionCheck
+
+Epoch regression checks persist proof that prior accepted grades, exams, tests, projects, and transfer tasks remain non-regressed at the current epoch.
+
+```yaml
+id: stable identifier
+subject_ref: evaluated subject
+subject_type: human | agent | model | service | os_release | boot_release | ontology | curriculum | platform_capability | atlas_bundle | other
+current_epoch_ref: current epoch
+baseline_epoch_ref: prior accepted epoch
+monotonicity_policy_ref: MonotonicProgressPolicy reference
+prior_tasks_evaluated: list of prior EvaluationTask refs
+baseline_records: list of prior EvaluationRecord refs
+current_records: list of current EvaluationRecord refs
+attempt_refs: list of EvaluationAttempt refs, including regression_rerun or stochastic_repeat attempts
+deltas:
+  metric_deltas: map of metric id to baseline/current/delta
+  rubric_deltas: map of rubric criterion to baseline/current/delta
+  grade_deltas: map of grade item to baseline/current/delta
+allowed_delta_applied: numeric, rubric-band, or stochastic tolerance applied
+stochastic_summary:
+  repeats: integer
+  aggregation_method: mean | median | worst_case | confidence_bound | custom
+  confidence_bound: description or value
+regressions_found: list of regression findings
+result: no_regression | within_allowed_delta | remediation_required | blocked | unknown
 evidence_bundle_ref: EvidenceBundle reference
 ```
 
@@ -105,7 +135,18 @@ Must store:
 - rubric results;
 - remediation records;
 - transfer evaluation records;
+- prior exam/test/project regression checks for epoch-bearing subjects;
 - Angel epoch grade for agent education.
+
+### Michael-agent education
+
+Must additionally store:
+
+- all prior accepted exam/test/project grades;
+- current-epoch rerun or regression evidence against prior accepted assessments;
+- stochastic tolerance evidence where applicable;
+- remediation records for any grade drop outside allowed tolerance;
+- Angel grade confirming whether the regression is material.
 
 ### Model and MLOps
 
@@ -117,6 +158,7 @@ Must store:
 - evaluation metrics;
 - serving deployment references;
 - observability and feedback records;
+- stochastic repeated-run evidence where metrics vary;
 - retraining or rollback decisions.
 
 ### OS and fleet lifecycle
@@ -128,6 +170,7 @@ Must store:
 - device/fleet fingerprint;
 - install/update/rollback result;
 - compliance result;
+- regression record against prior release behavior;
 - Angel grade where publication, release, or fleet transition is affected.
 
 ### Ontology and knowledge systems
@@ -145,6 +188,8 @@ Must store:
 
 Evaluation records supporting accepted claims, releases, education completions, platform transitions, or model deployments SHOULD be retained append-only. Restricted material may be stored under restricted handling, but its existence and sanitized summary should still be recorded where policy permits.
 
+Prior accepted grade baselines for epoch-bearing agents and models SHOULD be retained append-only so monotonic progress can be verified.
+
 ## Acceptance rule
 
 An evaluation result may not be marked `accepted` unless:
@@ -154,4 +199,6 @@ An evaluation result may not be marked `accepted` unless:
 3. metrics or rubrics are recorded;
 4. remediation is closed or explicitly accepted;
 5. Angel findings are resolved where Angel grading is required;
-6. transfer or regression evaluation is complete where relevant.
+6. transfer or regression evaluation is complete where relevant;
+7. prior accepted exams, tests, projects, and transfer tasks remain non-regressed within the applicable monotonic progress policy;
+8. stochastic deltas are documented with repeated-run or confidence-bound evidence where applicable.
