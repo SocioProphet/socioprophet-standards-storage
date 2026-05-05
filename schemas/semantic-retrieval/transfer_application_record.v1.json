@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sourceos.local/schemas/semantic-retrieval/v1/transfer_application_record.v1.json",
+  "title": "TransferApplicationRecord",
+  "type": "object",
+  "required": [
+    "transferId",
+    "mappingDecisionRef",
+    "sourceArtifactRef",
+    "appliedAt",
+    "appliedItems"
+  ],
+  "properties": {
+    "transferId": { "type": "string", "minLength": 1 },
+    "mappingDecisionRef": { "type": "string", "minLength": 1 },
+    "sourceArtifactRef": { "type": "string", "minLength": 1 },
+    "appliedAt": { "type": "string", "format": "date-time" },
+    "appliedBy": { "type": ["string", "null"] },
+    "appliedItems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "value", "provenanceClass"],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "canonical_field_alias",
+              "semantic_family_tag",
+              "join_hint",
+              "union_hint",
+              "quality_rule",
+              "dedup_hint",
+              "governance_tag",
+              "lineage_annotation",
+              "transform_recipe"
+            ]
+          },
+          "value": { "type": "object" },
+          "provenanceClass": { "type": "string", "enum": ["observed", "inherited", "inferred"] },
+          "evidenceRef": { "type": ["string", "null"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "rollbackRef": { "type": ["string", "null"] },
+    "notes": { "type": ["string", "null"] }
+  },
+  "additionalProperties": false
+}
