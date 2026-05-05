@@ -1,0 +1,172 @@
+{
+  "profileId": "profile-order-line-001",
+  "artifactRef": "dataset://sales/raw/order_items",
+  "artifactKind": "parquet",
+  "profileVersion": "1.0.0",
+  "extractedAt": "2026-05-05T00:00:00Z",
+  "extractorRef": "semantic-profile-extractor@1.0.0",
+  "policyRef": "policy://default",
+  "lexicalView": {
+    "artifactName": "order_items",
+    "columnNames": [
+      "order_id",
+      "customer_id",
+      "sku",
+      "quantity",
+      "gross_amount",
+      "currency_code",
+      "purchased_at"
+    ],
+    "normalizedTokens": [
+      "order",
+      "item",
+      "line",
+      "customer",
+      "sku",
+      "quantity",
+      "amount",
+      "currency",
+      "purchase"
+    ],
+    "description": "Line-level commerce order item table.",
+    "aliases": {}
+  },
+  "valueProfileView": {
+    "rowCount": 1000000,
+    "columns": [
+      {
+        "name": "order_id",
+        "primitiveType": "string",
+        "unit": null,
+        "semanticTypeHint": "order identifier",
+        "nullRatio": 0.0,
+        "uniquenessRatio": 0.65,
+        "cardinalityEstimate": 650000,
+        "patternFamily": "id",
+        "redactionApplied": false
+      },
+      {
+        "name": "customer_id",
+        "primitiveType": "string",
+        "unit": null,
+        "semanticTypeHint": "customer identifier",
+        "nullRatio": 0.0,
+        "uniquenessRatio": 0.15,
+        "cardinalityEstimate": 150000,
+        "patternFamily": "id",
+        "redactionApplied": true
+      },
+      {
+        "name": "sku",
+        "primitiveType": "string",
+        "unit": null,
+        "semanticTypeHint": "product identifier",
+        "nullRatio": 0.0,
+        "uniquenessRatio": 0.03,
+        "cardinalityEstimate": 30000,
+        "patternFamily": "code",
+        "redactionApplied": false
+      },
+      {
+        "name": "quantity",
+        "primitiveType": "integer",
+        "unit": "count",
+        "semanticTypeHint": "item quantity",
+        "nullRatio": 0.0,
+        "uniquenessRatio": 0.001,
+        "cardinalityEstimate": 100,
+        "patternFamily": "integer",
+        "redactionApplied": false
+      },
+      {
+        "name": "gross_amount",
+        "primitiveType": "number",
+        "unit": "money",
+        "semanticTypeHint": "gross monetary amount",
+        "nullRatio": 0.0,
+        "uniquenessRatio": 0.12,
+        "cardinalityEstimate": 120000,
+        "patternFamily": "decimal",
+        "redactionApplied": false
+      },
+      {
+        "name": "currency_code",
+        "primitiveType": "string",
+        "unit": null,
+        "semanticTypeHint": "currency code",
+        "nullRatio": 0.0,
+        "uniquenessRatio": 0.0002,
+        "cardinalityEstimate": 12,
+        "patternFamily": "iso_currency",
+        "redactionApplied": false
+      },
+      {
+        "name": "purchased_at",
+        "primitiveType": "timestamp",
+        "unit": null,
+        "semanticTypeHint": "purchase timestamp",
+        "nullRatio": 0.0,
+        "uniquenessRatio": 0.82,
+        "cardinalityEstimate": 820000,
+        "patternFamily": "timestamp",
+        "temporalGranularity": "second",
+        "redactionApplied": false
+      }
+    ]
+  },
+  "structuralView": {
+    "candidateKeys": [
+      [
+        "order_id",
+        "sku"
+      ]
+    ],
+    "candidateForeignKeys": [
+      {
+        "columns": [
+          "customer_id"
+        ],
+        "targetArtifactRef": "dataset://crm/customer_master",
+        "targetColumns": [
+          "customer_id"
+        ],
+        "confidence": 0.92
+      },
+      {
+        "columns": [
+          "sku"
+        ],
+        "targetArtifactRef": "dataset://catalog/product_dimension",
+        "targetColumns": [
+          "sku"
+        ],
+        "confidence": 0.88
+      }
+    ],
+    "rowGrainHypothesis": "one row per purchased order item",
+    "partitioningHints": [
+      "purchased_at"
+    ],
+    "columnDependencyHints": [
+      "gross_amount depends on quantity and sku"
+    ]
+  },
+  "usageLineageView": {
+    "upstreamArtifactRefs": [
+      "dataset://sales/raw/orders"
+    ],
+    "downstreamArtifactRefs": [
+      "dataset://analytics/order_margin_features"
+    ],
+    "joinNeighborhoods": [
+      "customer_master",
+      "product_dimension"
+    ],
+    "accessFrequencyBucket": "high",
+    "policyAttachmentHints": [
+      "commerce",
+      "customer-data"
+    ]
+  },
+  "omissions": []
+}
