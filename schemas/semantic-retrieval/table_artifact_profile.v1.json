@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sourceos.local/schemas/semantic-retrieval/v1/table_artifact_profile.v1.json",
+  "title": "TableArtifactProfile",
+  "type": "object",
+  "required": [
+    "profileId",
+    "artifactRef",
+    "artifactKind",
+    "profileVersion",
+    "extractedAt",
+    "lexicalView",
+    "valueProfileView",
+    "structuralView",
+    "usageLineageView",
+    "omissions"
+  ],
+  "properties": {
+    "profileId": { "type": "string", "minLength": 1 },
+    "artifactRef": { "type": "string", "minLength": 1 },
+    "artifactKind": {
+      "type": "string",
+      "enum": ["table", "view", "materialized_view", "csv", "parquet", "iceberg", "delta"]
+    },
+    "profileVersion": { "type": "string", "minLength": 1 },
+    "extractedAt": { "type": "string", "format": "date-time" },
+    "extractorRef": { "type": ["string", "null"] },
+    "policyRef": { "type": ["string", "null"] },
+    "lexicalView": {
+      "type": "object",
+      "required": ["artifactName", "columnNames", "normalizedTokens"],
+      "properties": {
+        "artifactName": { "type": "string", "minLength": 1 },
+        "columnNames": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "normalizedTokens": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "description": { "type": ["string", "null"] },
+        "aliases": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "valueProfileView": {
+      "type": "object",
+      "required": ["columns"],
+      "properties": {
+        "rowCount": { "type": ["integer", "null"], "minimum": 0 },
+        "columns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "primitiveType", "nullRatio", "uniquenessRatio"],
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "primitiveType": {
+                "type": "string",
+                "enum": ["string", "integer", "number", "boolean", "date", "timestamp", "binary", "json", "unknown"]
+              },
+              "unit": { "type": ["string", "null"] },
+              "semanticTypeHint": { "type": ["string", "null"] },
+              "nullRatio": { "type": "number", "minimum": 0, "maximum": 1 },
+              "uniquenessRatio": { "type": "number", "minimum": 0, "maximum": 1 },
+              "cardinalityEstimate": { "type": ["integer", "null"], "minimum": 0 },
+              "patternFamily": { "type": ["string", "null"] },
+              "minValue": { "type": ["string", "number", "integer", "null"] },
+              "maxValue": { "type": ["string", "number", "integer", "null"] },
+              "meanLength": { "type": ["number", "null"], "minimum": 0 },
+              "temporalGranularity": { "type": ["string", "null"] },
+              "sketchRef": { "type": ["string", "null"] },
+              "redactionApplied": { "type": "boolean", "default": false }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "structuralView": {
+      "type": "object",
+      "required": ["candidateKeys", "candidateForeignKeys", "rowGrainHypothesis"],
+      "properties": {
+        "candidateKeys": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 }
+          }
+        },
+        "candidateForeignKeys": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["columns", "targetArtifactRef", "confidence"],
+            "properties": {
+              "columns": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string", "minLength": 1 }
+              },
+              "targetArtifactRef": { "type": "string", "minLength": 1 },
+              "targetColumns": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+            },
+            "additionalProperties": false
+          }
+        },
+        "rowGrainHypothesis": { "type": ["string", "null"] },
+        "partitioningHints": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "columnDependencyHints": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "usageLineageView": {
+      "type": "object",
+      "required": ["upstreamArtifactRefs", "downstreamArtifactRefs", "joinNeighborhoods"],
+      "properties": {
+        "upstreamArtifactRefs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "downstreamArtifactRefs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "joinNeighborhoods": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "accessFrequencyBucket": {
+          "type": ["string", "null"],
+          "enum": ["rare", "low", "medium", "high", "critical", null]
+        },
+        "policyAttachmentHints": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "omissions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["field", "reason"],
+        "properties": {
+          "field": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
