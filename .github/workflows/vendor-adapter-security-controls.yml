@@ -1,0 +1,31 @@
+name: Vendor Adapter Security Controls
+
+on:
+  pull_request:
+    paths:
+      - 'docs/standards/control-plane/vendor-adapter-security/**'
+      - 'tools/validate_vendor_adapter_security_controls.py'
+      - '.github/workflows/vendor-adapter-security-controls.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/standards/control-plane/vendor-adapter-security/**'
+      - 'tools/validate_vendor_adapter_security_controls.py'
+      - '.github/workflows/vendor-adapter-security-controls.yml'
+
+jobs:
+  validate:
+    name: Validate vendor adapter security controls
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Install validator dependency
+        run: python3 -m pip install pyyaml
+      - name: Validate vendor adapter security controls
+        run: python3 tools/validate_vendor_adapter_security_controls.py
