@@ -98,17 +98,24 @@ If AG-UI events initiate an agent action, the execution path **MUST** still pass
 
 Protocol adapters **MAY** record protocol-local aliases in evidence artifacts, but aliases **MUST** remain subordinate to canonical identity bindings.
 
-Recommended alias classes:
+The normative alias object for this standard is `schemas/identity/protocol_identity_aliases.schema.json`.
+
+Recommended first-class alias fields are:
 
 - `a2a_agent_card_ref`,
+- `a2a_task_ref`,
 - `mcp_server_ref`,
 - `mcp_tool_ref`,
+- `mcp_resource_ref`,
 - `anp_agent_ref`,
 - `anp_service_ref`,
 - `agui_session_ref`,
-- `agui_component_ref`.
+- `agui_component_ref`,
+- `agui_event_ref`.
 
-Adapters **SHOULD** include alias references in runtime evidence artifacts when they materially affect routing, discovery, authorization, or user intent.
+Adapters **SHOULD** include protocol identity aliases in runtime evidence artifacts when they materially affect routing, discovery, authorization, or user intent.
+
+Adapters **MUST NOT** treat the presence of a protocol alias as proof of authorization.
 
 ## 6. Evidence binding requirements
 
@@ -120,7 +127,8 @@ When an agent action crosses a trust boundary, protocol adapters **MUST** produc
 4. Which policy authorized or denied the action?
 5. Which semantic/export evidence influenced the decision, if applicable?
 6. Which transport or UI protocol carried the request?
-7. Which replay/evidence artifact records the outcome?
+7. Which protocol-local aliases were involved?
+8. Which replay/evidence artifact records the outcome?
 
 ## 7. Non-goals
 
@@ -134,7 +142,7 @@ This standard does not prevent protocol-native identifiers from being used. It o
 
 A protocol adapter conforms to this standard when it provides:
 
-- a protocol-local identity alias map,
+- a protocol-local identity alias map conforming to `ProtocolIdentityAliases`,
 - a canonical principal binding procedure,
 - a grant/policy decision binding procedure,
 - evidence references for semantic/export proof inputs when applicable,

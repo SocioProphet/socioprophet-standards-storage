@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.dev/schema/identity/protocol_identity_aliases.schema.json",
+  "title": "ProtocolIdentityAliases",
+  "description": "Protocol-local identifiers that may be preserved as aliases or evidence references but must not replace canonical SourceOS identity bindings.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "a2a_agent_card_ref": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "description": "Reference to an A2A agent card, descriptor, or equivalent discovery record."
+    },
+    "a2a_task_ref": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "description": "Reference to an A2A task, artifact, or task-scoped interaction."
+    },
+    "mcp_server_ref": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "description": "Reference to an MCP server identity or descriptor."
+    },
+    "mcp_tool_ref": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "description": "Reference to an MCP tool, tool call, or resource invocation."
+    },
+    "mcp_resource_ref": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "description": "Reference to an MCP resource exposed or consumed during the interaction."
+    },
+    "anp_agent_ref": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "description": "Reference to an ANP-style agent, DID, linked-data identifier, or agent network profile."
+    },
+    "anp_service_ref": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "description": "Reference to an ANP-style service, endpoint, meta-protocol descriptor, or linked-data service claim."
+    },
+    "agui_session_ref": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "description": "Reference to an AG-UI session, UI interaction session, or human-agent interaction context."
+    },
+    "agui_component_ref": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "description": "Reference to an AG-UI component, surface, event source, or UI control path."
+    },
+    "agui_event_ref": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "description": "Reference to a UI event or intent event that contributed evidence but did not authorize execution by itself."
+    },
+    "aliases": {
+      "type": "array",
+      "description": "Additional protocol-local aliases that do not yet have first-class fields. Each alias must state its protocol and reference value.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["protocol", "ref"],
+        "properties": {
+          "protocol": {
+            "type": "string",
+            "enum": ["A2A", "MCP", "ANP", "AG_UI", "OTHER"]
+          },
+          "kind": {
+            "type": ["string", "null"],
+            "minLength": 1
+          },
+          "ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "hash": {
+            "type": ["string", "null"],
+            "pattern": "^sha256:[a-f0-9]{64}$"
+          }
+        }
+      },
+      "default": []
+    }
+  }
+}
