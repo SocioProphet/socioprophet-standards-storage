@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sourceos.local/schemas/semantic-retrieval/v1/family_profile.v1.json",
+  "title": "FamilyProfile",
+  "type": "object",
+  "required": [
+    "familyId",
+    "familyName",
+    "familyVersion",
+    "slots",
+    "keyExpectations",
+    "grainExpectation",
+    "qualityRules"
+  ],
+  "properties": {
+    "familyId": { "type": "string", "minLength": 1 },
+    "familyName": { "type": "string", "minLength": 1 },
+    "familyVersion": { "type": "string", "minLength": 1 },
+    "description": { "type": ["string", "null"] },
+    "slots": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["slotName", "required", "acceptedPrimitiveTypes", "aliases"],
+        "properties": {
+          "slotName": { "type": "string", "minLength": 1 },
+          "required": { "type": "boolean" },
+          "acceptedPrimitiveTypes": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "enum": ["string", "integer", "number", "boolean", "date", "timestamp", "binary", "json", "unknown"]
+            }
+          },
+          "semanticType": { "type": ["string", "null"] },
+          "unit": { "type": ["string", "null"] },
+          "aliases": { "type": "array", "items": { "type": "string" } },
+          "expectedNullRatioMax": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+          "expectedUniquenessRatioMin": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+          "patternFamily": { "type": ["string", "null"] },
+          "notes": { "type": ["string", "null"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "keyExpectations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["columns", "kind"],
+        "properties": {
+          "columns": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" }
+          },
+          "kind": { "type": "string", "enum": ["primary", "candidate", "foreign", "composite"] },
+          "required": { "type": "boolean", "default": false }
+        },
+        "additionalProperties": false
+      }
+    },
+    "grainExpectation": { "type": ["string", "null"] },
+    "unitDomainExpectations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "commonJoinNeighborhoods": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "qualityRules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["ruleId", "description"],
+        "properties": {
+          "ruleId": { "type": "string", "minLength": 1 },
+          "description": { "type": "string", "minLength": 1 },
+          "severity": { "type": "string", "enum": ["info", "warning", "error", "critical"], "default": "warning" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
