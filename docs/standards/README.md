@@ -10,6 +10,7 @@ This directory contains normative standards for the SocioProphet platform. Requi
 - `020-data-formats.md` — contract formats (Avro, Arrow/Parquet, JSON-LD).
 - `030-service-interfaces-tritrpc.md` — RPC and eventing interface expectations.
 - `040-observability-otel.md` — OpenTelemetry observability requirements.
+- `041-runtime-control-plane-telemetry.md` — bootstrap, runtime policy, connector routing, client memory, telemetry, recovery, and redaction requirements.
 - `050-security-oidc-policy.md` — identity, authorization, and policy (OIDC/mTLS baseline).
 - `060-storage-decision-guidance.md` — when to add optional storage tiers.
 - `070-graph-rdf-hypergraph.md` — RDF, property graph, and hypergraph (AtomSpace) standards.
