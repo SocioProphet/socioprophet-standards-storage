@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sourceos.local/schemas/semantic-retrieval/v1/mapping_decision.v1.json",
+  "title": "MappingDecision",
+  "type": "object",
+  "required": [
+    "decisionId",
+    "sourceArtifactRef",
+    "targetRef",
+    "targetKind",
+    "decisionState",
+    "confidenceScore",
+    "fieldMappings",
+    "reasonCodes",
+    "verifierVersion",
+    "profileExtractionVersion",
+    "decidedAt"
+  ],
+  "properties": {
+    "decisionId": { "type": "string", "minLength": 1 },
+    "sourceArtifactRef": { "type": "string", "minLength": 1 },
+    "targetRef": { "type": "string", "minLength": 1 },
+    "targetKind": { "type": "string", "enum": ["family", "artifact"] },
+    "decisionState": { "type": "string", "enum": ["proposed", "accepted", "rejected", "superseded"] },
+    "confidenceScore": { "type": "number", "minimum": 0, "maximum": 1 },
+    "fieldMappings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["sourceField", "targetSlot", "confidence"],
+        "properties": {
+          "sourceField": { "type": "string", "minLength": 1 },
+          "targetSlot": { "type": "string", "minLength": 1 },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+          "reasonCodes": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "reasonCodes": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "negativeReasonCodes": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "hardIncompatibilities": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "verifierVersion": { "type": "string", "minLength": 1 },
+    "profileExtractionVersion": { "type": "string", "minLength": 1 },
+    "reviewerRef": { "type": ["string", "null"] },
+    "automationRef": { "type": ["string", "null"] },
+    "decidedAt": { "type": "string", "format": "date-time" },
+    "supersedesDecisionRef": { "type": ["string", "null"] },
+    "evidenceRefs": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}
