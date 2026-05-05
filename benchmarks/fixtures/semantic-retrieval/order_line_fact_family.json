@@ -1,0 +1,118 @@
+{
+  "familyId": "family://commerce/order_line_fact",
+  "familyName": "order_line_fact",
+  "familyVersion": "1.0.0",
+  "description": "Line-grain commerce order fact table.",
+  "slots": [
+    {
+      "slotName": "order_id",
+      "required": true,
+      "acceptedPrimitiveTypes": ["string", "integer"],
+      "semanticType": "order identifier",
+      "unit": null,
+      "aliases": ["order id", "order number", "purchase id"],
+      "expectedNullRatioMax": 0.0,
+      "expectedUniquenessRatioMin": 0.05,
+      "patternFamily": "id"
+    },
+    {
+      "slotName": "customer_id",
+      "required": true,
+      "acceptedPrimitiveTypes": ["string", "integer"],
+      "semanticType": "customer identifier",
+      "unit": null,
+      "aliases": ["customer id", "buyer id", "cid"],
+      "expectedNullRatioMax": 0.0,
+      "expectedUniquenessRatioMin": 0.01,
+      "patternFamily": "id"
+    },
+    {
+      "slotName": "product_id",
+      "required": true,
+      "acceptedPrimitiveTypes": ["string", "integer"],
+      "semanticType": "product identifier",
+      "unit": null,
+      "aliases": ["sku", "item no", "product code"],
+      "expectedNullRatioMax": 0.0,
+      "expectedUniquenessRatioMin": 0.001,
+      "patternFamily": "code"
+    },
+    {
+      "slotName": "quantity",
+      "required": true,
+      "acceptedPrimitiveTypes": ["integer", "number"],
+      "semanticType": "item quantity",
+      "unit": "count",
+      "aliases": ["qty", "units"],
+      "expectedNullRatioMax": 0.0,
+      "expectedUniquenessRatioMin": null,
+      "patternFamily": "integer"
+    },
+    {
+      "slotName": "gross_amount",
+      "required": true,
+      "acceptedPrimitiveTypes": ["number", "integer"],
+      "semanticType": "gross monetary amount",
+      "unit": "money",
+      "aliases": ["gross local", "amount", "line amount"],
+      "expectedNullRatioMax": 0.0,
+      "expectedUniquenessRatioMin": null,
+      "patternFamily": "decimal"
+    },
+    {
+      "slotName": "currency_code",
+      "required": false,
+      "acceptedPrimitiveTypes": ["string"],
+      "semanticType": "currency code",
+      "unit": null,
+      "aliases": ["ccy", "currency"],
+      "expectedNullRatioMax": 0.05,
+      "expectedUniquenessRatioMin": null,
+      "patternFamily": "iso_currency"
+    },
+    {
+      "slotName": "transaction_timestamp",
+      "required": false,
+      "acceptedPrimitiveTypes": ["timestamp", "date", "string"],
+      "semanticType": "transaction timestamp",
+      "unit": null,
+      "aliases": ["purchased at", "transaction time", "txn ts"],
+      "expectedNullRatioMax": 0.05,
+      "expectedUniquenessRatioMin": null,
+      "patternFamily": "timestamp"
+    }
+  ],
+  "keyExpectations": [
+    {
+      "columns": ["order_id", "product_id"],
+      "kind": "composite",
+      "required": true
+    },
+    {
+      "columns": ["customer_id"],
+      "kind": "foreign",
+      "required": true
+    }
+  ],
+  "grainExpectation": "one row per purchased order item",
+  "unitDomainExpectations": [
+    "gross_amount uses monetary unit",
+    "quantity uses count"
+  ],
+  "commonJoinNeighborhoods": [
+    "customer_master",
+    "product_dimension"
+  ],
+  "qualityRules": [
+    {
+      "ruleId": "order_line.quantity.positive",
+      "description": "Quantity should be greater than zero.",
+      "severity": "error"
+    },
+    {
+      "ruleId": "order_line.currency.iso4217",
+      "description": "Currency code should conform to ISO 4217 when present.",
+      "severity": "warning"
+    }
+  ]
+}
