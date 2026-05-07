@@ -1,0 +1,16 @@
+{
+  "type": "record",
+  "name": "MatrixRoomPivot",
+  "namespace": "org.socioprophet.controlplane",
+  "fields": [
+    { "name": "schema_version", "type": "string", "default": "0.1.0" },
+    { "name": "event_id", "type": "string" },
+    { "name": "occurred_at", "type": "string" },
+    { "name": "source_room_id", "type": "string" },
+    { "name": "target_room_id", "type": "string" },
+    { "name": "pivot_reason", "type": "string" },
+    { "name": "case_ref", "type": ["null", "string"], "default": null },
+    { "name": "task_ref", "type": ["null", "string"], "default": null },
+    { "name": "decision_ref", "type": ["null", "string"], "default": null }
+  ]
+}
