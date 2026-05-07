@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.dev/schema/conversational/contact_profile.schema.json",
+  "title": "ContactProfile",
+  "description": "Canonical local contact profile. External handles remain attached claims, not identity authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "contact_uuid",
+    "external_handles",
+    "merge_status",
+    "human_handoff_state"
+  ],
+  "properties": {
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "contact_uuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "external_handles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["channel", "handle", "verified", "confidence"],
+        "properties": {
+          "channel": {
+            "type": "string",
+            "enum": ["matrix", "sms", "rcs", "telegram", "signal", "messenger", "instagram", "imessage", "slack", "voice"]
+          },
+          "handle": {
+            "type": "string",
+            "minLength": 1
+          },
+          "verified": {
+            "type": "boolean"
+          },
+          "first_seen_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_seen_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0
+          },
+          "trust_tier": {
+            "type": "string",
+            "enum": ["T0", "T1", "T2", "T3", "T4"]
+          },
+          "fragility_tier": {
+            "type": "string",
+            "enum": ["F0", "F1", "F2", "F3"]
+          }
+        }
+      }
+    },
+    "phone_numbers": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "default": []
+    },
+    "matrix_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "default": []
+    },
+    "consent_state": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "preferred_reply_channel": {
+      "type": "string",
+      "minLength": 1
+    },
+    "routing_policy": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "merge_status": {
+      "type": "string",
+      "enum": ["single", "candidate_merge", "merged", "split_required"]
+    },
+    "human_handoff_state": {
+      "type": "string",
+      "enum": ["none", "queued", "active", "closed"]
+    }
+  }
+}
