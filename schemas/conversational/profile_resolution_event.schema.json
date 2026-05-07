@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.dev/schema/conversational/profile_resolution_event.schema.json",
+  "title": "ProfileResolutionEvent",
+  "description": "Canonical event for profile merge, split, and unlink operations.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "event_uuid",
+    "event_type",
+    "from_profile_refs",
+    "to_profile_refs",
+    "confidence_class",
+    "issued_at"
+  ],
+  "properties": {
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "event_uuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": ["link", "merge", "split", "unlink", "contest"]
+    },
+    "from_profile_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "default": []
+    },
+    "to_profile_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "default": []
+    },
+    "affected_handles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["channel", "handle"],
+        "properties": {
+          "channel": {
+            "type": "string",
+            "enum": ["matrix", "sms", "rcs", "telegram", "signal", "messenger", "instagram", "imessage", "slack", "voice"]
+          },
+          "handle": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "default": []
+    },
+    "confidence_class": {
+      "type": "string",
+      "enum": ["C0", "C1", "C2", "C3", "C4"]
+    },
+    "reason_codes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "default": []
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "issuer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["service", "human", "pipeline"]
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}
