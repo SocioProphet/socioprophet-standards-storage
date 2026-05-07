@@ -1,0 +1,16 @@
+{
+  "type": "record",
+  "name": "ModerationDecision",
+  "namespace": "org.socioprophet.controlplane",
+  "fields": [
+    { "name": "schema_version", "type": "string", "default": "0.1.0" },
+    { "name": "event_id", "type": "string" },
+    { "name": "occurred_at", "type": "string" },
+    { "name": "room_id", "type": "string" },
+    { "name": "decision_type", "type": "string" },
+    { "name": "decision_ref", "type": "string" },
+    { "name": "actor", "type": ["null", "string"], "default": null },
+    { "name": "reason", "type": ["null", "string"], "default": null },
+    { "name": "publication_state", "type": ["null", "string"], "default": null }
+  ]
+}
