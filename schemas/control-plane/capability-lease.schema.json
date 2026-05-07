@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.dev/schemas/control-plane/capability-lease.schema.json",
+  "title": "CapabilityLease",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "lease_id",
+    "issuer",
+    "subject",
+    "audience",
+    "scope",
+    "purpose_of_use",
+    "issued_at",
+    "not_before",
+    "expires_at",
+    "decision_ref"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "0.1.0" },
+    "lease_id": { "type": "string", "minLength": 1 },
+    "issuer": { "type": "string", "minLength": 1 },
+    "subject": { "type": "string", "minLength": 1 },
+    "actor": { "type": ["string", "null"] },
+    "audience": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "scope": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "purpose_of_use": { "type": "string", "minLength": 1 },
+    "task_ref": { "type": ["string", "null"] },
+    "case_ref": { "type": ["string", "null"] },
+    "approval_ref": { "type": ["string", "null"] },
+    "decision_ref": { "type": "string", "minLength": 1 },
+    "classification": {
+      "type": "string",
+      "enum": ["public", "internal", "confidential", "restricted"]
+    },
+    "issued_at": { "type": "string", "format": "date-time" },
+    "not_before": { "type": "string", "format": "date-time" },
+    "expires_at": { "type": "string", "format": "date-time" },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}
