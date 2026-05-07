@@ -22,6 +22,11 @@ This directory contains normative standards for the SocioProphet platform. Requi
 - `093-forensic-audit-nist-800-88.md` — forensic-ready audit trail requirements (NIST SP 800-88/800-92).
 - `094-data-layer-fips-compliance.md` — FIPS compliance for 6 data stores (PostgreSQL, MongoDB, Elasticsearch, Redis, MinIO, RocksDB).
 - `095-orchestration-fips-compliance.md` — FIPS compliance for Kubernetes federation, Vault, and service mesh.
+- `096-conversational-mesh-canonical-plane.md` — canonical sovereign conversation plane, trust tiers, fragility tiers, and internal/external room separation.
+- `097-channel-ranking-and-routing.md` — default channel ranking, reply routing, and escalation posture for the conversational mesh.
+- `098-profile-resolution-and-channel-upgrade.md` — canonical profile resolution, merge/split policy, and channel-upgrade rules.
+- `099-telephony-ingress-and-handoff.md` — telephony ingress, call-state handling, and human handoff policy.
+- `120-lawful-learning-calibration.md` — calibrated lawful learning conformance draft.
 
 ## Authoring guidance
 When adding a new standard:
