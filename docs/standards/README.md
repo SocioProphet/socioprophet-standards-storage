@@ -15,6 +15,7 @@ This directory contains normative standards for the SocioProphet platform. Requi
 - `060-storage-decision-guidance.md` — when to add optional storage tiers.
 - `070-graph-rdf-hypergraph.md` — RDF, property graph, and hypergraph (AtomSpace) standards.
 - `080-knowledge-context.md` — knowledge context pointer to sibling standards repo.
+- `143-operation-plane-artifact-storage-sync-and-redaction-v0-1.md` — Operation Plane artifact storage, local-first sync states, and diagnostic redaction requirements.
 
 ## FIPS / NIST Compliance Standards
 - `090-fips-nist-compliance.md` — FIPS 140-2/140-3 cryptographic requirements and approved algorithms.
