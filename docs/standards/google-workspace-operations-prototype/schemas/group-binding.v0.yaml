@@ -1,0 +1,120 @@
+version: "v0"
+standard: google-workspace-operations-prototype
+decision_record: EDR-GWOP-2026-06-05-001
+owning_issue: 92
+
+purpose: "Prototype mapping from Google Workspace groups to SocioProphet role, authority, and resource boundaries."
+
+required_fields:
+  - group_id
+  - display_email
+  - purpose
+  - authority_level
+  - mapped_roles
+  - allowed_resources
+  - owner
+  - review_cadence
+
+identifier_policy:
+  durable_identifier: group_id
+  mutable_label: display_email
+  rule: "Never use group email as the sole durable key."
+
+authority_levels:
+  - observer
+  - contributor
+  - reviewer
+  - approver
+  - steward
+  - admin
+
+canonical_groups:
+  - key: sp-exec-council
+    purpose: executive_sponsorship
+    authority_level: steward
+    mapped_roles:
+      - ExecutiveSponsor
+      - EscalationAuthority
+
+  - key: sp-launch-council
+    purpose: cross_function_launch_governance
+    authority_level: approver
+    mapped_roles:
+      - LaunchCouncilMember
+      - MarketplaceReadinessReviewer
+
+  - key: sp-product
+    purpose: packaging_plan_catalog_and_product_decisions
+    authority_level: reviewer
+    mapped_roles:
+      - ProductOwner
+      - PlanCatalogOwner
+
+  - key: sp-engineering
+    purpose: spine_adapters_conformance_runtime
+    authority_level: contributor
+    mapped_roles:
+      - EngineeringOwner
+      - AdapterImplementer
+      - ConformanceOwner
+
+  - key: sp-partner-gtm
+    purpose: cloud_partner_marketplace_cosell_motion
+    authority_level: contributor
+    mapped_roles:
+      - PartnerOwner
+      - ListingOwner
+      - GTMOwner
+
+  - key: sp-legal-finance
+    purpose: terms_privacy_contracts_billing_posture
+    authority_level: reviewer
+    mapped_roles:
+      - CommercialControlOwner
+      - LegalReviewer
+      - FinanceReviewer
+
+  - key: sp-support-ops
+    purpose: support_escalation_incident_handling
+    authority_level: contributor
+    mapped_roles:
+      - OperationsOwner
+      - SupportOwner
+      - IncidentCoordinator
+
+  - key: sp-agent-operators
+    purpose: automation_supervision_and_agent_operation
+    authority_level: contributor
+    mapped_roles:
+      - AgentOperator
+      - AutomationReviewer
+
+  - key: sp-auditors
+    purpose: read_only_governance_visibility
+    authority_level: observer
+    mapped_roles:
+      - Auditor
+      - EvidenceReviewer
+
+resource_binding_example:
+  group_key: sp-launch-council
+  group_id: TODO_GOOGLE_GROUP_ID
+  display_email: sp-launch-council@example.com
+  purpose: launch_governance
+  authority_level: approver
+  mapped_roles:
+    - LaunchCouncilMember
+    - MarketplaceReadinessReviewer
+  allowed_resources:
+    - calendar:SP - Launch Council
+    - calendar:SP - Cloud Vendor Strategy
+    - drive_folder:/Prophet Operations/03-Cloud-Vendor-Strategy
+    - dashboard:cloud_vendor_strategy
+  owner: sp-exec-council
+  review_cadence: monthly
+
+rules:
+  - "Groups are role/access projections, not identity truth."
+  - "Membership drift must be reconciled against the Groups ledger."
+  - "Auditor groups default to read-only access."
+  - "Bridge/system accounts must be isolated from admin groups unless explicitly approved."
