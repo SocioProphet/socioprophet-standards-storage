@@ -1,0 +1,80 @@
+version: "v0"
+standard: google-workspace-operations-prototype
+decision_record: EDR-GWOP-2026-06-05-001
+owning_issue: 92
+
+purpose: "Structured metadata block embedded in Google Calendar event descriptions until SocioProphet has native cadence objects."
+
+block_header: "socioprophet:"
+format: yaml
+
+required_fields:
+  - workstream
+  - meeting_type
+  - canonical_issue
+  - dashboard_key
+  - expected_outputs
+
+optional_fields:
+  - decision_record
+  - source_artifacts
+  - required_artifacts
+  - owner_group
+  - attendee_groups
+  - control_room_ref
+  - drive_folder_ref
+  - sheet_ref
+  - migration_target
+  - automation_profile
+
+meeting_types:
+  - launch_council
+  - adapter_review
+  - readiness_gate_review
+  - governance_review
+  - incident_review
+  - risk_review
+  - partner_gtm_review
+  - product_architecture_review
+  - request_review
+  - retrospective
+
+expected_outputs_enum:
+  - decisions
+  - action_items
+  - risks
+  - blockers
+  - requests
+  - responses
+  - readiness_gate_updates
+  - artifacts_changed
+  - recommendations
+  - no_output_expected
+
+example: |
+  socioprophet:
+    workstream: cloud-vendor-strategy
+    meeting_type: launch_council
+    canonical_issue: SocioProphet/socioprophet-standards-storage#91
+    decision_record: EDR-CVSP-2026-06-05-002
+    dashboard_key: cloud_vendor_strategy
+    owner_group: sp-launch-council
+    attendee_groups:
+      - sp-product
+      - sp-engineering
+      - sp-partner-gtm
+    required_artifacts:
+      - docs/standards/cloud-vendor-strategy/canonical/planspec.v1.yaml
+      - docs/standards/cloud-vendor-strategy/schemas/marketplace.event.v1.schema.json
+    expected_outputs:
+      - decisions
+      - action_items
+      - readiness_gate_updates
+    migration_target: GovernanceSession
+
+rules:
+  - "Calendar prose may summarize context, but structured metadata is authoritative for automation."
+  - "Automation must fail closed when required fields are missing."
+  - "Calendar event IDs must be recorded in the Meetings ledger."
+  - "Recurring events must be expanded into occurrence-level meeting rows."
+  - "Event descriptions must not carry secrets, API keys, or sensitive personal identifiers."
