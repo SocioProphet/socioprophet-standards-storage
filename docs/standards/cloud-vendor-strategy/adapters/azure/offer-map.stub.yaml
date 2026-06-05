@@ -1,0 +1,58 @@
+version: "v1"
+vendor: azure
+standard: cloud-vendor-strategy
+decision_record: EDR-CVSP-2026-06-05-002
+
+role: enterprise_workflow_rail
+positioning: Governed agents for Microsoft enterprise estates across Entra, Microsoft 365, Teams, GitHub, Foundry, and Azure.
+
+required_surfaces:
+  - microsoft_commercial_marketplace_saas_offer
+  - fulfillment_api_client
+  - subscription_webhook
+  - marketplace_landing_page
+  - entra_app_registration
+  - entra_tenant_binding
+  - private_plan_policy
+  - conformance_fixtures
+
+plan_mappings:
+  - vendor_offer_id: TODO_AZURE_OFFER_ID
+    vendor_plan_id: TODO_AZURE_STARTER_PLAN_ID
+    canonical_plan_id: starter
+    allowed_addons: []
+  - vendor_offer_id: TODO_AZURE_OFFER_ID
+    vendor_plan_id: TODO_AZURE_TEAM_PLAN_ID
+    canonical_plan_id: team
+    allowed_addons:
+      - addon.integrations
+  - vendor_offer_id: TODO_AZURE_OFFER_ID
+    vendor_plan_id: TODO_AZURE_SCALE_PLAN_ID
+    canonical_plan_id: scale
+    private_plan_preferred: true
+    allowed_addons:
+      - addon.governance
+      - addon.security
+      - addon.integrations
+      - addon.premium_support
+  - vendor_offer_id: TODO_AZURE_OFFER_ID
+    vendor_plan_id: TODO_AZURE_ENTERPRISE_PLAN_ID
+    canonical_plan_id: enterprise
+    private_plan_required: true
+    allowed_addons:
+      - addon.governance
+      - addon.security
+      - addon.integrations
+      - addon.premium_support
+
+normalization:
+  dedupe_key_pattern: "azure:{subscription_id}:{event_type}:{occurred_at}"
+  required_security_checks:
+    - signature_verified
+    - replay_protected
+  unknown_state_policy: deny_production_access
+
+runtime_bindings:
+  - microsoft-foundry
+  - microsoft-foundry-agent-service
+  - github-enterprise-workflows
