@@ -1,0 +1,90 @@
+version: "v1"
+standard: "cloud-vendor-strategy"
+decision_record: "EDR-CVSP-2026-06-05-002"
+
+capabilities:
+  - id: cap.core.ingest
+    name: Core ingest
+    category: core
+    description: Ingest approved source material into a governed workspace.
+
+  - id: cap.core.search
+    name: Core search
+    category: core
+    description: Search indexed workspace material with entitlement-aware access controls.
+
+  - id: cap.core.export
+    name: Core export
+    category: core
+    description: Export approved artifacts and reports from governed workspaces.
+
+  - id: cap.core.agent_basic
+    name: Basic agent execution
+    category: agents
+    description: Run governed basic agent workflows within plan quotas.
+
+  - id: cap.integrations.standard
+    name: Standard integrations
+    category: integrations
+    description: Use standard connectors and approved integration endpoints.
+
+  - id: cap.integrations.premium
+    name: Premium integrations
+    category: integrations
+    description: Use enterprise connectors, advanced sync, and premium integration support.
+
+  - id: cap.security.sso_saml
+    name: SAML SSO
+    category: security
+    description: Enable SAML single sign-on for enterprise identity providers.
+
+  - id: cap.security.scim
+    name: SCIM provisioning
+    category: security
+    description: Enable automated user and group provisioning.
+
+  - id: cap.security.customer_managed_keys
+    name: Customer-managed keys
+    category: security
+    description: Enable customer-managed encryption-key controls where supported.
+
+  - id: cap.governance.audit_advanced
+    name: Advanced audit
+    category: governance
+    description: Enable detailed audit event retention, export, and review workflows.
+
+  - id: cap.governance.policy_engine
+    name: Governance policy engine
+    category: governance
+    description: Enable organization-defined policy checks for agents, data, and workflows.
+
+  - id: cap.runtime.cloud_dedicated
+    name: Dedicated cloud runtime
+    category: runtime
+    description: Enable dedicated cloud runtime bindings for regulated or isolated workloads.
+
+  - id: cap.support.premium
+    name: Premium support
+    category: support
+    description: Enable premium response, escalation, and launch-support terms.
+
+  - id: cap.enterprise.private_runtime
+    name: Private enterprise runtime
+    category: enterprise
+    description: Enable private runtime topology for strategic enterprise deployments.
+
+  - id: cap.enterprise.custom_model_routing
+    name: Custom model routing
+    category: enterprise
+    description: Enable customer-specific model-routing policy across approved providers.
+
+  - id: cap.enterprise.custom_data_residency
+    name: Custom data residency
+    category: enterprise
+    description: Enable customer-specific data boundary and residency policy where supported.
+
+registry_rules:
+  - Capability identifiers are stable and must not be reused for different meanings.
+  - Removing a capability requires deprecation notes and migration instructions.
+  - Marketplace plans may reference only capabilities defined in this registry.
+  - Runtime feature gates must bind to capability IDs, not marketplace SKU names.
