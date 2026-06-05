@@ -1,0 +1,105 @@
+version: "v1"
+standard: "cloud-vendor-strategy"
+decision_record: "EDR-CVSP-2026-06-05-002"
+
+plans:
+  - plan_id: starter
+    display_name: "Starter"
+    billing_model: subscription
+    intended_motion: pilot
+    entitlements:
+      seats_max: 5
+      workspaces_max: 1
+      storage_gb_max: 10
+      agent_runs_monthly_max: 500
+    capabilities:
+      allow:
+        - cap.core.ingest
+        - cap.core.search
+        - cap.core.agent_basic
+      deny:
+        - cap.security.sso_saml
+        - cap.governance.policy_engine
+        - cap.enterprise.private_runtime
+
+  - plan_id: team
+    display_name: "Team"
+    billing_model: subscription
+    intended_motion: departmental
+    entitlements:
+      seats_max: 50
+      workspaces_max: 5
+      storage_gb_max: 250
+      agent_runs_monthly_max: 10000
+    capabilities:
+      allow:
+        - cap.core.ingest
+        - cap.core.search
+        - cap.core.export
+        - cap.core.agent_basic
+        - cap.integrations.standard
+      deny:
+        - cap.security.customer_managed_keys
+        - cap.enterprise.private_runtime
+
+  - plan_id: scale
+    display_name: "Scale"
+    billing_model: contract
+    intended_motion: enterprise_private_offer
+    entitlements:
+      seats_max: 500
+      workspaces_max: 25
+      storage_gb_max: 2000
+      agent_runs_monthly_max: 250000
+    capabilities:
+      allow:
+        - cap.integrations.premium
+        - cap.security.sso_saml
+        - cap.security.scim
+        - cap.governance.audit_advanced
+        - cap.governance.policy_engine
+        - cap.runtime.cloud_dedicated
+
+  - plan_id: enterprise
+    display_name: "Enterprise"
+    billing_model: contract
+    intended_motion: strategic_private_offer
+    entitlements:
+      seats_max: null
+      workspaces_max: null
+      storage_gb_max: null
+      agent_runs_monthly_max: null
+    capabilities:
+      allow:
+        - cap.security.customer_managed_keys
+        - cap.governance.policy_engine
+        - cap.governance.audit_advanced
+        - cap.support.premium
+        - cap.enterprise.private_runtime
+        - cap.enterprise.custom_model_routing
+        - cap.enterprise.custom_data_residency
+
+addons:
+  - addon_id: addon.governance
+    display_name: "Governance"
+    capabilities_allow:
+      - cap.governance.policy_engine
+      - cap.governance.audit_advanced
+
+  - addon_id: addon.security
+    display_name: "Security"
+    capabilities_allow:
+      - cap.security.sso_saml
+      - cap.security.scim
+      - cap.security.customer_managed_keys
+
+  - addon_id: addon.integrations
+    display_name: "Integrations"
+    capabilities_allow:
+      - cap.integrations.standard
+      - cap.integrations.premium
+
+  - addon_id: addon.premium_support
+    display_name: "Premium Support"
+    capabilities_allow:
+      - cap.support.premium
