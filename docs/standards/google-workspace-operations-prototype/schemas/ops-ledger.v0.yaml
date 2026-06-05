@@ -1,0 +1,205 @@
+version: "v0"
+standard: google-workspace-operations-prototype
+decision_record: EDR-GWOP-2026-06-05-001
+owning_issue: 92
+
+sheet:
+  name: "SocioProphet Operations Control Plane - Prototype"
+  purpose: "Temporary operational database for prototyping SocioProphet management objects in Google Workspace."
+  invariants:
+    - "Every row must have a stable prototype_id."
+    - "Every row must identify source_system and source_ref where applicable."
+    - "Every row must be migratable into a SocioProphet-native object or explicitly marked prototype_only."
+    - "Dashboards must read from tabs, not from freeform meeting notes."
+
+tabs:
+  Workstreams:
+    object_target: Workstream
+    required_columns:
+      - workstream_id
+      - title
+      - status
+      - owner_group_id
+      - canonical_issue_ref
+      - primary_calendar_id
+      - primary_drive_folder_ref
+      - dashboard_key
+      - created_at
+      - updated_at
+
+  Calendars:
+    object_target: CadenceSurface
+    required_columns:
+      - calendar_id
+      - calendar_name
+      - purpose
+      - owning_group_id
+      - visibility
+      - default_event_metadata_profile
+      - migration_target
+
+  Groups:
+    object_target: RoleBinding
+    required_columns:
+      - group_id
+      - display_email
+      - display_name
+      - purpose
+      - authority_level
+      - mapped_roles
+      - allowed_resources
+      - owner
+      - review_cadence
+
+  Meetings:
+    object_target: GovernanceSession
+    required_columns:
+      - meeting_id
+      - calendar_event_id
+      - calendar_id
+      - workstream_id
+      - meeting_type
+      - scheduled_start
+      - scheduled_end
+      - actual_status
+      - attendee_groups
+      - decisions_count
+      - action_items_count
+      - risks_count
+      - source_note_ref
+      - next_review_date
+
+  Decisions:
+    object_target: DecisionRecord
+    required_columns:
+      - decision_id
+      - workstream_id
+      - source_meeting_id
+      - title
+      - decision_status
+      - decision_text
+      - alternatives_considered
+      - owner_group_id
+      - effective_at
+      - review_at
+      - artifact_refs
+
+  Requests:
+    object_target: Request
+    required_columns:
+      - request_id
+      - request_type
+      - requester_group_id
+      - objective
+      - expected_outcome
+      - compensation_model
+      - schedule_expectations
+      - response_deadline
+      - evaluation_criteria
+      - status
+
+  Responses:
+    object_target: Response
+    required_columns:
+      - response_id
+      - request_id
+      - responder_ref
+      - approach
+      - terms
+      - evidence_refs
+      - questions
+      - availability
+      - proposed_pricing
+      - status
+
+  ActionItems:
+    object_target: ActionItem
+    required_columns:
+      - action_item_id
+      - workstream_id
+      - source_meeting_id
+      - owner_ref
+      - owner_group_id
+      - title
+      - due_date
+      - status
+      - blocker_flag
+      - evidence_refs
+
+  Risks:
+    object_target: Risk
+    required_columns:
+      - risk_id
+      - workstream_id
+      - severity
+      - likelihood
+      - impact
+      - description
+      - mitigation
+      - owner_group_id
+      - escalation_surface
+      - status
+
+  Artifacts:
+    object_target: ArtifactRef
+    required_columns:
+      - artifact_id
+      - title
+      - artifact_type
+      - source_system
+      - source_ref
+      - canonicality
+      - owning_workstream_id
+      - owning_group_id
+      - migration_target
+
+  Automations:
+    object_target: AutomationRun
+    required_columns:
+      - run_id
+      - automation_name
+      - trigger_type
+      - source_object
+      - target_object
+      - started_at
+      - completed_at
+      - status
+      - error
+      - affected_records
+      - replay_ref
+
+  Dashboards:
+    object_target: DashboardPanel
+    required_columns:
+      - dashboard_key
+      - panel_key
+      - title
+      - source_tab
+      - metric_definition
+      - refresh_cadence
+      - owner_group_id
+      - migration_target
+
+  CloudVendorReadiness:
+    object_target: ReadinessGate
+    required_columns:
+      - cloud_vendor
+      - gate_id
+      - gate_group
+      - status
+      - blocking_flag
+      - evidence_ref
+      - owner_group_id
+      - last_reviewed_at
+
+  MigrationReadiness:
+    object_target: MigrationGate
+    required_columns:
+      - prototype_object_type
+      - prototype_surface
+      - native_target_object
+      - schema_stability
+      - automation_stability
+      - dashboard_regeneration_possible
+      - migration_status
+      - notes
