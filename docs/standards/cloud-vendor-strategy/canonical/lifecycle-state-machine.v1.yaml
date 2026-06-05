@@ -1,0 +1,82 @@
+version: "v1"
+standard: "cloud-vendor-strategy"
+decision_record: "EDR-CVSP-2026-06-05-002"
+
+states:
+  - none
+  - purchase_requested
+  - provisioning_pending
+  - active
+  - pending_plan_change
+  - suspended
+  - pending_cancellation
+  - canceled
+  - expired
+  - deleted
+
+initial_state: none
+terminal_states:
+  - canceled
+  - expired
+  - deleted
+
+allowed_transitions:
+  none:
+    - purchase_requested
+  purchase_requested:
+    - provisioning_pending
+    - canceled
+  provisioning_pending:
+    - active
+    - suspended
+    - canceled
+  active:
+    - pending_plan_change
+    - suspended
+    - pending_cancellation
+    - canceled
+    - expired
+  pending_plan_change:
+    - active
+    - suspended
+    - pending_cancellation
+    - canceled
+  suspended:
+    - active
+    - pending_cancellation
+    - canceled
+    - expired
+  pending_cancellation:
+    - active
+    - canceled
+    - expired
+  canceled:
+    - deleted
+  expired:
+    - deleted
+  deleted: []
+
+access_policy:
+  active: full_access_per_entitlement
+  pending_plan_change: full_access_per_current_entitlement_until_change_effective
+  suspended: restricted_access_only
+  provisioning_pending: no_production_access
+  pending_cancellation: full_access_until_cancellation_effective_unless_vendor_policy_overrides
+  canceled: no_access_after_grace_policy
+  expired: no_access
+  deleted: no_access
+  none: no_access
+  purchase_requested: no_production_access
+
+severity_invariants:
+  - id: sev1.paid_not_entitled
+    description: Paid-but-not-entitled is severity 1.
+  - id: sev1.entitled_not_paid
+    description: Entitled-but-not-paid is severity 1 after grace policy expires.
+  - id: sev1.unknown_state_access
+    description: Unknown marketplace state must never grant production access.
+
+normalization_notes:
+  aws: AWS Marketplace events normalize into purchase_requested, provisioning_pending, active, pending_plan_change, pending_cancellation, canceled, or expired.
+  azure: Microsoft commercial marketplace fulfillment and webhook events normalize into purchase_requested, provisioning_pending, active, suspended, pending_cancellation, canceled, or expired.
+  gcp: Google Cloud Marketplace entitlement events normalize into purchase_requested, active, pending_plan_change, pending_cancellation, canceled, or deleted.
