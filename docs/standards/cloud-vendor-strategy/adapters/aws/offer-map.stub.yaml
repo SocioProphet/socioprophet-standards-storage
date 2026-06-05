@@ -1,0 +1,57 @@
+version: "v1"
+vendor: aws
+standard: cloud-vendor-strategy
+decision_record: EDR-CVSP-2026-06-05-002
+
+role: first_activation_rail
+positioning: OpenAI-powered enterprise agents inside AWS security, governance, procurement, and operational workflows.
+
+required_surfaces:
+  - aws_marketplace_saas_product
+  - aws_marketplace_contract_or_subscription
+  - private_offer_policy
+  - procurement_to_tenant_linking
+  - entitlement_reconciler
+  - event_normalizer
+  - conformance_fixtures
+
+plan_mappings:
+  - vendor_offer_id: TODO_AWS_OFFER_ID
+    vendor_plan_id: TODO_AWS_STARTER_PLAN_ID
+    canonical_plan_id: starter
+    allowed_addons: []
+  - vendor_offer_id: TODO_AWS_OFFER_ID
+    vendor_plan_id: TODO_AWS_TEAM_PLAN_ID
+    canonical_plan_id: team
+    allowed_addons:
+      - addon.integrations
+  - vendor_offer_id: TODO_AWS_OFFER_ID
+    vendor_plan_id: TODO_AWS_SCALE_PLAN_ID
+    canonical_plan_id: scale
+    private_offer_preferred: true
+    allowed_addons:
+      - addon.governance
+      - addon.security
+      - addon.integrations
+      - addon.premium_support
+  - vendor_offer_id: TODO_AWS_OFFER_ID
+    vendor_plan_id: TODO_AWS_ENTERPRISE_PLAN_ID
+    canonical_plan_id: enterprise
+    private_offer_required: true
+    allowed_addons:
+      - addon.governance
+      - addon.security
+      - addon.integrations
+      - addon.premium_support
+
+normalization:
+  dedupe_key_pattern: "aws:{event_id}"
+  required_security_checks:
+    - signature_verified
+    - replay_protected
+  unknown_state_policy: deny_production_access
+
+runtime_bindings:
+  - aws-bedrock-openai
+  - aws-codex
+  - aws-bedrock-managed-agents
