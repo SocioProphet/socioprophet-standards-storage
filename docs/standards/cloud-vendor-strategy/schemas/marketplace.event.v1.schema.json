@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://standards.socioprophet.org/cloud-vendor-strategy/marketplace.event.v1.schema.json",
+  "title": "Marketplace Event Envelope v1",
+  "type": "object",
+  "required": ["schema", "event_type", "vendor", "event_id", "occurred_at", "offer", "canonical", "lifecycle", "security", "idempotency"],
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "marketplace.event.v1"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "SUBSCRIPTION_CREATED",
+        "SUBSCRIPTION_UPDATED",
+        "SUBSCRIPTION_CANCELED",
+        "SUBSCRIPTION_EXPIRED",
+        "SUBSCRIPTION_SUSPENDED",
+        "PLAN_CHANGE_REQUESTED",
+        "PLAN_CHANGE_COMPLETED",
+        "PRIVATE_OFFER_ACCEPTED",
+        "ENTITLEMENT_CREATED",
+        "ENTITLEMENT_UPDATED",
+        "ENTITLEMENT_CANCELED",
+        "ENTITLEMENT_DELETED",
+        "USAGE_REPORTED",
+        "RECONCILIATION_DRIFT_DETECTED",
+        "RECONCILIATION_REPAIRED"
+      ]
+    },
+    "vendor": {
+      "type": "string",
+      "enum": ["aws", "azure", "gcp", "ibm", "manual"]
+    },
+    "event_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "received_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "offer": {
+      "type": "object",
+      "required": ["vendor_offer_id", "vendor_plan_id"],
+      "properties": {
+        "vendor_offer_id": {"type": "string"},
+        "vendor_plan_id": {"type": "string"},
+        "vendor_private_offer_id": {"type": ["string", "null"]},
+        "vendor_subscription_id": {"type": ["string", "null"]},
+        "vendor_entitlement_id": {"type": ["string", "null"]},
+        "vendor_account_id": {"type": ["string", "null"]},
+        "vendor_tenant_id": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "canonical": {
+      "type": "object",
+      "required": ["plan_id", "addons"],
+      "properties": {
+        "plan_id": {
+          "type": "string",
+          "enum": ["starter", "team", "scale", "enterprise"]
+        },
+        "addons": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["addon.governance", "addon.security", "addon.integrations", "addon.premium_support"]
+          },
+          "uniqueItems": true
+        },
+        "tenant_id": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "lifecycle": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["none", "purchase_requested", "provisioning_pending", "active", "pending_plan_change", "suspended", "pending_cancellation", "canceled", "expired", "deleted"]
+        },
+        "effective_at": {"type": ["string", "null"], "format": "date-time"},
+        "grace_until": {"type": ["string", "null"], "format": "date-time"}
+      },
+      "additionalProperties": false
+    },
+    "security": {
+      "type": "object",
+      "required": ["signature_verified", "replay_protected"],
+      "properties": {
+        "signature_verified": {"type": "boolean"},
+        "replay_protected": {"type": "boolean"},
+        "source_ip_validated": {"type": ["boolean", "null"]},
+        "auth_context": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "idempotency": {
+      "type": "object",
+      "required": ["dedupe_key"],
+      "properties": {
+        "dedupe_key": {"type": "string", "minLength": 1},
+        "sequence": {"type": ["integer", "null"]}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
