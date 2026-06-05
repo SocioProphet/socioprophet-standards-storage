@@ -1,0 +1,37 @@
+{
+  "schema": "marketplace.event.v1",
+  "event_type": "SUBSCRIPTION_CREATED",
+  "vendor": "aws",
+  "event_id": "fixture-aws-subscription-created-001",
+  "occurred_at": "2026-06-05T00:00:00Z",
+  "received_at": "2026-06-05T00:00:01Z",
+  "offer": {
+    "vendor_offer_id": "TODO_AWS_OFFER_ID",
+    "vendor_plan_id": "TODO_AWS_TEAM_PLAN_ID",
+    "vendor_private_offer_id": null,
+    "vendor_subscription_id": "TODO_AWS_SUBSCRIPTION_ID",
+    "vendor_entitlement_id": null,
+    "vendor_account_id": "TODO_AWS_ACCOUNT_ID",
+    "vendor_tenant_id": null
+  },
+  "canonical": {
+    "plan_id": "team",
+    "addons": ["addon.integrations"],
+    "tenant_id": null
+  },
+  "lifecycle": {
+    "status": "provisioning_pending",
+    "effective_at": "2026-06-05T00:00:00Z",
+    "grace_until": null
+  },
+  "security": {
+    "signature_verified": true,
+    "replay_protected": true,
+    "source_ip_validated": null,
+    "auth_context": "fixture"
+  },
+  "idempotency": {
+    "dedupe_key": "aws:fixture-aws-subscription-created-001",
+    "sequence": null
+  }
+}
