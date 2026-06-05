@@ -1,0 +1,68 @@
+version: "v0"
+standard: google-workspace-operations-prototype
+decision_record: EDR-GWOP-2026-06-05-001
+owning_issue: 92
+
+purpose: "Execution record emitted by Apps Script or other prototype automations."
+
+required_fields:
+  - run_id
+  - automation_name
+  - trigger_type
+  - source_object
+  - target_object
+  - started_at
+  - completed_at
+  - status
+  - affected_records
+
+optional_fields:
+  - error
+  - replay_ref
+  - actor_ref
+  - decision_record_ref
+  - policy_evaluation_ref
+  - dashboard_key
+  - trace_id
+
+statuses:
+  - started
+  - succeeded
+  - failed
+  - skipped
+  - quarantined
+  - replayed
+
+trigger_types:
+  - calendar_event_created
+  - calendar_event_updated
+  - calendar_event_deleted
+  - sheet_row_created
+  - sheet_row_updated
+  - time_driven
+  - manual
+  - github_webhook
+  - drive_file_created
+  - group_membership_changed
+
+example: |
+  run_id: arun_20260605_calendar_sync_001
+  automation_name: syncCalendarEventsToMeetings
+  trigger_type: time_driven
+  source_object: calendar:SP - Cloud Vendor Strategy
+  target_object: sheet:Meetings
+  started_at: 2026-06-05T14:00:00Z
+  completed_at: 2026-06-05T14:00:03Z
+  status: succeeded
+  affected_records: 12
+  error: null
+  replay_ref: drive:/Prophet Operations/04-Agent-Automation-Prototypes/replay/arun_20260605_calendar_sync_001.json
+  dashboard_key: automation_health
+  trace_id: trace_google_workspace_ops_001
+
+rules:
+  - "Every automation run must write a row to the Automations tab."
+  - "Failed runs must include a non-empty error field."
+  - "Quarantined runs must include a replay_ref or policy_evaluation_ref."
+  - "Automation must be replayable when it mutates ledger rows."
+  - "Automation must not silently edit canonical standards files."
