@@ -1,0 +1,60 @@
+version: "v1"
+vendor: gcp
+standard: cloud-vendor-strategy
+decision_record: EDR-CVSP-2026-06-05-002
+
+role: data_knowledge_agent_rail
+positioning: Ontology-grounded agents over governed enterprise data, analytics, and knowledge infrastructure.
+
+required_surfaces:
+  - google_cloud_marketplace_integrated_saas_product
+  - producer_portal_product
+  - partner_procurement_api_client
+  - pubsub_entitlement_handler
+  - usage_reporting_pipeline
+  - billing_account_private_offer_binding
+  - conformance_fixtures
+
+plan_mappings:
+  - vendor_offer_id: TODO_GCP_PRODUCT_ID
+    vendor_plan_id: TODO_GCP_STARTER_PLAN_ID
+    canonical_plan_id: starter
+    allowed_addons: []
+  - vendor_offer_id: TODO_GCP_PRODUCT_ID
+    vendor_plan_id: TODO_GCP_TEAM_PLAN_ID
+    canonical_plan_id: team
+    allowed_addons:
+      - addon.integrations
+  - vendor_offer_id: TODO_GCP_PRODUCT_ID
+    vendor_plan_id: TODO_GCP_SCALE_PLAN_ID
+    canonical_plan_id: scale
+    private_offer_preferred: true
+    allowed_addons:
+      - addon.governance
+      - addon.security
+      - addon.integrations
+      - addon.premium_support
+  - vendor_offer_id: TODO_GCP_PRODUCT_ID
+    vendor_plan_id: TODO_GCP_ENTERPRISE_PLAN_ID
+    canonical_plan_id: enterprise
+    private_offer_required: true
+    allowed_addons:
+      - addon.governance
+      - addon.security
+      - addon.integrations
+      - addon.premium_support
+
+normalization:
+  dedupe_key_pattern: "gcp:{event_id}"
+  required_security_checks:
+    - signature_verified
+    - replay_protected
+  usage_reporting_policy:
+    report_within: PT1H
+    no_new_usage_after_entitlement_end: true
+  unknown_state_policy: deny_production_access
+
+runtime_bindings:
+  - google-cloud-marketplace-ai-agent
+  - google-data-knowledge-runtime
+  - vertex-gemini-runtime
