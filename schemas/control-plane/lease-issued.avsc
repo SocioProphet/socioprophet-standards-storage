@@ -1,0 +1,18 @@
+{
+  "type": "record",
+  "name": "LeaseIssued",
+  "namespace": "org.socioprophet.controlplane",
+  "fields": [
+    { "name": "schema_version", "type": "string", "default": "0.1.0" },
+    { "name": "event_id", "type": "string" },
+    { "name": "occurred_at", "type": "string" },
+    { "name": "lease_id", "type": "string" },
+    { "name": "issuer", "type": "string" },
+    { "name": "subject", "type": "string" },
+    { "name": "decision_ref", "type": "string" },
+    { "name": "approval_ref", "type": ["null", "string"], "default": null },
+    { "name": "task_ref", "type": ["null", "string"], "default": null },
+    { "name": "case_ref", "type": ["null", "string"], "default": null },
+    { "name": "expires_at", "type": "string" }
+  ]
+}
