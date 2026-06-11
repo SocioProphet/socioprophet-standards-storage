@@ -14,22 +14,25 @@ This repository is a **standards and decision** package for an open, vendor-neut
 ## Metadata summary
 | Key | Summary |
 | --- | --- |
-| Repository role | Canonical standards source for storage, contracts, and benchmark methodology in SocioProphet platform workstreams. |
+| Repository role | Canonical standards source for storage, contracts, benchmark methodology, and control-plane standards in SocioProphet platform workstreams. |
 | Primary outputs | Normative standards (`docs/standards`), benchmark guidance (`docs/benchmarks`), workload definitions (`benchmarks/workloads`), and ADRs (`adr`). |
 | Contract formats | Avro (events), Arrow/Parquet (analytics), JSON-LD (semantic/provenance overlays). |
 | Interface standards | TritRPC service interfaces and event bus topic conventions. |
-| Decision posture | Vendor-neutral defaults with workload-driven adoption gates for vector and graph systems. |
+| Decision posture | Vendor-neutral defaults with workload-driven adoption gates for vector, graph, adapter, and gateway systems. |
 | Governance intent | Reproducible measurement, portability, and security-first interoperability across contexts. |
 
-We treat the platform as a set of **contexts** (event stream, incident state, artifacts, search, vectors, graphs, metrics) and we standardize:
+We treat the platform as a set of **contexts** (event stream, incident state, artifacts, search, vectors, graphs, metrics, control-plane gateways) and we standardize:
 - **Data contracts:** Avro for event contracts; Arrow + Parquet for analytic payloads; JSON-LD for semantic/provenance overlays.
 - **Interfaces:** TritRPC (typed RPC) for service calls; event bus topics for asynchronous flows.
 - **Execution:** Beam for batch/stream transforms; Ray for training/serving/task placement.
 - **Storage portfolio:** Postgres as system-of-record; OpenSearch for text; optional vector/graph stores based on measured workload triggers.
+- **Control-plane security:** vendor-adapter and local model gateway controls for tool intent, execution scope, debug surface isolation, and protocol honesty.
 - **Measurement:** a benchmark harness with 30 defined workloads (latency/throughput/cost/recovery).
 
 ## Repository map
 - `docs/standards/` — normative standards (MUST/SHOULD/MAY language)
+- `docs/standards/control-plane/` — control-plane standards packages, including Agentic Control Matrix and vendor-adapter/local-model-gateway security controls
+- `docs/standards/control-plane/vendor-adapter-security/` — security standard, hardening spec, baseline, checklist, schema, verification matrix, and adoption map for vendor adapters and local model gateways
 - `docs/standards/governance/` — governance-oriented standards and operating controls, including the governed CSO partnership execution pack
 - `docs/benchmarks/` — benchmark methodology and reporting format
 - `docs/fips/` — FIPS 140-2/140-3 governance framework (standards authority, activation plan, roadmap)
@@ -43,12 +46,15 @@ We treat the platform as a set of **contexts** (event stream, incident state, ar
 
 ## Governance surfaces
 - `GOVERNANCE.md` — root entry point for governance-oriented standards and operating controls
+- `docs/standards/control-plane/README.md` — control-plane standards index
+- `docs/standards/control-plane/vendor-adapter-security/README.md` — vendor-adapter and local-model-gateway security package entry point
 - `docs/standards/governance/README.md` — governance standards index
 - `docs/standards/governance/cso-partnerships/README.md` — governed CSO partnership execution pack
 
 ## Status
 - Initial scaffold created: 2026-01-08
 - FIPS 140-2/140-3 governance framework added: 2026-Q2 (see `docs/fips/`)
+- Vendor-adapter and local model gateway security package added under `docs/standards/control-plane/vendor-adapter-security/`
 - Next: implement benchmark harness code + populate schema directories with v1 contracts.
 
 ## Graph Layer
@@ -71,6 +77,7 @@ Standards in this repository cross-reference implementations in the following re
 | `093-forensic-audit-nist-800-88.md` | `SocioProphet/sociosphere/observability/audit-pipeline.yaml` |
 | `094-data-layer-fips-compliance.md` | `SocioProphet/postgres`, `SocioProphet/mongo`, `SocioProphet/elasticsearch`, `SocioProphet/redis`, `SocioProphet/minio`, `SocioProphet/rocksdb` |
 | `095-orchestration-fips-compliance.md` | `SocioProphet/sociosphere/k8s/`, `SocioProphet/sociosphere/vault/`, `SocioProphet/sociosphere/mesh/` |
+| `vendor-adapter-security` | `SocioProphet/prophet-platform`, `SocioProphet/agentplane`, `SocioProphet/policy-fabric`, `SocioProphet/sociosphere`, `SourceOS-Linux/sourceos-devtools`, `SourceOS-Linux/sourceos-spec`, `SociOS-Linux/agentos-spine` |
 
 Implementation repositories that consume these standards MUST add a "Complies with Standards" section to their README, linking back to specific standard documents (bidirectional cross-reference requirement).
 
