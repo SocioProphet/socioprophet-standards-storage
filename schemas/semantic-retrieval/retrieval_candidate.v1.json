@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sourceos.local/schemas/semantic-retrieval/v1/retrieval_candidate.v1.json",
+  "title": "RetrievalCandidate",
+  "type": "object",
+  "required": [
+    "candidateId",
+    "queryArtifactRef",
+    "targetRef",
+    "targetKind",
+    "retrievalVersion",
+    "retrievedAt",
+    "scores",
+    "reasonCodes"
+  ],
+  "properties": {
+    "candidateId": { "type": "string", "minLength": 1 },
+    "queryArtifactRef": { "type": "string", "minLength": 1 },
+    "targetRef": { "type": "string", "minLength": 1 },
+    "targetKind": { "type": "string", "enum": ["artifact", "family", "join", "union"] },
+    "retrievalVersion": { "type": "string", "minLength": 1 },
+    "retrievedAt": { "type": "string", "format": "date-time" },
+    "rank": { "type": ["integer", "null"], "minimum": 1 },
+    "scores": {
+      "type": "object",
+      "required": ["overall"],
+      "properties": {
+        "overall": { "type": "number", "minimum": 0, "maximum": 1 },
+        "lexical": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "valueProfile": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "structural": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "usageLineage": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "hammingDistance": { "type": ["integer", "null"], "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "reasonCodes": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "retrievalEvidenceRefs": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}
