@@ -1,1 +1,137 @@
-{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://schemas.socioprophet.org/proofs/snapshot-diff-proof.schema.json","title":"SnapshotDiffProof","allOf":[{"$ref":"proof-common.schema.json"},{"type":"object","additionalProperties":false,"properties":{"proof_type":{"const":"snapshot_diff"},"left_snapshot":{"type":"object","additionalProperties":false,"properties":{"worldview_id":{"$ref":"../semantic/common.schema.json#/$defs/Id"},"root_hash":{"type":"string","pattern":"^sha256:[0-9a-f]{64}$"}},"required":["worldview_id","root_hash"]},"right_snapshot":{"type":"object","additionalProperties":false,"properties":{"worldview_id":{"$ref":"../semantic/common.schema.json#/$defs/Id"},"root_hash":{"type":"string","pattern":"^sha256:[0-9a-f]{64}$"}},"required":["worldview_id","root_hash"]},"changes":{"type":"array","items":{"type":"object","additionalProperties":false,"properties":{"leaf_key":{"type":"string","minLength":1},"left_state":{"enum":["present","absent"]},"right_state":{"enum":["present","absent"]},"left_inclusion_proof_ref":{"oneOf":[{"$ref":"../semantic/common.schema.json#/$defs/Id"},{"type":"null"}]},"left_exclusion_proof_ref":{"oneOf":[{"$ref":"../semantic/common.schema.json#/$defs/Id"},{"type":"null"}]},"right_inclusion_proof_ref":{"oneOf":[{"$ref":"../semantic/common.schema.json#/$defs/Id"},{"type":"null"}]},"right_exclusion_proof_ref":{"oneOf":[{"$ref":"../semantic/common.schema.json#/$defs/Id"},{"type":"null"}]}},"required":["leaf_key","left_state","right_state","left_inclusion_proof_ref","left_exclusion_proof_ref","right_inclusion_proof_ref","right_exclusion_proof_ref"]}},"diff_hash":{"type":"string","pattern":"^sha256:[0-9a-f]{64}$"}},"required":["left_snapshot","right_snapshot","changes","diff_hash"]}]}
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.org/proofs/snapshot-diff-proof.schema.json",
+  "title": "SnapshotDiffProof",
+  "allOf": [
+    {
+      "$ref": "proof-common.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "proof_type": {
+          "const": "snapshot_diff"
+        },
+        "left_snapshot": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "worldview_id": {
+              "$ref": "../semantic/common.schema.json#/$defs/Id"
+            },
+            "root_hash": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "worldview_id",
+            "root_hash"
+          ]
+        },
+        "right_snapshot": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "worldview_id": {
+              "$ref": "../semantic/common.schema.json#/$defs/Id"
+            },
+            "root_hash": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "worldview_id",
+            "root_hash"
+          ]
+        },
+        "changes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "leaf_key": {
+                "type": "string",
+                "minLength": 1
+              },
+              "left_state": {
+                "enum": [
+                  "present",
+                  "absent"
+                ]
+              },
+              "right_state": {
+                "enum": [
+                  "present",
+                  "absent"
+                ]
+              },
+              "left_inclusion_proof_ref": {
+                "oneOf": [
+                  {
+                    "$ref": "../semantic/common.schema.json#/$defs/Id"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "left_exclusion_proof_ref": {
+                "oneOf": [
+                  {
+                    "$ref": "../semantic/common.schema.json#/$defs/Id"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "right_inclusion_proof_ref": {
+                "oneOf": [
+                  {
+                    "$ref": "../semantic/common.schema.json#/$defs/Id"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "right_exclusion_proof_ref": {
+                "oneOf": [
+                  {
+                    "$ref": "../semantic/common.schema.json#/$defs/Id"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "leaf_key",
+              "left_state",
+              "right_state",
+              "left_inclusion_proof_ref",
+              "left_exclusion_proof_ref",
+              "right_inclusion_proof_ref",
+              "right_exclusion_proof_ref"
+            ]
+          }
+        },
+        "diff_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "left_snapshot",
+        "right_snapshot",
+        "changes",
+        "diff_hash"
+      ]
+    }
+  ],
+  "unevaluatedProperties": false
+}
