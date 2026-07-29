@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.dev/benchmarks/benchmark-run-envelope.schema.json",
+  "title": "BenchmarkRunEnvelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "run_id",
+    "benchmark_profile_id",
+    "candidate",
+    "environment",
+    "dataset_manifest",
+    "workload_ids",
+    "cache_mode",
+    "started_at",
+    "ended_at"
+  ],
+  "properties": {
+    "run_id": {"type": "string", "minLength": 1},
+    "benchmark_profile_id": {"type": "string", "minLength": 1},
+    "benchmark_profile_version": {"type": "string"},
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "primary_architecture_class"],
+      "properties": {
+        "name": {"type": "string"},
+        "version": {"type": "string"},
+        "commit": {"type": "string"},
+        "build_id": {"type": "string"},
+        "primary_architecture_class": {
+          "type": "string",
+          "enum": [
+            "oltp_relational",
+            "mpp_columnar_analytical",
+            "native_graph",
+            "lakehouse_query_engine",
+            "hybrid_analytical_relationship_platform"
+          ]
+        },
+        "secondary_architecture_classes": {
+          "type": "array",
+          "items": {"type": "string"},
+          "uniqueItems": true
+        }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["region", "topology", "instance_types"],
+      "properties": {
+        "region": {"type": "string"},
+        "topology": {"type": "string"},
+        "instance_types": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "storage_layout": {"type": "string"},
+        "notes": {"type": "string"}
+      }
+    },
+    "dataset_manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dataset_ids"],
+      "properties": {
+        "dataset_ids": {
+          "type": "array",
+          "items": {"type": "string"},
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "corpus_classes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "synthetic_controlled",
+              "open_structured",
+              "mixed_structured_unstructured"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "data_quality_conditions": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "workload_ids": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "cache_mode": {
+      "type": "string",
+      "enum": ["cold", "warm"]
+    },
+    "warm_cache_source_run_id": {"type": "string"},
+    "external_dependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "role", "dependency_class"],
+        "properties": {
+          "name": {"type": "string"},
+          "role": {"type": "string"},
+          "dependency_class": {
+            "type": "string",
+            "enum": ["required", "optional"]
+          },
+          "capability_boundary": {"type": "string"}
+        }
+      }
+    },
+    "trace_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "trace_ids": {
+          "type": "array",
+          "items": {"type": "string"},
+          "uniqueItems": true
+        },
+        "span_ids": {
+          "type": "array",
+          "items": {"type": "string"},
+          "uniqueItems": true
+        },
+        "event_envelope_ids": {
+          "type": "array",
+          "items": {"type": "string"},
+          "uniqueItems": true
+        },
+        "checkpoint_ids": {
+          "type": "array",
+          "items": {"type": "string"},
+          "uniqueItems": true
+        }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["artifact_type", "uri"],
+        "properties": {
+          "artifact_type": {"type": "string"},
+          "uri": {"type": "string"},
+          "sha256": {"type": "string"}
+        }
+      }
+    },
+    "started_at": {"type": "string", "format": "date-time"},
+    "ended_at": {"type": "string", "format": "date-time"},
+    "notes": {"type": "string"}
+  }
+}

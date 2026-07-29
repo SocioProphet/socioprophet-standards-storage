@@ -1,0 +1,27 @@
+{
+  "agents": [
+    {"id": "agent.manager", "kind": "Agent", "capabilities": ["award"]},
+    {"id": "agent.workerA", "kind": "Agent", "capabilities": ["executeTask", "consume"]}
+  ],
+  "actionTypes": [
+    {"id": "award", "kind": "ActionType"},
+    {"id": "executeTask", "kind": "ActionType"},
+    {"id": "consume", "kind": "ActionType"}
+  ],
+  "states": [
+    {"id": "state.open", "kind": "State", "affordances": ["award"]},
+    {"id": "state.awarded", "kind": "State", "affordances": ["executeTask", "consume"]},
+    {"id": "state.done", "kind": "State", "affordances": []}
+  ],
+  "actions": [
+    {"id": "action.consume.wrongbridge", "kind": "Action", "performedBy": "agent.workerA", "actionType": "consume", "fromState": "state.awarded", "toState": "state.awarded", "timestamp": "2026-04-11T19:53:00Z"},
+    {"id": "action.exec.wrongbridge", "kind": "Action", "performedBy": "agent.workerA", "actionType": "executeTask", "fromState": "state.awarded", "toState": "state.done", "timestamp": "2026-04-11T19:53:05Z"}
+  ],
+  "traces": [
+    {"id": "trace.cfp.wrongbridge", "kind": "Trace", "pattern": "ContractNet", "traceKind": "cfp", "medium": "bus:tasks", "timestamp": "2026-04-11T19:52:50Z", "taskId": "task-right"},
+    {"id": "trace.bid.wrongbridge", "kind": "Trace", "pattern": "ContractNet", "traceKind": "bid", "medium": "bus:tasks", "timestamp": "2026-04-11T19:52:55Z", "taskId": "task-right"},
+    {"id": "trace.publish.wrongbridge", "kind": "Trace", "pattern": "PubSub", "traceKind": "publish", "medium": "topic:tasks", "timestamp": "2026-04-11T19:53:01Z", "topicId": "tasks", "messageId": "msg-wrong", "taskId": "task-wrong"},
+    {"id": "trace.ack.wrongbridge", "kind": "Trace", "pattern": "PubSub", "traceKind": "ack", "medium": "topic:tasks", "timestamp": "2026-04-11T19:53:02Z", "topicId": "tasks", "messageId": "msg-wrong", "refAction": "action.consume.wrongbridge"},
+    {"id": "trace.done.wrongbridge", "kind": "Trace", "pattern": "ContractNet", "traceKind": "done", "medium": "bus:tasks", "timestamp": "2026-04-11T19:53:06Z", "taskId": "task-right", "refAction": "action.exec.wrongbridge"}
+  ]
+}

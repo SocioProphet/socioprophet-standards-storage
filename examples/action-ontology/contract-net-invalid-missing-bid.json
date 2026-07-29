@@ -1,0 +1,21 @@
+{
+  "agents": [
+    {"id": "agent.manager", "kind": "Agent", "capabilities": ["award"]},
+    {"id": "agent.workerA", "kind": "Agent", "capabilities": ["executeTask"]}
+  ],
+  "actionTypes": [
+    {"id": "award", "kind": "ActionType"},
+    {"id": "executeTask", "kind": "ActionType"}
+  ],
+  "states": [
+    {"id": "state.open", "kind": "State", "affordances": ["award"]},
+    {"id": "state.done", "kind": "State", "affordances": ["executeTask"]}
+  ],
+  "actions": [
+    {"id": "action.exec.nobid", "kind": "Action", "performedBy": "agent.workerA", "actionType": "executeTask", "fromState": "state.open", "toState": "state.done", "timestamp": "2026-04-11T19:52:00Z"}
+  ],
+  "traces": [
+    {"id": "trace.cfp.nobid", "kind": "Trace", "pattern": "ContractNet", "traceKind": "cfp", "medium": "bus:tasks", "timestamp": "2026-04-11T19:51:50Z", "taskId": "task-nobid"},
+    {"id": "trace.done.nobid", "kind": "Trace", "pattern": "ContractNet", "traceKind": "done", "medium": "bus:tasks", "timestamp": "2026-04-11T19:52:01Z", "taskId": "task-nobid", "refAction": "action.exec.nobid"}
+  ]
+}

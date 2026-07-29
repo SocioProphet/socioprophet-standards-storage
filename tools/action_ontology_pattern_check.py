@@ -60,6 +60,27 @@ def check_pubsub(doc):
     if not pubs:
         return ["PubSub: missing publish trace with topicId and messageId"]
 
+    # At-most-once. Every check below tests PRESENCE — a missing consume, a
+    # missing ack, an ack that references nothing — so a redelivered message or
+    # a double ack satisfied all of them and passed. Delivering twice and
+    # acknowledging twice are the two failure modes the pattern exists to
+    # exclude, and neither was detectable.
+    for kind in ("publish", "ack"):
+        seen = {}
+        for t in traces:
+            if t.get("pattern") != "PubSub" or t.get("traceKind") != kind:
+                continue
+            key = (t.get("topicId"), t.get("messageId"))
+            if key == (None, None):
+                continue
+            seen[key] = seen.get(key, 0) + 1
+        for (topic, msgid), n in sorted(seen.items(), key=lambda kv: (str(kv[0][0]), str(kv[0][1]))):
+            if n > 1:
+                errs.append(
+                    f"PubSub: {kind} trace must occur at most once per message, "
+                    f"found {n} for topicId={topic}, messageId={msgid}"
+                )
+
     for p in pubs:
         topic = p.get("topicId")
         msgid = p.get("messageId")
