@@ -3,7 +3,6 @@
   "$id": "https://schemas.socioprophet.org/proofs/proof-common.schema.json",
   "title": "ProofCommon",
   "type": "object",
-  "additionalProperties": false,
   "properties": {
     "proof_id": {
       "$ref": "../semantic/common.schema.json#/$defs/Id"

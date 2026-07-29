@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.org/proofs/consistency-proof.schema.json",
+  "title": "ConsistencyProof",
+  "allOf": [
+    {
+      "$ref": "proof-common.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "proof_type": {
+          "const": "consistency"
+        },
+        "subject": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "log_id": {
+              "$ref": "../semantic/common.schema.json#/$defs/Id"
+            },
+            "old_tree_size": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "new_tree_size": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "old_root_hash": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            "new_root_hash": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "log_id",
+            "old_tree_size",
+            "new_tree_size",
+            "old_root_hash",
+            "new_root_hash"
+          ]
+        },
+        "consistency_path": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          }
+        }
+      },
+      "required": [
+        "subject",
+        "consistency_path"
+      ]
+    }
+  ],
+  "unevaluatedProperties": false
+}

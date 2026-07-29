@@ -1,1 +1,100 @@
-{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://schemas.socioprophet.org/proofs/inclusion-proof.schema.json","title":"InclusionProof","allOf":[{"$ref":"proof-common.schema.json"},{"type":"object","additionalProperties":false,"properties":{"proof_type":{"const":"inclusion"},"subject":{"type":"object","additionalProperties":false,"properties":{"root_hash":{"type":"string","pattern":"^sha256:[0-9a-f]{64}$"},"tree_size":{"type":"integer","minimum":1},"leaf_index":{"type":"integer","minimum":0},"leaf_record":{"type":"object","additionalProperties":false,"properties":{"leaf_version":{"const":"wv-leaf/1"},"leaf_kind":{"type":"string"},"primary_id":{"$ref":"../semantic/common.schema.json#/$defs/Id"},"leaf_key":{"type":"string","minLength":1},"leaf_hash":{"type":"string","pattern":"^sha256:[0-9a-f]{64}$"}},"required":["leaf_version","leaf_kind","primary_id","leaf_key","leaf_hash"]}},"required":["root_hash","tree_size","leaf_index","leaf_record"]},"audit_path":{"type":"array","items":{"type":"object","additionalProperties":false,"properties":{"side":{"enum":["left","right"]},"hash":{"type":"string","pattern":"^sha256:[0-9a-f]{64}$"}},"required":["side","hash"]}}},"required":["subject","audit_path"]}]}
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.org/proofs/inclusion-proof.schema.json",
+  "title": "InclusionProof",
+  "allOf": [
+    {
+      "$ref": "proof-common.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "proof_type": {
+          "const": "inclusion"
+        },
+        "subject": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "root_hash": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            "tree_size": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "leaf_index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "leaf_record": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "leaf_version": {
+                  "const": "wv-leaf/1"
+                },
+                "leaf_kind": {
+                  "type": "string"
+                },
+                "primary_id": {
+                  "$ref": "../semantic/common.schema.json#/$defs/Id"
+                },
+                "leaf_key": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "leaf_hash": {
+                  "type": "string",
+                  "pattern": "^sha256:[0-9a-f]{64}$"
+                }
+              },
+              "required": [
+                "leaf_version",
+                "leaf_kind",
+                "primary_id",
+                "leaf_key",
+                "leaf_hash"
+              ]
+            }
+          },
+          "required": [
+            "root_hash",
+            "tree_size",
+            "leaf_index",
+            "leaf_record"
+          ]
+        },
+        "audit_path": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "side": {
+                "enum": [
+                  "left",
+                  "right"
+                ]
+              },
+              "hash": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              }
+            },
+            "required": [
+              "side",
+              "hash"
+            ]
+          }
+        }
+      },
+      "required": [
+        "subject",
+        "audit_path"
+      ]
+    }
+  ],
+  "unevaluatedProperties": false
+}
