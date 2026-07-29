@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sourceos.local/schemas/ml/v1/test_fuller.schema.json",
+  "title": "X",
+  "type": "object",
+  "properties": {
+    "datasetRef": { "type": "string", "minLength": 1 }
+  },
+  "additionalProperties": false
+}

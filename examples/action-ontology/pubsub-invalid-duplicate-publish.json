@@ -1,0 +1,22 @@
+{
+  "agents": [
+    {"id": "agent.publisher", "kind": "Agent", "capabilities": ["writeTrace"]},
+    {"id": "agent.subscriber", "kind": "Agent", "capabilities": ["consume", "writeTrace"]}
+  ],
+  "actionTypes": [
+    {"id": "consume", "kind": "ActionType"},
+    {"id": "writeTrace", "kind": "ActionType"}
+  ],
+  "states": [
+    {"id": "state.pending", "kind": "State", "affordances": ["consume", "writeTrace"]},
+    {"id": "state.processed", "kind": "State", "affordances": ["writeTrace"]}
+  ],
+  "actions": [
+    {"id": "action.consume.pubdup", "kind": "Action", "performedBy": "agent.subscriber", "actionType": "consume", "fromState": "state.pending", "toState": "state.processed", "timestamp": "2026-04-11T19:51:05Z"}
+  ],
+  "traces": [
+    {"id": "trace.publish.pubdup.1", "kind": "Trace", "pattern": "PubSub", "traceKind": "publish", "medium": "topic:alerts", "timestamp": "2026-04-11T19:51:00Z", "topicId": "alerts", "messageId": "msg-pubdup"},
+    {"id": "trace.publish.pubdup.2", "kind": "Trace", "pattern": "PubSub", "traceKind": "publish", "medium": "topic:alerts", "timestamp": "2026-04-11T19:51:01Z", "topicId": "alerts", "messageId": "msg-pubdup"},
+    {"id": "trace.ack.pubdup", "kind": "Trace", "pattern": "PubSub", "traceKind": "ack", "medium": "topic:alerts", "timestamp": "2026-04-11T19:51:06Z", "topicId": "alerts", "messageId": "msg-pubdup", "refAction": "action.consume.pubdup"}
+  ]
+}

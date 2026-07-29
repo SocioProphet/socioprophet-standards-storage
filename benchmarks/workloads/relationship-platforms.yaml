@@ -1,0 +1,214 @@
+workloads:
+  - id: AR01
+    name: cold_cache_iterative_exploration
+    category: relationship_exploration
+    description: >-
+      Start from a seed entity set, perform a first-hop expansion, apply time/type filters,
+      pivot to indirect relationships, compute one aggregate, and export the intermediate state.
+    primary_metrics:
+      - analyst_roundtrip_p50_ms
+      - analyst_roundtrip_p95_ms
+      - iterative_cycle_time_s
+      - time_to_first_valid_hypothesis_s
+    secondary_metrics:
+      - query_compile_time_ms
+      - cache_reuse_ratio
+      - manual_context_preservation_events
+    concurrency_profiles:
+      - analyst_heavy_rw
+      - analyst_heavy_ro
+    datasets:
+      - synthetic_controlled
+      - open_structured
+    notes: cold-cache run; planner and compilation effects are expected.
+
+  - id: AR02
+    name: warm_cache_iterative_exploration
+    category: relationship_exploration
+    description: >-
+      Repeat the AR01 workflow after explicit cache warm-up using the same workload path and
+      candidate configuration.
+    primary_metrics:
+      - analyst_roundtrip_p50_ms
+      - analyst_roundtrip_p95_ms
+      - iterative_cycle_time_s
+      - cache_reuse_ratio
+    secondary_metrics:
+      - warm_cache_source_run_id
+      - manual_context_preservation_events
+      - query_reformulations_per_investigation
+    concurrency_profiles:
+      - analyst_heavy_ro
+    datasets:
+      - synthetic_controlled
+      - open_structured
+    notes: report separately from AR01; do not mix samples.
+
+  - id: AR03
+    name: granular_mutation_under_concurrent_reads
+    category: mutation_and_isolation
+    description: >-
+      Apply frequent updates to existing values while concurrent analysts run exploration and
+      aggregate queries against the same logical objects.
+    primary_metrics:
+      - write_latency_p95_ms
+      - read_latency_p95_ms
+      - storage_amplification_ratio
+      - error_rate
+    secondary_metrics:
+      - compaction_backlog_s
+      - maintenance_cpu_ratio
+      - read_degradation_ratio
+    concurrency_profiles:
+      - mixed_ingest_and_explore
+    datasets:
+      - synthetic_controlled
+      - open_structured
+    notes: reveals append-only or compaction-heavy write penalties.
+
+  - id: AR04
+    name: schema_evolution_propagation
+    category: model_agility
+    description: >-
+      Add a new entity type, add one attribute to an existing type, add one derived relationship,
+      and measure the work required to preserve existing reports, policies, and analyst workflows.
+    primary_metrics:
+      - schema_change_lead_time_s
+      - schema_change_propagation_count
+      - operator_hours_per_new_source
+    secondary_metrics:
+      - migration_downtime_s
+      - broken_workflow_count
+      - policy_touchpoint_count
+    concurrency_profiles:
+      - operator_control_plane
+    datasets:
+      - synthetic_controlled
+    notes: schema agility is measured as full-stack propagation burden, not only DDL time.
+
+  - id: AR05
+    name: aggregate_correctness_many_to_many
+    category: correctness
+    description: >-
+      Compute aggregates over many-to-many and event-centric structures with overlapping paths,
+      shared memberships, and temporal constraints.
+    primary_metrics:
+      - aggregate_correctness_rate
+      - duplicate_count_error_rate
+      - query_latency_p95_ms
+    secondary_metrics:
+      - query_complexity_score
+      - guardrail_expression_count
+      - analyst_steps_per_investigation
+    concurrency_profiles:
+      - analyst_heavy_ro
+    datasets:
+      - synthetic_controlled
+      - open_structured
+    notes: requires gold-standard reference computation.
+
+  - id: AR06
+    name: dependency_recomputation_blast_radius
+    category: derived_state
+    description: >-
+      Trigger a local change, a medium-scope relationship rule change, and a global scoring or
+      ontology change. Measure invalidation precision and user-visible staleness.
+    primary_metrics:
+      - recomputation_duration_s
+      - recomputation_blast_radius_ratio
+      - derived_relationship_refresh_lag_ms
+    secondary_metrics:
+      - cpu_saturation_ratio
+      - memory_saturation_ratio
+      - stale_view_window_s
+    concurrency_profiles:
+      - mixed_ingest_and_explore
+    datasets:
+      - synthetic_controlled
+      - mixed_structured_unstructured
+    notes: evaluates recomputation storming and invalidation precision.
+
+  - id: AR07
+    name: relationship_expressiveness_and_model_burden
+    category: modeling
+    description: >-
+      Represent multi-party events, role-qualified links, temporal relationships, contradictory
+      facts, and confidence-weighted links. Compare artifact count and query burden.
+    primary_metrics:
+      - model_artifact_count
+      - query_complexity_score
+      - semantic_loss_score
+    secondary_metrics:
+      - bridge_object_count
+      - join_count_p50
+      - analyst_comprehension_score
+    concurrency_profiles:
+      - model_design_review
+    datasets:
+      - synthetic_controlled
+      - open_structured
+    notes: evaluates expressiveness, not only raw execution speed.
+
+  - id: AR08
+    name: layered_freshness_pipeline
+    category: freshness
+    description: >-
+      Measure freshness at each layer from source event arrival to raw ingest visibility,
+      queryability, derived relationship refresh, and scored or alerted view availability.
+    primary_metrics:
+      - raw_ingest_visibility_lag_ms
+      - queryable_visibility_lag_ms
+      - derived_relationship_refresh_lag_ms
+      - scored_view_refresh_lag_ms
+    secondary_metrics:
+      - replay_reproducibility_rate
+      - freshness_jitter_ms
+      - freshness_sla_violation_rate
+    concurrency_profiles:
+      - mixed_ingest_and_explore
+    datasets:
+      - synthetic_controlled
+      - mixed_structured_unstructured
+    notes: expose layered freshness rather than a single 'real-time' claim.
+
+  - id: AR09
+    name: unstructured_pipeline_integration
+    category: external_capabilities
+    description: >-
+      Process raw documents through extraction and resolution, load results into the candidate,
+      and measure end-to-end usability, provenance preservation, and error propagation.
+    primary_metrics:
+      - entity_resolution_precision
+      - entity_resolution_recall
+      - entity_resolution_f1
+      - relation_extraction_f1
+    secondary_metrics:
+      - indexing_lag_ms
+      - provenance_completeness_rate
+      - downstream_usability_score
+    concurrency_profiles:
+      - pipeline_batch_then_analyst_ro
+    datasets:
+      - mixed_structured_unstructured
+    notes: distinguish native capability from tightly or loosely integrated external systems.
+
+  - id: AR10
+    name: policy_filtered_exploration
+    category: governance
+    description: >-
+      Run iterative exploration and aggregate queries under overlapping row, field, and tenant
+      policies to measure correctness, latency, and administrative complexity.
+    primary_metrics:
+      - policy_filtered_correctness_rate
+      - policy_evaluation_latency_p95_ms
+      - analyst_roundtrip_p95_ms
+    secondary_metrics:
+      - policy_overlap_count
+      - audit_completeness_rate
+      - admin_steps_per_policy_change
+    concurrency_profiles:
+      - policy_heavy_filtered_queries
+    datasets:
+      - open_structured
+      - mixed_structured_unstructured
+    notes: include at least one overlapping-policy stress case.
