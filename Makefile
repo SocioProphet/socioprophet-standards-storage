@@ -1,8 +1,12 @@
-.PHONY: validate action-ontology-validate cso-governance-validate cso-governance-scaffold multidomain-geospatial-validate
+.PHONY: validate action-ontology-validate cso-governance-validate cso-governance-scaffold multidomain-geospatial-validate proof-artifact-validate
 
 validate:
 	./.venv/bin/python tools/validate.py 2>/dev/null || python3 tools/validate.py
 	bash tools/action_ontology_validate_all.sh
+	./.venv/bin/python tools/proof_artifact_singleton_check.py 2>/dev/null || python3 tools/proof_artifact_singleton_check.py
+
+proof-artifact-validate:
+	./.venv/bin/python tools/proof_artifact_singleton_check.py 2>/dev/null || python3 tools/proof_artifact_singleton_check.py
 
 multidomain-geospatial-validate:
 	./.venv/bin/python tools/validate_multidomain_geospatial.py 2>/dev/null || python3 tools/validate_multidomain_geospatial.py

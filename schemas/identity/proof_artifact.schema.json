@@ -1,81 +1,89 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://socioprophet.dev/schema/identity/proof_artifact.schema.json",
-  "title": "ProofArtifact",
-  "type": "object",
-  "additionalProperties": true,
-  "required": [
-    "claim",
-    "status",
-    "inputs",
-    "domains",
-    "diagnostics"
-  ],
-  "properties": {
-    "claim": {
-      "type": "string",
-      "minLength": 1
+  "title": "ProofArtifact (identity domain)",
+  "description": "Identity-domain ProofArtifact. Converged onto the canonical ProofArtifact v1 (standards-storage#97, remediation R2): the shared vocabulary and the epistemicLevel/status enums now come from https://schemas.socioprophet.ai/proof-artifact/v1.json via $ref instead of being redefined here. This schema retains only the identity-domain-specific required fields and the narrowed status enum.",
+  "allOf": [
+    {
+      "$ref": "https://schemas.socioprophet.ai/proof-artifact/v1.json"
     },
-    "status": {
-      "type": "string",
-      "enum": [
-        "PROVED",
-        "VIOLATION",
-        "INCONCLUSIVE"
-      ]
-    },
-    "inputs": {
-      "type": "object"
-    },
-    "domains": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "violations": {
-      "type": "array",
-      "items": {
-        "type": "object"
-      }
-    },
-    "counterexample": {
-      "type": "array",
-      "items": {
-        "type": "object"
-      }
-    },
-    "witnesses": {
-      "type": "object"
-    },
-    "precision": {
-      "type": "object"
-    },
-    "schedule": {
-      "type": "object"
-    },
-    "diagnostics": {
+    {
       "type": "object",
+      "additionalProperties": true,
       "required": [
-        "iter_count",
-        "widen_count",
-        "duration_ms"
+        "claim",
+        "status",
+        "inputs",
+        "domains",
+        "diagnostics"
       ],
       "properties": {
-        "iter_count": {
-          "type": "integer",
-          "minimum": 0
+        "claim": {
+          "type": "string",
+          "minLength": 1
         },
-        "widen_count": {
-          "type": "integer",
-          "minimum": 0
+        "status": {
+          "type": "string",
+          "enum": [
+            "PROVED",
+            "VIOLATION",
+            "INCONCLUSIVE"
+          ]
         },
-        "duration_ms": {
-          "type": "integer",
-          "minimum": 0
+        "inputs": {
+          "type": "object"
+        },
+        "domains": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "violations": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "counterexample": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "witnesses": {
+          "type": "object"
+        },
+        "precision": {
+          "type": "object"
+        },
+        "schedule": {
+          "type": "object"
+        },
+        "diagnostics": {
+          "type": "object",
+          "required": [
+            "iter_count",
+            "widen_count",
+            "duration_ms"
+          ],
+          "properties": {
+            "iter_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "widen_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "duration_ms": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": true
         }
-      },
-      "additionalProperties": true
+      }
     }
-  }
+  ]
 }
