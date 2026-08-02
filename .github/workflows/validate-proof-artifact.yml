@@ -1,0 +1,32 @@
+name: Validate proof-artifact singleton
+
+on:
+  pull_request:
+    paths:
+      - 'schemas/proof-artifact/**'
+      - 'schemas/identity/proof_artifact.schema.json'
+      - 'tools/proof_artifact_singleton_check.py'
+      - '.github/workflows/validate-proof-artifact.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'schemas/proof-artifact/**'
+      - 'schemas/identity/proof_artifact.schema.json'
+      - 'tools/proof_artifact_singleton_check.py'
+      - '.github/workflows/validate-proof-artifact.yml'
+
+jobs:
+  proof-artifact-singleton:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Guard - exactly one canonical proof-artifact schema
+        run: python3 tools/proof_artifact_singleton_check.py
