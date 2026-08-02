@@ -35,6 +35,38 @@ def fail(msg: str) -> "None":
     raise SystemExit(2)
 
 
+def _iter_refs(node: object):
+    """Yield every ``$ref`` string value anywhere in a parsed schema.
+
+    Recurses through dicts and lists so that ``allOf[].$ref``, nested
+    ``$defs``, and property-level refs are all found. Only real ``$ref``
+    *values* are yielded — a canonical URL sitting in a ``description``,
+    ``$comment``, ``title``, or example is NOT a ``$ref`` and is ignored.
+    """
+    if isinstance(node, dict):
+        for key, value in node.items():
+            if key == "$ref" and isinstance(value, str):
+                yield value
+            else:
+                yield from _iter_refs(value)
+    elif isinstance(node, list):
+        for item in node:
+            yield from _iter_refs(item)
+
+
+def _refs_canonical(doc: object) -> bool:
+    """True iff the schema has a real ``$ref`` resolving to the canonical.
+
+    Matches the canonical root ``$id`` exactly or a JSON-pointer into it
+    (``<canonical>#/...``). Substring presence anywhere else in the text is
+    deliberately NOT accepted.
+    """
+    for ref in _iter_refs(doc):
+        if ref == CANONICAL_ID or ref.startswith(CANONICAL_ID + "#"):
+            return True
+    return False
+
+
 def _looks_like_proof_artifact(path: Path, doc: object) -> bool:
     if NAME_RE.search(path.name):
         return True
@@ -74,14 +106,16 @@ def main() -> int:
         if not _looks_like_proof_artifact(path, doc):
             continue
 
-        # A proof-artifact schema that is NOT the canonical must reference it.
-        if CANONICAL_ID in text:
+        # A proof-artifact schema that is NOT the canonical must reference it
+        # with a REAL $ref (parsed), not merely mention the URL in prose.
+        if _refs_canonical(doc):
             forks_ok.append(path)
         else:
             violations.append(
                 f"{path.relative_to(root)}: independent proof-artifact schema that "
-                f"neither is the canonical nor $refs it ({CANONICAL_ID}). "
-                f"Converge it onto the canonical via allOf:[{{$ref: canonical}}, ...]."
+                f"neither is the canonical nor has a $ref resolving to it "
+                f"({CANONICAL_ID}). Mentioning the URL in a description/comment is "
+                f"not enough. Converge it via allOf:[{{$ref: canonical}}, ...]."
             )
 
     if len(canonicals) == 0:
